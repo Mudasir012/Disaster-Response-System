@@ -10,7 +10,7 @@ export const useSocketStore = create((set, get) => ({
   connect: () => {
     const socket = createSocket()
     socket.on('connect', () => {
-      set({ connected: true, stats: { active: 47, today: 12, critical: 3, countries: 18 } })
+      set({ connected: true })
     })
     socket.on('disconnect', () => set({ connected: false }))
     socket.on('stats_update', (stats) => set({ stats }))

@@ -5,6 +5,8 @@ import { useIncidentStore } from '../../store/useIncidentStore'
 import { useFilterStore } from '../../store/useFilterStore'
 import { getSeverityColor } from '../ui/SeverityBadge'
 
+const MAP_STYLE = import.meta.env.VITE_MAP_STYLE || 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
+
 export default function MapCanvas({ onIncidentClick }) {
   const mapContainer = useRef(null)
   const map = useRef(null)
@@ -19,7 +21,7 @@ export default function MapCanvas({ onIncidentClick }) {
 
     const m = new maplibregl.Map({
       container: mapContainer.current,
-      style: 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json',
+      style: MAP_STYLE,
       center: [0, 20],
       zoom: 2.5,
       attributionControl: false,

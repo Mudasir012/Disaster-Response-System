@@ -1,4 +1,4 @@
-export const mockIncidents = [
+const baseIncidents = [
   {
     _id: 'inc-001',
     event_type: 'earthquake',
@@ -118,11 +118,10 @@ export const mockIncidents = [
     last_updated: new Date().toISOString(),
     created_at: new Date(Date.now() - 86400000 * 30).toISOString(),
   },
-].
+]
 
-map((inc, i) => ({
+export const mockIncidents = baseIncidents.map((inc) => ({
   ...inc,
-  _id: inc._id,
   sources: Array.from({ length: inc.source_count }, (_, j) => ({
     source: ['gdacs', 'usgs', 'noaa', 'newsapi', 'twitter'][j % 5],
     source_event_id: `${inc._id}-src-${j}`,
