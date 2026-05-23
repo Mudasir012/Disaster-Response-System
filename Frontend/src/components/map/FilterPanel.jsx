@@ -34,12 +34,13 @@ export default function FilterPanel() {
   } = useFilterStore()
 
   const allSelected = types.length === 0
+  const severityColors = { 1: 'bg-slate-500', 2: 'bg-signal-blue', 3: 'bg-amber', 4: 'bg-crisis-red', 5: 'bg-red-600' }
 
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-cool-gray">Disaster Type</h3>
-        <button onClick={() => setTypes([])} className="text-[11px] text-signal-blue hover:underline">Select all</button>
+        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-cool-gray/60">Disaster Type</h3>
+        <button onClick={() => setTypes([])} className="text-[11px] text-signal-blue hover:text-signal-blue/80 transition-colors">Select all</button>
       </div>
       <div className="space-y-1.5">
         {disasterTypes.map((dt) => (
@@ -47,7 +48,7 @@ export default function FilterPanel() {
             <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
               allSelected || types.includes(dt.key)
                 ? 'bg-signal-blue border-signal-blue'
-                : 'border-white/20 group-hover:border-white/40'
+                : 'border-white/15 group-hover:border-white/30'
             }`}>
               {(allSelected || types.includes(dt.key)) && (
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -60,18 +61,23 @@ export default function FilterPanel() {
         ))}
       </div>
 
-      <div className="border-t border-white/[0.06] pt-4">
-        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-cool-gray mb-3">Severity</h3>
+      <div className="border-t border-white/[0.05] pt-4">
+        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-cool-gray/60 mb-3">Severity</h3>
         <div className="flex gap-1.5">
           {[1, 2, 3, 4, 5].map((s) => {
-            const colors = { 1: 'bg-slate-500', 2: 'bg-signal-blue', 3: 'bg-amber', 4: 'bg-orange-500', 5: 'bg-crisis-red' }
             const active = s >= severityMin && s <= severityMax
             return (
               <button
                 key={s}
-                onClick={() => { setSeverityMin(s); setSeverityMax(s) }}
+                onClick={() => {
+                  if (s === severityMin && s === severityMax) {
+                    setSeverityMin(1); setSeverityMax(5)
+                  } else {
+                    setSeverityMin(s); setSeverityMax(s)
+                  }
+                }}
                 className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
-                  active ? `${colors[s]} text-white scale-105` : 'bg-surface text-cool-gray border border-white/10 hover:border-white/30'
+                  active ? `${severityColors[s]} text-white scale-105 shadow-sm` : 'bg-surface text-cool-gray/60 border border-white/10 hover:border-white/25'
                 }`}
               >
                 {s}
@@ -79,17 +85,27 @@ export default function FilterPanel() {
             )
           })}
         </div>
-        <input
-          type="range"
-          min={1} max={5} step={1}
-          value={severityMin}
-          onChange={(e) => setSeverityMin(Number(e.target.value))}
-          className="w-full mt-2 accent-crisis-red"
-        />
+        <div className="mt-3 px-1">
+          <div className="flex justify-between text-[10px] text-cool-gray/40 mb-1">
+            <span>Min: {severityMin}</span>
+            <span>Max: {severityMax}</span>
+          </div>
+          <div className="relative h-2">
+            <div className="absolute inset-0 bg-surface rounded-full" />
+            <div className="absolute h-full rounded-full bg-gradient-to-r from-slate-500 via-amber to-crisis-red"
+              style={{ left: `${(severityMin - 1) * 25}%`, right: `${(5 - severityMax) * 25}%` }} />
+            <input type="range" min={1} max={5} step={1} value={severityMin}
+              onChange={(e) => setSeverityMin(Math.min(Number(e.target.value), severityMax))}
+              className="absolute inset-0 w-full opacity-0 cursor-pointer z-10" />
+            <input type="range" min={1} max={5} step={1} value={severityMax}
+              onChange={(e) => setSeverityMax(Math.max(Number(e.target.value), severityMin))}
+              className="absolute inset-0 w-full opacity-0 cursor-pointer z-10" />
+          </div>
+        </div>
       </div>
 
-      <div className="border-t border-white/[0.06] pt-4">
-        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-cool-gray mb-2">Time Range</h3>
+      <div className="border-t border-white/[0.05] pt-4">
+        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-cool-gray/60 mb-2">Time Range</h3>
         <div className="flex flex-wrap gap-1.5">
           {timeRanges.map((tr) => (
             <button
@@ -98,7 +114,7 @@ export default function FilterPanel() {
               className={`text-xs px-2.5 py-1 rounded-md transition-colors ${
                 timeRange === tr.value
                   ? 'bg-signal-blue text-white'
-                  : 'text-cool-gray hover:text-glacier-white hover:bg-white/5'
+                  : 'text-cool-gray/60 hover:text-glacier-white hover:bg-white/5'
               }`}
             >
               {tr.label}
@@ -107,8 +123,8 @@ export default function FilterPanel() {
         </div>
       </div>
 
-      <div className="border-t border-white/[0.06] pt-4">
-        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-cool-gray mb-2">Region</h3>
+      <div className="border-t border-white/[0.05] pt-4">
+        <h3 className="text-[11px] font-semibold uppercase tracking-wider text-cool-gray/60 mb-2">Region</h3>
         <select
           value={region}
           onChange={(e) => setRegion(e.target.value)}
@@ -122,7 +138,7 @@ export default function FilterPanel() {
 
       <button
         onClick={resetFilters}
-        className="w-full text-sm text-cool-gray hover:text-glacier-white border border-white/10 hover:border-white/30 rounded-lg py-2 transition-colors"
+        className="w-full text-sm text-cool-gray/60 hover:text-glacier-white border border-white/10 hover:border-white/25 rounded-lg py-2 transition-colors"
       >
         Reset Filters
       </button>

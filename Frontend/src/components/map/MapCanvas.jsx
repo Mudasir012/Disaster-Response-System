@@ -4,6 +4,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { useIncidentStore } from '../../store/useIncidentStore'
 import { useFilterStore } from '../../store/useFilterStore'
 import { getSeverityColor } from '../ui/SeverityBadge'
+import { timeAgo } from '../../utils/timeAgo'
 
 const MAP_STYLE = import.meta.env.VITE_MAP_STYLE || 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
 
@@ -13,8 +14,8 @@ export default function MapCanvas({ onIncidentClick }) {
   const popup = useRef(null)
   const [mapLoaded, setMapLoaded] = useState(false)
 
-  const { incidents, fetchIncidents } = useIncidentStore()
-  const { types, severityMin, severityMax, timeRange, region } = useFilterStore()
+  const { incidents } = useIncidentStore()
+  const { types, severityMin, severityMax, region } = useFilterStore()
 
   useEffect(() => {
     if (map.current || !mapContainer.current) return
@@ -32,6 +33,7 @@ export default function MapCanvas({ onIncidentClick }) {
 
     m.on('load', () => {
       setMapLoaded(true)
+
       m.addSource('incidents', {
         type: 'geojson',
         data: { type: 'FeatureCollection', features: [] },
@@ -48,9 +50,10 @@ export default function MapCanvas({ onIncidentClick }) {
         paint: {
           'circle-color': ['step', ['get', 'point_count'], '#e94560', 5, '#d97706', 10, '#0f7ddb'],
           'circle-radius': ['step', ['get', 'point_count'], 20, 5, 28, 10, 36],
-          'circle-opacity': 0.7,
+          'circle-opacity': 0.75,
           'circle-stroke-width': 2,
-          'circle-stroke-color': '#fff',
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-opacity': 0.3,
         },
       })
 
@@ -78,7 +81,20 @@ export default function MapCanvas({ onIncidentClick }) {
           'circle-opacity': 0.9,
           'circle-stroke-width': 2,
           'circle-stroke-color': '#ffffff',
-          'circle-stroke-opacity': 0.5,
+          'circle-stroke-opacity': 0.4,
+        },
+      })
+
+      m.addLayer({
+        id: 'unclustered-point-glow',
+        type: 'circle',
+        source: 'incidents',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-color': ['get', 'color'],
+          'circle-radius': ['get', 'radius'],
+          'circle-opacity': 0.2,
+          'circle-blur': 3,
         },
       })
 
@@ -87,15 +103,13 @@ export default function MapCanvas({ onIncidentClick }) {
         const clusterId = features[0].properties.cluster_id
         m.getSource('incidents').getClusterExpansionZoom(clusterId, (err, zoom) => {
           if (err) return
-          m.easeTo({ center: features[0].geometry.coordinates, zoom })
+          m.easeTo({ center: features[0].geometry.coordinates, zoom, duration: 800 })
         })
       })
 
       m.on('click', 'unclustered-point', (e) => {
         const feature = e.features[0]
-        if (onIncidentClick) {
-          onIncidentClick(feature.properties._id)
-        }
+        if (onIncidentClick) onIncidentClick(feature.properties._id)
       })
 
       m.on('mouseenter', 'unclustered-point', () => { m.getCanvas().style.cursor = 'pointer' })
@@ -105,22 +119,25 @@ export default function MapCanvas({ onIncidentClick }) {
         if (popup.current) popup.current.remove()
         const feat = e.features[0]
         const p = feat.properties
+
+        const flashColor = p.severity >= 4 ? p.color : 'transparent'
+
         popup.current = new maplibregl.Popup({
-          closeButton: false, closeOnClick: false, offset: 12, className: 'incident-popup',
+          closeButton: false, closeOnClick: false, offset: 14, className: 'incident-popup',
+          maxWidth: '220px',
         })
           .setLngLat(feat.geometry.coordinates)
           .setHTML(`
-            <div style="padding:8px 12px;min-width:160px">
-              <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
-                <span style="display:inline-block;width:${p.severity >= 4 ? '10px' : '8px'};height:${p.severity >= 4 ? '10px' : '8px'};border-radius:50%;background:${p.color}"></span>
-                <span style="font-size:11px;font-weight:600;text-transform:capitalize">${p.event_type}</span>
-                <span style="font-size:10px;padding:1px 6px;border-radius:999px;background:${p.color}20;color:${p.color};font-weight:600">SEV-${p.severity}</span>
+            <div style="padding:10px 14px;min-width:180px">
+              <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+                <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${p.color};${p.severity >= 4 ? 'box-shadow:0 0 6px ' + p.color : ''}"></span>
+                <span style="font-size:11px;font-weight:600;text-transform:capitalize;color:#e2e8f0">${p.event_type}</span>
+                <span style="font-size:10px;padding:1px 8px;border-radius:999px;background:${p.color}20;color:${p.color};font-weight:600;margin-left:auto">SEV-${p.severity}</span>
               </div>
-              <div style="font-size:12px;font-weight:500;color:#f8fafc">${p.location_name}</div>
-              <div style="font-size:10px;color:#94a3b8;margin-top:2px">${p.time_ago}</div>
+              <div style="font-size:13px;font-weight:600;color:#f8fafc;margin-bottom:2px">${p.location_name}</div>
+              <div style="font-size:11px;color:#94a3b8">${p.time_ago}</div>
             </div>
           `)
-          .setLngLat(feat.geometry.coordinates)
           .addTo(m)
       })
 
@@ -162,9 +179,7 @@ export default function MapCanvas({ onIncidentClick }) {
       }))
 
     const source = map.current.getSource('incidents')
-    if (source) {
-      source.setData({ type: 'FeatureCollection', features })
-    }
+    if (source) source.setData({ type: 'FeatureCollection', features })
 
     if (region && region !== 'worldwide') {
       const regionCoords = {
@@ -172,23 +187,9 @@ export default function MapCanvas({ onIncidentClick }) {
         americas: [-90, 30], oceania: [135, -25],
       }
       const coords = regionCoords[region.toLowerCase()]
-      if (coords) {
-        map.current.flyTo({ center: coords, zoom: 3, duration: 1000 })
-      }
+      if (coords) map.current.flyTo({ center: coords, zoom: 3, duration: 1000 })
     }
   }, [incidents, types, severityMin, severityMax, region, mapLoaded])
 
-  return (
-    <div ref={mapContainer} className="absolute inset-0" style={{ top: 0, left: 0, right: 0, bottom: 0 }} />
-  )
-}
-
-function timeAgo(date) {
-  const diff = Date.now() - new Date(date).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'Just now'
-  if (mins < 60) return `${mins} min ago`
-  const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours}h ago`
-  return `${Math.floor(hours / 24)}d ago`
+  return <div ref={mapContainer} className="absolute inset-0" />
 }

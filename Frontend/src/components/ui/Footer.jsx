@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 export default function Footer({ systemStatus = 'operational' }) {
   return (
-    <footer className="bg-[#0a0f1a] border-t border-white/[0.08] pt-12 pb-6">
+    <footer className="bg-[#0a0f1a] border-t border-white/[0.06] pt-12 pb-6">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
@@ -50,16 +50,16 @@ export default function Footer({ systemStatus = 'operational' }) {
           </div>
         </div>
 
-        <div className="text-[11px] text-cool-gray/60 leading-relaxed space-y-1">
+        <div className="text-[11px] text-cool-gray/50 leading-relaxed space-y-1">
           <p>Data sourced from GDACS, USGS, NOAA, NewsAPI and social feeds. This platform is for informational purposes only.</p>
           <p>Not for emergency response decision-making. Always follow official emergency services guidance.</p>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-white/[0.06] flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span className="text-xs text-cool-gray/50">&copy; 2025 DisasterTracker</span>
+        <div className="mt-6 pt-4 border-t border-white/[0.05] flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span className="text-xs text-cool-gray/40">&copy; 2026 DisasterTracker</span>
           <div className="flex items-center gap-1.5">
-            <div className={`w-2 h-2 rounded-full ${systemStatus === 'operational' ? 'bg-safe-green' : 'bg-amber'}`} />
-            <span className="text-xs text-cool-gray/70 capitalize">{systemStatus}</span>
+            <div className={`w-2 h-2 rounded-full ${systemStatus === 'operational' ? 'bg-safe-green animate-glow-pulse' : 'bg-amber'}`} />
+            <span className="text-xs text-cool-gray/50 capitalize">{systemStatus}</span>
           </div>
         </div>
       </div>
