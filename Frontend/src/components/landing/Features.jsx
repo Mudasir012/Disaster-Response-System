@@ -12,7 +12,7 @@ const features = [
   {
     icon: Brain,
     title: 'AI reads the noise',
-    body: 'Claude API classifies severity (1–5), extracts locations from raw text, and writes clear summaries. Raw data becomes actionable intelligence.',
+    body: 'Gemini 1.5 Flash classifies severity (1–5), extracts locations from raw text, and writes clear summaries. Groq serves as a fallback. Raw data becomes actionable intelligence.',
     accent: 'border-ai-purple/30',
     iconColor: 'text-ai-purple',
     gradient: 'from-ai-purple/10 to-transparent',

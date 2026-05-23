@@ -16,9 +16,9 @@ export const config = {
 
   jwtSecret: required('JWT_SECRET'),
 
-  anthropicApiKey: required('ANTHROPIC_API_KEY'),
-  anthropicUrl: process.env.ANTHROPIC_URL || 'https://api.anthropic.com/v1/messages',
-  claudeModel: process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514',
+  geminiApiKey: process.env.GEMINI_API_KEY || '',
+  groqApiKey: process.env.GROQ_API_KEY || '',
+  groqModel: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
 
   twitterBearerToken: process.env.TWITTER_BEARER_TOKEN || '',
   twitterApiUrl: process.env.TWITTER_API_URL || 'https://api.twitter.com/2/tweets/search/recent',

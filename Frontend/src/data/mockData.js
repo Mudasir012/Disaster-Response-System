@@ -181,7 +181,7 @@ export const mockHealth = {
   mongodb: { status: 'connected', last_ping: Date.now() - 500 },
   redis: { status: 'connected', queue_depth: 14 },
   socketio: { active_connections: 23 },
-  claude_api: { last_latency_ms: 1240, status: 'ok' },
+  ai_api: { last_latency_ms: 1240, status: 'ok', provider: 'gemini' },
 }
 
 export const mockQueues = [

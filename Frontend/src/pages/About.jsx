@@ -48,7 +48,7 @@ export default function About() {
             <div className="space-y-6 relative">
               {[
                 { icon: Globe, step: '1', title: 'Collect', body: 'Data from 5 authoritative sources (GDACS, USGS, NOAA, NewsAPI, social feeds) is polled every 2 minutes.' },
-                { icon: Brain, step: '2', title: 'AI Analysis', body: 'Claude AI classifies each event, assigns a severity score (1–5), extracts location data, and writes a plain-English summary.' },
+                { icon: Brain, step: '2', title: 'AI Analysis', body: 'Gemini 1.5 Flash classifies each event, assigns a severity score (1–5), extracts location data, and writes a plain-English summary.' },
                 { icon: Radio, step: '3', title: 'Live Map', body: 'Every incident is pushed via WebSocket to the map within seconds — no page refresh required.' },
               ].map((item) => (
                 <div key={item.step} className="flex gap-4 items-start animate-slide-up" style={{ animationDelay: `${parseInt(item.step) * 100}ms` }}>
@@ -69,7 +69,7 @@ export default function About() {
               <span className="text-[10px] font-semibold text-ai-purple bg-ai-purple/15 px-2 py-0.5 rounded">ABOUT OUR AI</span>
             </div>
             <p className="text-sm text-glacier-white leading-relaxed mb-3">
-              Claude API processes incoming data to classify disaster types, assign severity scores,
+              Gemini 1.5 Flash processes incoming data to classify disaster types, assign severity scores,
               extract geographic locations from unstructured text, and generate concise summaries.
             </p>
             <ul className="text-sm text-cool-gray/70 space-y-1 list-disc list-inside">
@@ -117,7 +117,7 @@ export default function About() {
                     ['Frontend', 'React + Vite, MapLibre GL, Recharts, Zustand, Tailwind CSS'],
                     ['Backend', 'Node.js + Express, Socket.io, BullMQ + Redis'],
                     ['Database', 'MongoDB + Mongoose'],
-                    ['AI', 'Claude API (Anthropic)'],
+                    ['AI', 'Gemini 1.5 Flash (Google) — Groq fallback'],
                     ['Geocoding', 'Nominatim (OpenStreetMap)'],
                     ['Deployment', 'Railway (backend), Vercel (frontend)'],
                   ].map(([label, value]) => (
