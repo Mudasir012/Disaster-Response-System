@@ -8,6 +8,7 @@ import HealthCards from '../components/admin/HealthCards'
 import QueueDashboard from '../components/admin/QueueDashboard'
 import IncidentTable from '../components/admin/IncidentTable'
 import { useIncidentStore } from '../store/useIncidentStore'
+import { api } from '../lib/api'
 import { mockHealth, mockQueues, mockAILog, mockIncidents } from '../data/mockData'
 
 const useMockData = !import.meta.env.VITE_API_URL
@@ -33,9 +34,9 @@ export default function Admin() {
       return
     }
     Promise.all([
-      fetch('/api/admin/health').then(r => r.json()).then(setHealth),
-      fetch('/api/admin/queues').then(r => r.json()).then(setQueues),
-      fetch('/api/admin/ai-log').then(r => r.json()).then(setAiLog),
+      api.adminHealth().then(setHealth),
+      api.adminQueues().then(setQueues),
+      api.adminAILog({}).then(setAiLog),
     ]).catch(() => {})
   }, [])
 

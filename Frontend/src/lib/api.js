@@ -30,8 +30,9 @@ export const api = {
   statsSummary: () => request('/stats/summary'),
   statsByType: (params) => {
     const q = new URLSearchParams(params).toString()
-    return request(`/stats/by-type${q ? `?${q}` : ''}`)
+    return request(`/analytics/by-type${q ? `?${q}` : ''}`)
   },
+  severityDistribution: () => request('/analytics/severity-distribution'),
 
   // Analytics
   analyticsOverTime: (range = '30d', type) => {

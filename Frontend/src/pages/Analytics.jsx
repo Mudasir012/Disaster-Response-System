@@ -32,7 +32,7 @@ export default function Analytics() {
         } else {
           const [ot, sd, rg, sm] = await Promise.all([
             api.analyticsOverTime(range),
-            api.statsByType(),
+            api.severityDistribution(),
             api.analyticsByRegion(),
             api.statsSummary(),
           ])
