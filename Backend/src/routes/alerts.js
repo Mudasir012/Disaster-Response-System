@@ -1,23 +1,46 @@
 import { Router } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 import { AlertSubscription } from '../models/AlertSubscription.js'
-import { sendAlertEmail } from '../services/email.js'
+import { Incident } from '../models/Incident.js'
+import { Resend } from 'resend'
 
 const router = Router()
+const resend = new Resend(process.env.RESEND_API_KEY)
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+}
 
 router.post('/subscribe', async (req, res, next) => {
   try {
     const { email, rules } = req.body
-    if (!email) return res.status(400).json({ message: 'Email is required' })
+    if (!email || !validateEmail(email)) {
+      return res.status(400).json({ error: 'Valid email is required' })
+    }
 
     const token = uuidv4()
-    const subscription = await AlertSubscription.findOneAndUpdate(
+    const sub = await AlertSubscription.findOneAndUpdate(
       { email },
-      { email, token, rules: rules || [], confirmed: false },
+      { email, token, rules: rules || [{ region: 'worldwide', event_types: [], min_severity: 1 }] },
       { upsert: true, new: true }
     )
 
-    res.json({ message: 'Subscription created', token: subscription.token })
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+    const confirmUrl = `${frontendUrl}/alerts/confirm?token=${token}`
+
+    try {
+      await resend.emails.send({
+        from: process.env.EMAIL_FROM_ADDRESS || 'DisasterTracker <alerts@disastertracker.app>',
+        to: email,
+        subject: 'Confirm your alert subscription',
+        html: `<p>Click <a href="${confirmUrl}">here</a> to confirm your alert subscription.</p>
+               <p>Manage your subscription: <a href="${frontendUrl}/alerts/manage?token=${token}">${frontendUrl}/alerts/manage?token=${token}</a></p>`,
+      })
+    } catch {
+      // email send failure is non-fatal
+    }
+
+    res.json({ message: 'Subscription created', token })
   } catch (err) {
     next(err)
   }
@@ -25,9 +48,9 @@ router.post('/subscribe', async (req, res, next) => {
 
 router.get('/:token', async (req, res, next) => {
   try {
-    const sub = await AlertSubscription.findOne({ token: req.params.token })
-    if (!sub) return res.status(404).json({ message: 'Subscription not found' })
-    res.json({ email: sub.email, rules: sub.rules, confirmed: sub.confirmed })
+    const sub = await AlertSubscription.findOne({ token: req.params.token }).lean()
+    if (!sub) return res.status(404).json({ error: 'Subscription not found' })
+    res.json(sub)
   } catch (err) {
     next(err)
   }
@@ -38,11 +61,11 @@ router.patch('/:token', async (req, res, next) => {
     const { rules } = req.body
     const sub = await AlertSubscription.findOneAndUpdate(
       { token: req.params.token },
-      { rules, confirmed: true },
+      { rules },
       { new: true }
     )
-    if (!sub) return res.status(404).json({ message: 'Subscription not found' })
-    res.json({ message: 'Updated', rules: sub.rules })
+    if (!sub) return res.status(404).json({ error: 'Subscription not found' })
+    res.json({ message: 'Updated', sub })
   } catch (err) {
     next(err)
   }
@@ -51,13 +74,24 @@ router.patch('/:token', async (req, res, next) => {
 router.post('/:token/test', async (req, res, next) => {
   try {
     const sub = await AlertSubscription.findOne({ token: req.params.token })
-    if (!sub) return res.status(404).json({ message: 'Subscription not found' })
+    if (!sub) return res.status(404).json({ error: 'Subscription not found' })
 
-    await sendAlertEmail({
+    const fakeIncident = {
+      _id: 'test',
+      event_type: 'earthquake',
+      severity: 4,
+      location: { name: 'Test Location', continent: 'Test' },
+      summary: 'This is a test alert.',
+      first_seen: new Date().toISOString(),
+    }
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
+
+    await resend.emails.send({
+      from: process.env.EMAIL_FROM_ADDRESS || 'DisasterTracker <alerts@disastertracker.app>',
       to: sub.email,
-      subject: '[TEST] DisasterTracker Alert',
-      text: 'This is a test alert to verify your subscription is working.',
-      html: '<h2>Test Alert</h2><p>This is a test alert to verify your subscription is working.</p>',
+      subject: `[TEST] [SEV-4] EARTHQUAKE — Test Location`,
+      html: `<p>This is a test alert from DisasterTracker.</p><p><a href="${frontendUrl}/alerts/manage?token=${sub.token}">Manage alerts</a></p>`,
     })
 
     res.json({ message: 'Test alert sent' })
@@ -69,8 +103,8 @@ router.post('/:token/test', async (req, res, next) => {
 router.delete('/:token', async (req, res, next) => {
   try {
     const sub = await AlertSubscription.findOneAndDelete({ token: req.params.token })
-    if (!sub) return res.status(404).json({ message: 'Subscription not found' })
-    res.json({ message: 'Unsubscribed' })
+    if (!sub) return res.status(404).json({ error: 'Subscription not found' })
+    res.json({ message: 'Subscription deleted' })
   } catch (err) {
     next(err)
   }

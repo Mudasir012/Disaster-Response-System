@@ -1,42 +1,31 @@
+import 'dotenv/config'
 import http from 'http'
-import { Server } from 'socket.io'
-import { createApp } from './app.js'
-import { connectDB } from './db/mongoose.js'
-import { config } from './config/index.js'
-import { setupSocket } from './socket/index.js'
-import { startScheduler } from './services/sync/scheduler.js'
-import { startWorkers, setSocketIO } from './services/sync/processor.js'
+import app from './app.js'
+import { initSocket } from './socket.js'
+import connectDB from './config/db.js'
+import startWorkers from './workers/index.js'
+import startScheduler from './scheduler/cron.js'
+import logger from './utils/logger.js'
 
-async function main() {
+const PORT = process.env.PORT || 3001
+
+async function start() {
   await connectDB()
 
-  const app = createApp()
   const server = http.createServer(app)
 
-  const io = new Server(server, {
-    cors: {
-      origin: config.frontendUrl,
-      methods: ['GET', 'POST'],
-    },
-  })
+  initSocket(server)
 
-  app.set('io', io)
-  setupSocket(io)
-  setSocketIO(io)
+  startWorkers()
 
-  if (config.nodeEnv === 'production' || process.argv.includes('--sync')) {
-    startScheduler()
-    startWorkers()
-  }
+  startScheduler()
 
-  server.listen(config.port, () => {
-    console.log(`[Server] Running on port ${config.port} in ${config.nodeEnv} mode`)
-    console.log(`[Server] API: http://localhost:${config.port}/api`)
-    console.log(`[Server] Frontend: ${config.frontendUrl}`)
+  server.listen(PORT, () => {
+    logger.info(`Server running on port ${PORT}`)
   })
 }
 
-main().catch((err) => {
-  console.error('[Fatal]', err)
+start().catch((err) => {
+  logger.error('Failed to start server:', err)
   process.exit(1)
 })

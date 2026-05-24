@@ -1,8 +1,12 @@
-export function errorHandler(err, req, res, _next) {
-  console.error('[Error]', err.message, err.stack)
+import logger from '../utils/logger.js'
+
+export default function errorHandler(err, req, res, next) {
+  logger.error(`${err.message}`, { stack: err.stack, path: req.path })
+
   const status = err.status || 500
   res.status(status).json({
-    message: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    error: err.message,
+    status,
+    ...(process.env.NODE_ENV !== 'production' && { stack: err.stack }),
   })
 }
