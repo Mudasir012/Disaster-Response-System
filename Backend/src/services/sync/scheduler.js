@@ -3,24 +3,24 @@ import { queues } from '../queue.js'
 import { config } from '../../config/index.js'
 
 export function startScheduler() {
-  console.log('[Scheduler] Starting sync scheduler (interval: 2 min)')
+  console.log('[Scheduler] Starting sync scheduler (interval: 2 min, GDELT: 15 min)')
 
   cron.schedule('*/2 * * * *', () => {
-    enqueueAllSyncs()
+    enqueueSyncs(['gdacs', 'usgs', 'noaa', 'newsapi'])
   })
 
-  enqueueAllSyncs()
+  cron.schedule('*/15 * * * *', () => {
+    enqueueSyncs(['gdelt'])
+  })
+
+  enqueueSyncs(['gdacs', 'usgs', 'noaa', 'newsapi'])
+  enqueueSyncs(['gdelt'])
 }
 
-function enqueueAllSyncs() {
-  const sources = [
-    { name: 'gdacs', queue: queues.gdacs },
-    { name: 'usgs', queue: queues.usgs },
-    { name: 'noaa', queue: queues.noaa },
-    { name: 'newsapi', queue: queues.newsapi },
-  ]
-
-  sources.forEach(({ name, queue }) => {
+function enqueueSyncs(names) {
+  names.forEach((name) => {
+    const queue = queues[name]
+    if (!queue) return
     queue.add('sync', { source: name }, {
       removeOnComplete: { age: 3600 },
       removeOnFail: { age: 86400 },

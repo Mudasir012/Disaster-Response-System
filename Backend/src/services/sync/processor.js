@@ -4,7 +4,7 @@ import { fetchGDACS } from './gdacs.js'
 import { fetchUSGS } from './usgs.js'
 import { fetchNOAA } from './noaa.js'
 import { fetchNewsAPI } from './newsapi.js'
-import { fetchTwitter } from './twitter.js'
+import { fetchGDELT } from './gdelt.js'
 import { processIncidentWithAI, extractLocationFromText, logAIProcessing } from '../ai/gemini.js'
 import { geocodeLocation, getContinent } from '../geocode.js'
 import { Incident } from '../../models/Incident.js'
@@ -23,7 +23,7 @@ const fetchers = {
   usgs: fetchUSGS,
   noaa: fetchNOAA,
   newsapi: fetchNewsAPI,
-  twitter: fetchTwitter,
+  gdelt: fetchGDELT,
 }
 
 function normalizeEventType(raw) {

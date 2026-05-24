@@ -123,9 +123,9 @@ const baseIncidents = [
 export const mockIncidents = baseIncidents.map((inc) => ({
   ...inc,
   sources: Array.from({ length: inc.source_count }, (_, j) => ({
-    source: ['gdacs', 'usgs', 'noaa', 'newsapi', 'twitter'][j % 5],
+    source: ['gdacs', 'usgs', 'noaa', 'newsapi', 'gdelt'][j % 5],
     source_event_id: `${inc._id}-src-${j}`,
-    raw_text: `Raw data from ${['gdacs', 'usgs', 'noaa', 'newsapi', 'twitter'][j % 5]} for ${inc.location.name}`,
+    raw_text: `Raw data from ${['gdacs', 'usgs', 'noaa', 'newsapi', 'gdelt'][j % 5]} for ${inc.location.name}`,
     processed: true,
     processed_at: new Date(Date.now() - 86400000 * (30 - j)).toISOString(),
     fetched_at: new Date(Date.now() - 86400000 * (30 - j)).toISOString(),
@@ -188,7 +188,7 @@ export const mockQueues = [
   { name: 'GDACS queue', waiting: 0, active: 1, completed: 342, failed: 2 },
   { name: 'USGS queue', waiting: 0, active: 0, completed: 891, failed: 0 },
   { name: 'News queue', waiting: 3, active: 1, completed: 156, failed: 5 },
-  { name: 'Twitter queue', waiting: 0, active: 0, completed: 445, failed: 1 },
+  { name: 'GDELT queue', waiting: 0, active: 0, completed: 445, failed: 1 },
 ]
 
 export const mockAILog = Array.from({ length: 20 }, (_, i) => ({

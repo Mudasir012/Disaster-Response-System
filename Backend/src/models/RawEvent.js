@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const rawEventSchema = new mongoose.Schema({
   source: {
     type: String,
-    enum: ['gdacs', 'usgs', 'noaa', 'newsapi', 'twitter'],
+    enum: ['gdacs', 'usgs', 'noaa', 'newsapi', 'gdelt'],
     required: true,
   },
   source_event_id: { type: String, required: true },

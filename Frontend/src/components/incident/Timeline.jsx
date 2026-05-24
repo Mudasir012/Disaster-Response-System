@@ -5,7 +5,7 @@ const sourceColors = {
   usgs: 'bg-signal-blue',
   noaa: 'bg-amber',
   newsapi: 'bg-ai-purple',
-  twitter: 'bg-sky-400',
+  gdelt: 'bg-sky-400',
 }
 
 const sourceLabels = {
@@ -13,7 +13,7 @@ const sourceLabels = {
   usgs: 'USGS',
   noaa: 'NOAA',
   newsapi: 'NewsAPI',
-  twitter: 'Twitter',
+  gdelt: 'GDELT',
 }
 
 function formatTime(date) {

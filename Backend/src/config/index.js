@@ -20,9 +20,7 @@ export const config = {
   groqApiKey: process.env.GROQ_API_KEY || '',
   groqModel: process.env.GROQ_MODEL || 'llama-3.3-70b-versatile',
 
-  twitterBearerToken: process.env.TWITTER_BEARER_TOKEN || '',
-  twitterApiUrl: process.env.TWITTER_API_URL || 'https://api.twitter.com/2/tweets/search/recent',
-  twitterQuery: process.env.TWITTER_QUERY || 'earthquake OR flood OR wildfire OR cyclone OR tsunami -has:links',
+  // GDELT Doc 2.0 needs no API key — free tier, no auth required
 
   newsApiKey: process.env.NEWS_API_KEY || '',
   newsApiUrl: process.env.NEWS_API_URL || 'https://newsapi.org/v2/everything',

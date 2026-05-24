@@ -58,7 +58,7 @@ export default function Admin() {
     { key: 'ai-log', label: 'AI Log' },
   ]
 
-  const syncSources = ['GDACS', 'USGS', 'NOAA', 'NewsAPI', 'Twitter']
+  const syncSources = ['GDACS', 'USGS', 'NOAA', 'NewsAPI', 'GDELT']
 
   return (
     <div className="min-h-screen bg-deep-slate">

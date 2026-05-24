@@ -9,7 +9,7 @@ export const queues = {
   usgs: new Queue('usgs', { connection }),
   noaa: new Queue('noaa', { connection }),
   newsapi: new Queue('newsapi', { connection }),
-  twitter: new Queue('twitter', { connection }),
+  gdelt: new Queue('gdelt', { connection }),
 }
 
 export { connection }
