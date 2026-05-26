@@ -21,13 +21,16 @@ export default function AdminLogin() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-        credentials: 'include',
       })
 
+      const data = await res.json()
+
       if (!res.ok) {
-        const data = await res.json()
-        throw new Error(data.message || 'Login failed')
+        throw new Error(data.error || data.message || 'Login failed')
       }
+
+      // Persist JWT token in a cookie so Admin.jsx and api.js can read it
+      document.cookie = `admin_token=${data.token}; path=/; max-age=${8 * 3600}; SameSite=Lax`
 
       navigate('/admin')
     } catch (err) {

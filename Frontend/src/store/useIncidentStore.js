@@ -27,8 +27,8 @@ export const useIncidentStore = create((set, get) => ({
         return filtered
       }
       const data = await api.incidents(params)
-      set({ incidents: data, loading: false })
-      return data
+      set({ incidents: data.incidents || [], loading: false })
+      return data.incidents || []
     } catch (err) {
       set({ error: err.message, loading: false })
       return []

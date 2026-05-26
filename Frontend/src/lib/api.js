@@ -1,5 +1,9 @@
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001/api'
 
+function getAdminToken() {
+  return document.cookie.match(/admin_token=([^;]+)/)?.[1] || ''
+}
+
 async function request(url, options = {}) {
   const res = await fetch(`${API_BASE}${url}`, {
     headers: { 'Content-Type': 'application/json', ...options.headers },
@@ -7,9 +11,20 @@ async function request(url, options = {}) {
   })
   if (!res.ok) {
     const err = await res.json().catch(() => ({}))
-    throw new Error(err.message || `API error: ${res.status}`)
+    throw new Error(err.message || err.error || `API error: ${res.status}`)
   }
   return res.json()
+}
+
+async function adminRequest(url, options = {}) {
+  return request(url, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getAdminToken()}`,
+      ...options.headers,
+    },
+  })
 }
 
 export const api = {
@@ -28,6 +43,7 @@ export const api = {
 
   // Stats
   statsSummary: () => request('/stats/summary'),
+  analyticsOverview: () => request('/analytics/summary'),
   statsByType: (params) => {
     const q = new URLSearchParams(params).toString()
     return request(`/analytics/by-type${q ? `?${q}` : ''}`)
@@ -58,22 +74,22 @@ export const api = {
   // Admin
   adminLogin: (data) =>
     request('/admin/login', { method: 'POST', body: JSON.stringify(data) }),
-  adminHealth: () => request('/admin/health'),
-  adminQueues: () => request('/admin/queues'),
+  adminHealth: () => adminRequest('/admin/health'),
+  adminQueues: () => adminRequest('/admin/queues'),
   adminSync: (source) =>
-    request(`/admin/sync/${source}`, { method: 'POST' }),
+    adminRequest(`/admin/sync/${source}`, { method: 'POST' }),
   adminRetryQueue: (queue) =>
-    request(`/admin/queues/${queue}/retry`, { method: 'POST' }),
+    adminRequest(`/admin/queues/${queue}/retry`, { method: 'POST' }),
   adminAILog: (params) => {
     const q = new URLSearchParams(params).toString()
-    return request(`/admin/ai-log${q ? `?${q}` : ''}`)
+    return adminRequest(`/admin/ai-log${q ? `?${q}` : ''}`)
   },
   adminUpdateIncident: (id, data) =>
-    request(`/admin/incidents/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+    adminRequest(`/admin/incidents/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   adminDeleteIncident: (id) =>
-    request(`/admin/incidents/${id}`, { method: 'DELETE' }),
+    adminRequest(`/admin/incidents/${id}`, { method: 'DELETE' }),
   adminReprocessIncident: (id) =>
-    request(`/admin/incidents/${id}/reprocess`, { method: 'POST' }),
+    adminRequest(`/admin/incidents/${id}/reprocess`, { method: 'POST' }),
 
   // Health
   health: () => request('/health'),

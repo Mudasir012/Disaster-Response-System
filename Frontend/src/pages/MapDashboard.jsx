@@ -15,7 +15,12 @@ export default function MapDashboard() {
   const [mobileSidebar, setMobileSidebar] = useState(false)
   const { incidents, fetchIncidents, statsSummary } = useIncidentStore()
   const { sidebarOpen, toggleSidebar, types, severityMin, severityMax, timeRange, region, search } = useFilterStore()
-  const { connected } = useSocketStore()
+  const { connected, connect, disconnect } = useSocketStore()
+
+  useEffect(() => {
+    connect()
+    return () => disconnect()
+  }, [])
 
   const buildParams = useCallback(() => {
     const params = {}

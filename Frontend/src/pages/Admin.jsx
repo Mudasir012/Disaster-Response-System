@@ -21,6 +21,7 @@ export default function Admin() {
   const [aiLog, setAiLog] = useState([])
   const [activeTab, setActiveTab] = useState('overview')
   const [syncing, setSyncing] = useState(null)
+  const [syncMsg, setSyncMsg] = useState(null)
 
   const isAuthed = document.cookie.includes('admin_token=')
 
@@ -42,8 +43,19 @@ export default function Admin() {
 
   const handleSync = async (source) => {
     setSyncing(source)
-    await new Promise(r => setTimeout(r, 1500))
-    setSyncing(null)
+    setSyncMsg(null)
+    try {
+      if (!useMockData) {
+        const token = document.cookie.match(/admin_token=([^;]+)/)?.[1]
+        await api.adminSync(source.toLowerCase(), token)
+      }
+      setSyncMsg({ type: 'success', text: `${source} sync triggered successfully` })
+    } catch (err) {
+      setSyncMsg({ type: 'error', text: err.message || `Failed to sync ${source}` })
+    } finally {
+      setSyncing(null)
+      setTimeout(() => setSyncMsg(null), 4000)
+    }
   }
 
   const handleEdit = () => {}
@@ -119,6 +131,16 @@ export default function Admin() {
                   </button>
                 ))}
               </div>
+
+              {syncMsg && (
+                <div className={`mb-4 px-4 py-3 rounded-lg text-sm font-medium animate-fade-in ${
+                  syncMsg.type === 'success'
+                    ? 'bg-safe-green/10 border border-safe-green/20 text-safe-green'
+                    : 'bg-crisis-red/10 border border-crisis-red/20 text-crisis-red'
+                }`}>
+                  {syncMsg.text}
+                </div>
+              )}
 
               <QueueDashboard queues={queues} />
             </div>

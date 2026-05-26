@@ -8,20 +8,39 @@ router.get('/summary', async (req, res, next) => {
     const todayStart = new Date()
     todayStart.setHours(0, 0, 0, 0)
 
-    const [activeCount, todayCount, criticalCount, countries, total] = await Promise.all([
+    const [activeCount, todayCount, criticalCount, countries, total, byType, byRegion] = await Promise.all([
       Incident.countDocuments({ status: 'active' }),
       Incident.countDocuments({ created_at: { $gte: todayStart } }),
       Incident.countDocuments({ severity: 5, status: 'active' }),
       Incident.distinct('location.continent', { status: 'active' }),
       Incident.countDocuments({ status: { $ne: 'deleted' } }),
+      Incident.aggregate([
+        { $match: { status: { $ne: 'deleted' } } },
+        { $group: { _id: '$event_type', count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 1 },
+      ]),
+      Incident.aggregate([
+        { $match: { status: 'active' } },
+        { $group: { _id: '$location.continent', count: { $sum: 1 } } },
+        { $sort: { count: -1 } },
+        { $limit: 1 },
+      ]),
     ])
 
     res.json({
+      active: activeCount,
       active_count: activeCount,
+      today: todayCount,
       today_count: todayCount,
       countries_affected: countries.length,
+      countries: countries.length,
+      critical: criticalCount,
       critical_count: criticalCount,
+      total: total,
       total_all_time: total,
+      most_common_type: byType[0]?._id || null,
+      most_active_region: byRegion[0]?._id || null,
     })
   } catch (err) {
     next(err)
@@ -115,6 +134,20 @@ router.get('/by-region', async (req, res, next) => {
       },
     ])
 
+    res.json(results)
+  } catch (err) {
+    next(err)
+  }
+})
+
+router.get('/severity-distribution', async (req, res, next) => {
+  try {
+    const results = await Incident.aggregate([
+      { $match: { status: { $ne: 'deleted' } } },
+      { $group: { _id: '$severity', count: { $sum: 1 } } },
+      { $sort: { _id: 1 } },
+      { $project: { severity: '$_id', count: 1, _id: 0 } },
+    ])
     res.json(results)
   } catch (err) {
     next(err)

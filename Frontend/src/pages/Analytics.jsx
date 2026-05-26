@@ -34,7 +34,7 @@ export default function Analytics() {
             api.analyticsOverTime(range),
             api.severityDistribution(),
             api.analyticsByRegion(),
-            api.statsSummary(),
+            api.analyticsOverview(),
           ])
           setOverTime(ot)
           setSeverityDist(sd)
