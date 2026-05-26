@@ -125,5 +125,3 @@ See `Backend/.env.example` for all configuration options. Key variables:
 | `POST /api/admin/sync/:source` | Trigger manual sync |
 
 ## License
-
-MIT
