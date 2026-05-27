@@ -29,12 +29,17 @@ const regions = [
 export default function FilterPanel() {
   const {
     types, severityMin, severityMax, timeRange, region,
-    toggleType, setSeverityMin, setSeverityMax, setTimeRange, setRegion,
+    setSeverityMin, setSeverityMax, setTimeRange, setRegion,
     resetFilters, setTypes,
   } = useFilterStore()
 
+  const toggleType = (key) => {
+    if (types.includes(key)) setTypes(types.filter(t => t !== key))
+    else setTypes([...types, key])
+  }
+
   const allSelected = types.length === 0
-  const severityColors = { 1: 'bg-slate-500', 2: 'bg-signal-blue', 3: 'bg-amber', 4: 'bg-crisis-red', 5: 'bg-red-600' }
+  const severityColors = { 1: 'bg-slate-500', 2: 'bg-signal-blue', 3: 'bg-amber', 4: 'bg-crisis-red', 5: 'bg-crisis-red' }
 
   return (
     <div className="space-y-5">
@@ -45,13 +50,16 @@ export default function FilterPanel() {
       <div className="space-y-1.5">
         {disasterTypes.map((dt) => (
           <label key={dt.key} className="flex items-center gap-2.5 cursor-pointer group">
+            <input type="checkbox" checked={allSelected || types.includes(dt.key)}
+              onChange={() => toggleType(dt.key)}
+              className="sr-only" />
             <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${
               allSelected || types.includes(dt.key)
                 ? 'bg-signal-blue border-signal-blue'
                 : 'border-white/15 group-hover:border-white/30'
-            }`}>
+            }`} aria-hidden="true">
               {(allSelected || types.includes(dt.key)) && (
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true" className="animate-scale-in">
                   <path d="M2 5l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               )}
@@ -76,7 +84,9 @@ export default function FilterPanel() {
                     setSeverityMin(s); setSeverityMax(s)
                   }
                 }}
-                className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${
+                aria-label={`Severity level ${s}`}
+                aria-pressed={active}
+                className={`flex-1 min-h-[44px] py-2 rounded-lg text-xs font-bold transition-all ${
                   active ? `${severityColors[s]} text-white scale-105 shadow-sm` : 'bg-surface text-cool-gray/60 border border-white/10 hover:border-white/25'
                 }`}
               >
@@ -96,9 +106,11 @@ export default function FilterPanel() {
               style={{ left: `${(severityMin - 1) * 25}%`, right: `${(5 - severityMax) * 25}%` }} />
             <input type="range" min={1} max={5} step={1} value={severityMin}
               onChange={(e) => setSeverityMin(Math.min(Number(e.target.value), severityMax))}
+              aria-label="Minimum severity"
               className="absolute inset-0 w-full opacity-0 cursor-pointer z-10" />
             <input type="range" min={1} max={5} step={1} value={severityMax}
               onChange={(e) => setSeverityMax(Math.max(Number(e.target.value), severityMin))}
+              aria-label="Maximum severity"
               className="absolute inset-0 w-full opacity-0 cursor-pointer z-10" />
           </div>
         </div>
@@ -111,7 +123,8 @@ export default function FilterPanel() {
             <button
               key={tr.value}
               onClick={() => setTimeRange(tr.value)}
-              className={`text-xs px-2.5 py-1 rounded-md transition-colors ${
+              aria-pressed={timeRange === tr.value}
+              className={`min-h-[44px] min-w-[44px] px-2.5 py-1.5 rounded-md text-xs transition-colors ${
                 timeRange === tr.value
                   ? 'bg-signal-blue text-white'
                   : 'text-cool-gray/60 hover:text-glacier-white hover:bg-white/5'
@@ -126,8 +139,10 @@ export default function FilterPanel() {
       <div className="border-t border-white/[0.05] pt-4">
         <h3 className="text-[11px] font-semibold uppercase tracking-wider text-cool-gray/60 mb-2">Region</h3>
         <select
+          id="filter-region"
           value={region}
           onChange={(e) => setRegion(e.target.value)}
+          aria-label="Region"
           className="w-full bg-surface border border-white/10 rounded-lg px-3 py-2 text-sm text-glacier-white focus:outline-none focus:border-signal-blue/50"
         >
           {regions.map((r) => (

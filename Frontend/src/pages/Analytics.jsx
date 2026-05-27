@@ -59,18 +59,18 @@ export default function Analytics() {
 
   const statCards = [
     { icon: Activity, value: summary?.total?.toLocaleString(), label: 'Total Incidents', color: 'border-crisis-red/30', iconColor: 'text-crisis-red' },
-    { icon: Globe, value: summary?.most_active_region || '—', label: 'Most Active Region', color: 'border-signal-blue/30', iconColor: 'text-signal-blue' },
-    { icon: AlertTriangle, value: summary?.most_common_type?.replace('_', ' ') || '—', label: 'Most Common Type', color: 'border-amber/30', iconColor: 'text-amber' },
-    { icon: TrendingUp, value: summary?.active?.toLocaleString() || '—', label: 'Currently Active', color: 'border-ai-purple/30', iconColor: 'text-ai-purple' },
+    { icon: Globe, value: summary?.most_active_region || '-', label: 'Most Active Region', color: 'border-signal-blue/30', iconColor: 'text-signal-blue' },
+    { icon: AlertTriangle, value: summary?.most_common_type?.replace('_', ' ') || '-', label: 'Most Common Type', color: 'border-amber/30', iconColor: 'text-amber' },
+    { icon: TrendingUp, value: summary?.active?.toLocaleString() || '-', label: 'Currently Active', color: 'border-ai-purple/30', iconColor: 'text-ai-purple' },
   ]
 
   return (
-    <div className="min-h-screen bg-deep-slate">
+    <main className="min-h-screen bg-deep-slate">
       <Navbar />
       <div className="pt-14">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 animate-fade-in">
-            <h1 className="text-2xl font-bold text-glacier-white">Analytics & Statistics</h1>
+            <h1 className="text-2xl font-bold text-glacier-white">Incident trends over time</h1>
             <div className="flex items-center gap-1.5 bg-surface/50 rounded-lg p-1 border border-white/[0.06]">
               {ranges.map((r) => (
                 <button key={r.value}
@@ -118,6 +118,6 @@ export default function Analytics() {
         </div>
       </div>
       <Footer />
-    </div>
+    </main>
   )
 }

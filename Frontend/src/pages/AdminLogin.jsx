@@ -56,14 +56,14 @@ export default function AdminLogin() {
             </div>
           )}
           <div>
-            <label className="text-xs text-cool-gray mb-1 block">Email</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+            <label htmlFor="admin-email" className="text-xs text-cool-gray mb-1 block">Email</label>
+            <input id="admin-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
               className="w-full bg-deep-slate border border-white/10 rounded-lg px-3 py-2 text-sm text-glacier-white focus:outline-none focus:border-signal-blue/50"
               required />
           </div>
           <div>
-            <label className="text-xs text-cool-gray mb-1 block">Password</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+            <label htmlFor="admin-password" className="text-xs text-cool-gray mb-1 block">Password</label>
+            <input id="admin-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-deep-slate border border-white/10 rounded-lg px-3 py-2 text-sm text-glacier-white focus:outline-none focus:border-signal-blue/50"
               required />
           </div>

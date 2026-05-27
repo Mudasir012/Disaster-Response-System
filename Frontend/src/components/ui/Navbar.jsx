@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { Search, Bell, Radio } from 'lucide-react'
 import { useFilterStore } from '../../store/useFilterStore'
 
@@ -13,6 +13,7 @@ const navLinks = [
 export default function Navbar({ transparent = false, activeCount = 0, connected = false }) {
   const location = useLocation()
   const [searchOpen, setSearchOpen] = useState(false)
+  const [searchClosing, setSearchClosing] = useState(false)
   const { search, setSearch } = useFilterStore()
 
   const isLanding = location.pathname === '/'
@@ -36,7 +37,7 @@ export default function Navbar({ transparent = false, activeCount = 0, connected
               <Link
                 key={link.path}
                 to={link.path}
-                className={`px-3 py-1.5 rounded-md text-sm transition-all duration-200 ${
+                className={`px-3 py-2.5 rounded-md text-sm transition-all duration-200 ${
                   location.pathname === link.path
                     ? 'text-glacier-white bg-white/10'
                     : 'text-cool-gray hover:text-glacier-white hover:bg-white/5'
@@ -49,8 +50,10 @@ export default function Navbar({ transparent = false, activeCount = 0, connected
         </div>
 
         <div className="flex items-center gap-2">
-          {searchOpen && (
-            <div className="absolute top-14 left-0 right-0 md:relative md:top-0 bg-deep-slate md:bg-transparent p-3 md:p-0 border-b border-white/10 md:border-0 animate-slide-up">
+          {(searchOpen || searchClosing) && (
+            <div className={`absolute top-14 left-0 right-0 md:relative md:top-0 bg-deep-slate md:bg-transparent p-3 md:p-0 border-b border-white/10 md:border-0 ${
+              searchClosing ? 'animate-slide-down' : 'animate-slide-up'
+            }`}>
               <div className="relative">
                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-cool-gray" />
                 <input
@@ -63,6 +66,7 @@ export default function Navbar({ transparent = false, activeCount = 0, connected
                 {search && (
                   <button
                     onClick={() => setSearch('')}
+                    aria-label="Clear search"
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-cool-gray hover:text-glacier-white text-xs"
                   >
                     ✕
@@ -71,8 +75,17 @@ export default function Navbar({ transparent = false, activeCount = 0, connected
               </div>
             </div>
           )}
-          <button onClick={() => setSearchOpen(!searchOpen)}
-            className="p-1.5 rounded-md text-cool-gray hover:text-glacier-white hover:bg-white/5 transition-colors">
+          <button onClick={() => {
+              if (searchOpen) {
+                setSearchClosing(true)
+                setTimeout(() => { setSearchOpen(false); setSearchClosing(false) }, 250)
+              } else {
+                setSearchOpen(true)
+              }
+            }}
+            aria-label={searchOpen || searchClosing ? 'Close search' : 'Open search'}
+            aria-expanded={searchOpen}
+            className="p-2.5 rounded-md text-cool-gray hover:text-glacier-white hover:bg-white/5 transition-colors">
             <Search size={16} />
           </button>
 
@@ -83,7 +96,7 @@ export default function Navbar({ transparent = false, activeCount = 0, connected
             </div>
           )}
 
-          <Link to="/alerts" className="relative p-1.5 rounded-md text-cool-gray hover:text-glacier-white hover:bg-white/5 transition-colors">
+          <Link to="/alerts" aria-label="View alerts" className="relative p-2.5 rounded-md text-cool-gray hover:text-glacier-white hover:bg-white/5 transition-colors">
             <Bell size={16} />
           </Link>
 

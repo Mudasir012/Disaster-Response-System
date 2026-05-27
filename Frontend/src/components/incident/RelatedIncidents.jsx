@@ -21,10 +21,10 @@ export default function RelatedIncidents({ incidentId }) {
   if (!related.length) return null
 
   return (
-    <div className="bg-surface/50 border border-white/[0.06] rounded-xl p-5">
+    <div>
       <h3 className="text-sm font-semibold text-glacier-white mb-4">Related Incidents</h3>
       <div className="flex gap-3 overflow-x-auto pb-2">
-        {related.map((inc, i) => (
+        {related.map((inc) => (
           <button
             key={inc._id}
             onClick={() => navigate(`/incident/${inc._id}`)}

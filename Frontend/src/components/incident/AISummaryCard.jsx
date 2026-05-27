@@ -2,7 +2,7 @@ import { RefreshCw } from 'lucide-react'
 
 export default function AISummaryCard({ summary, confidence, sourceCount, showAdmin = false }) {
   return (
-    <div className="bg-gradient-to-br from-[#1a1040] to-[#110a2e] border border-ai-purple/20 rounded-xl p-5 border-l-4 border-l-ai-purple">
+    <div className="bg-ai-purple/[0.06] border border-ai-purple/20 rounded-xl p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-1.5">
           <span className="text-[10px] font-semibold text-ai-purple bg-ai-purple/15 px-2 py-0.5 rounded">AI GENERATED</span>

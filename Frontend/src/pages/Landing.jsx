@@ -19,12 +19,12 @@ export default function Landing() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-deep-slate">
+    <main className="min-h-screen bg-deep-slate">
       <Hero />
       <Features />
       <LivePreview />
       <DisasterTypeGrid />
       <Footer />
-    </div>
+    </main>
   )
 }

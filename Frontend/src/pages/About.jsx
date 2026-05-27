@@ -7,7 +7,7 @@ import { useIncidentStore } from '../store/useIncidentStore'
 
 const dataSources = [
   { name: 'GDACS', desc: 'Global Disaster Alert and Coordination System', url: 'https://gdacs.org' },
-  { name: 'USGS', desc: 'United States Geological Survey — earthquake monitoring', url: 'https://earthquake.usgs.gov' },
+  { name: 'USGS', desc: 'United States Geological Survey, earthquake monitoring', url: 'https://earthquake.usgs.gov' },
   { name: 'NOAA', desc: 'National Oceanic and Atmospheric Administration', url: 'https://www.weather.gov' },
   { name: 'NewsAPI', desc: 'Global news aggregator for disaster reporting', url: 'https://newsapi.org' },
   { name: 'OpenStreetMap', desc: 'Free geographic data and map tiles', url: 'https://openstreetmap.org' },
@@ -20,7 +20,7 @@ export default function About() {
   useEffect(() => { fetchStatsSummary() }, [])
 
   return (
-    <div className="min-h-screen bg-deep-slate">
+    <main className="min-h-screen bg-deep-slate">
       <Navbar />
       <div className="pt-14">
         <div className="max-w-3xl mx-auto px-4 py-12 animate-fade-in">
@@ -30,7 +30,7 @@ export default function About() {
             </h1>
             <p className="text-base text-cool-gray/70 leading-relaxed max-w-2xl mx-auto">
               The Real-Time Disaster Response Tracker aggregates live data from government agencies,
-              seismic networks, social media, and news outlets — and presents it as an interactive,
+              seismic networks, social media, and news outlets, and presents it as an interactive,
               severity-coded map updated in real time.
             </p>
           </div>
@@ -49,7 +49,7 @@ export default function About() {
               {[
                 { icon: Globe, step: '1', title: 'Collect', body: 'Data from 5 authoritative sources (GDACS, USGS, NOAA, NewsAPI, social feeds) is polled every 2 minutes.' },
                 { icon: Brain, step: '2', title: 'AI Analysis', body: 'Gemini 1.5 Flash classifies each event, assigns a severity score (1–5), extracts location data, and writes a plain-English summary.' },
-                { icon: Radio, step: '3', title: 'Live Map', body: 'Every incident is pushed via WebSocket to the map within seconds — no page refresh required.' },
+                { icon: Radio, step: '3', title: 'Live Map', body: 'Every incident is pushed via WebSocket to the map within seconds, no page refresh required.' },
               ].map((item) => (
                 <div key={item.step} className="flex gap-4 items-start animate-slide-up" style={{ animationDelay: `${parseInt(item.step) * 100}ms` }}>
                   <div className="shrink-0 w-12 h-12 rounded-full bg-signal-blue/15 border border-signal-blue/30 flex items-center justify-center">
@@ -64,7 +64,7 @@ export default function About() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-[#1a1040] to-[#110a2e] border border-ai-purple/20 rounded-xl p-6 mb-10 border-l-4 border-l-ai-purple">
+          <div className="bg-ai-purple/[0.06] border border-ai-purple/20 rounded-xl p-6 mb-10">
             <div className="flex items-center gap-2 mb-3">
               <span className="text-[10px] font-semibold text-ai-purple bg-ai-purple/15 px-2 py-0.5 rounded">ABOUT OUR AI</span>
             </div>
@@ -73,7 +73,7 @@ export default function About() {
               extract geographic locations from unstructured text, and generate concise summaries.
             </p>
             <ul className="text-sm text-cool-gray/70 space-y-1 list-disc list-inside">
-              <li>Classification — not prediction. AI categorises what has already happened.</li>
+              <li>Classification, not prediction. AI categorises what has already happened.</li>
               <li>Confidence scores below 0.7 are flagged for human review.</li>
               <li>All data links to original sources for verification.</li>
             </ul>
@@ -99,7 +99,7 @@ export default function About() {
             <div className="text-center mb-8 animate-fade-in">
               <div className="inline-block bg-surface/30 border border-white/[0.06] rounded-lg px-5 py-3">
                 <span className="text-sm text-cool-gray/70">
-                  <span className="font-bold text-glacier-white">{statsSummary.total?.toLocaleString() || '—'}</span> incidents tracked to date
+                  <span className="font-bold text-glacier-white">{statsSummary.total?.toLocaleString() || '-'}</span> incidents tracked to date
                 </span>
               </div>
             </div>
@@ -107,17 +107,19 @@ export default function About() {
 
           <div className="text-center mb-8">
             <button onClick={() => setExpanded(!expanded)}
+              aria-expanded={expanded}
+              aria-controls="tech-stack-details"
               className="text-sm text-cool-gray/60 hover:text-glacier-white cursor-pointer transition-colors">
               {expanded ? 'Hide' : 'Show'} tech stack details
             </button>
             {expanded && (
-              <div className="mt-4 bg-surface/30 border border-white/[0.06] rounded-xl p-6 text-left animate-slide-up">
+              <div id="tech-stack-details" className="mt-4 bg-surface/30 border border-white/[0.06] rounded-xl p-6 text-left animate-slide-up">
                 <div className="grid grid-cols-2 gap-3 text-sm">
                   {[
                     ['Frontend', 'React + Vite, MapLibre GL, Recharts, Zustand, Tailwind CSS'],
                     ['Backend', 'Node.js + Express, Socket.io, BullMQ + Redis'],
                     ['Database', 'MongoDB + Mongoose'],
-                    ['AI', 'Gemini 1.5 Flash (Google) — Groq fallback'],
+                    ['AI', 'Gemini 1.5 Flash (Google), Groq fallback'],
                     ['Geocoding', 'Nominatim (OpenStreetMap)'],
                     ['Deployment', 'Railway (backend), Vercel (frontend)'],
                   ].map(([label, value]) => (
@@ -141,6 +143,6 @@ export default function About() {
         </div>
       </div>
       <Footer />
-    </div>
+    </main>
   )
 }

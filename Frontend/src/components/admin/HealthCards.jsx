@@ -29,7 +29,7 @@ export default function HealthCards({ health }) {
       icon: Cpu,
       label: 'AI API',
       status: health.ai_api?.status === 'ok' ? 'ok' : 'error',
-      detail: `${health.ai_api?.last_latency_ms || 0}ms latency (${health.ai_api?.provider || '—'})`,
+      detail: `${health.ai_api?.last_latency_ms || 0}ms latency (${health.ai_api?.provider || '-'})`,
       color: health.ai_api?.status === 'ok' ? 'text-ai-purple' : 'text-crisis-red',
     },
   ]

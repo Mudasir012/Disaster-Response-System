@@ -40,7 +40,8 @@ export default function IncidentTable({ incidents, onEdit, onDelete, onReprocess
           <thead>
             <tr className="border-b border-white/[0.06]">
               <th className="w-8 px-3 py-3">
-                <input type="checkbox" checked={selected.length === incidents.length}
+                <input type="checkbox" aria-label="Select all incidents"
+                  checked={selected.length === incidents.length}
                   onChange={toggleAll} className="accent-signal-blue" />
               </th>
               <th className="text-left text-[11px] text-cool-gray font-medium uppercase tracking-wider px-3 py-3">Severity</th>
@@ -57,7 +58,8 @@ export default function IncidentTable({ incidents, onEdit, onDelete, onReprocess
               <tr key={inc._id} className="border-b border-white/[0.04] hover:bg-white/[0.02] cursor-pointer"
                 onClick={() => navigate(`/incident/${inc._id}`)}>
                 <td className="px-3 py-2.5" onClick={(e) => e.stopPropagation()}>
-                  <input type="checkbox" checked={selected.includes(inc._id)}
+                  <input type="checkbox" aria-label={`Select incident ${inc._id}`}
+                    checked={selected.includes(inc._id)}
                     onChange={() => toggleSelect(inc._id)} className="accent-signal-blue" />
                 </td>
                 <td className="px-3 py-2.5"><SeverityDot severity={inc.severity} /></td>
@@ -69,15 +71,18 @@ export default function IncidentTable({ incidents, onEdit, onDelete, onReprocess
                 <td className="px-3 py-2.5 text-right" onClick={(e) => e.stopPropagation()}>
                   <div className="flex items-center justify-end gap-1">
                     <button onClick={() => onEdit?.(inc)}
-                      className="p-1.5 rounded text-cool-gray hover:text-glacier-white hover:bg-white/5 transition-colors">
+                      aria-label="Edit incident"
+                      className="p-2.5 rounded text-cool-gray hover:text-glacier-white hover:bg-white/5 transition-colors">
                       <Edit3 size={13} />
                     </button>
                     <button onClick={() => onReprocess?.(inc._id)}
-                      className="p-1.5 rounded text-cool-gray hover:text-ai-purple hover:bg-ai-purple/10 transition-colors">
+                      aria-label="Reprocess incident"
+                      className="p-2.5 rounded text-cool-gray hover:text-ai-purple hover:bg-ai-purple/10 transition-colors">
                       <RefreshCw size={13} />
                     </button>
                     <button onClick={() => onDelete?.(inc._id)}
-                      className="p-1.5 rounded text-cool-gray hover:text-crisis-red hover:bg-crisis-red/10 transition-colors">
+                      aria-label="Delete incident"
+                      className="p-2.5 rounded text-cool-gray hover:text-crisis-red hover:bg-crisis-red/10 transition-colors">
                       <Trash2 size={13} />
                     </button>
                   </div>
@@ -90,7 +95,7 @@ export default function IncidentTable({ incidents, onEdit, onDelete, onReprocess
       {selected.length > 0 && (
         <div className="px-4 py-3 border-t border-white/[0.06] flex items-center gap-2">
           <span className="text-xs text-cool-gray">{selected.length} selected</span>
-          <button className="text-xs text-crisis-red hover:underline ml-auto">Delete selected</button>
+          <button aria-label="Delete selected incidents" className="text-xs text-crisis-red hover:underline ml-auto min-h-[44px] px-3">Delete selected</button>
         </div>
       )}
     </div>

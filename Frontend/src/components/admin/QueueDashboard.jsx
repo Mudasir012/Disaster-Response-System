@@ -35,13 +35,13 @@ export default function QueueDashboard({ queues, onRetry, onDrain }) {
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-1">
                     <button onClick={() => onRetry?.(q.name)}
-                      className="p-1.5 rounded text-cool-gray hover:text-glacier-white hover:bg-white/5 transition-colors"
-                      title="Retry failed">
+                      aria-label="Retry failed"
+                      className="p-2.5 rounded text-cool-gray hover:text-glacier-white hover:bg-white/5 transition-colors">
                       <RotateCcw size={14} />
                     </button>
                     <button onClick={() => onDrain?.(q.name)}
-                      className="p-1.5 rounded text-cool-gray hover:text-crisis-red hover:bg-crisis-red/10 transition-colors"
-                      title="Drain queue">
+                      aria-label="Drain queue"
+                      className="p-2.5 rounded text-cool-gray hover:text-crisis-red hover:bg-crisis-red/10 transition-colors">
                       <Trash2 size={14} />
                     </button>
                   </div>

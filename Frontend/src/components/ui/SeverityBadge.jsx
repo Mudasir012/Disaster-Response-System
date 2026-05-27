@@ -24,7 +24,7 @@ export default function SeverityBadge({ severity, size = 'md', showLabel = true,
 
 export function SeverityDot({ severity }) {
   const config = severityConfig[severity] || severityConfig[1]
-  return <div className={`rounded-full shrink-0 ${config.bg}`} style={{ width: 8, height: 8 }} />
+  return <div className={`rounded-full shrink-0 ${config.bg}`} style={{ width: 8, height: 8 }} aria-label={`Severity ${severity}`} />
 }
 
 export function SeverityMapPin({ severity }) {

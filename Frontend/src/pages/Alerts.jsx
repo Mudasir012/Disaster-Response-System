@@ -6,12 +6,21 @@ import { Bell, Plus, Trash2, Send, CheckCircle } from 'lucide-react'
 const disasterTypes = ['earthquake', 'flood', 'wildfire', 'cyclone', 'tsunami', 'severe_weather']
 
 function RuleRow({ rule, index, onChange, onDelete }) {
+  const [deleting, setDeleting] = useState(false)
+
+  const handleDelete = () => {
+    setDeleting(true)
+    setTimeout(() => onDelete(index), 250)
+  }
+
   return (
-    <div className="bg-surface/30 border border-white/[0.06] rounded-lg p-4 card-hover">
+    <div className={`bg-surface/30 border border-white/[0.06] rounded-lg p-4 card-hover ${
+      deleting ? 'animate-scale-out' : 'animate-slide-up'
+    }`}>
       <div className="grid md:grid-cols-4 gap-3">
         <div>
-          <label className="text-[11px] text-cool-gray/60 mb-1 block">Region</label>
-          <select value={rule.region} onChange={(e) => onChange(index, 'region', e.target.value)}
+          <label htmlFor={`rule-region-${index}`} className="text-[11px] text-cool-gray/60 mb-1 block">Region</label>
+          <select id={`rule-region-${index}`} value={rule.region} onChange={(e) => onChange(index, 'region', e.target.value)}
             className="w-full bg-deep-slate border border-white/10 rounded-lg px-3 py-2 text-sm text-glacier-white focus:outline-none focus:border-signal-blue/50">
             <option value="worldwide">Worldwide</option>
             <option value="asia">Asia</option>
@@ -22,8 +31,8 @@ function RuleRow({ rule, index, onChange, onDelete }) {
           </select>
         </div>
         <div>
-          <label className="text-[11px] text-cool-gray/60 mb-1 block">Disaster Types</label>
-          <div className="flex flex-wrap gap-1">
+          <label className="text-[11px] text-cool-gray/60 mb-1 block" id={`rule-types-label-${index}`}>Disaster Types</label>
+          <div className="flex flex-wrap gap-1" role="group" aria-labelledby={`rule-types-label-${index}`}>
             {disasterTypes.map((dt) => (
               <button key={dt}
                 onClick={() => {
@@ -31,7 +40,8 @@ function RuleRow({ rule, index, onChange, onDelete }) {
                   const updated = types.includes(dt) ? types.filter((t) => t !== dt) : [...types, dt]
                   onChange(index, 'event_types', updated)
                 }}
-                className={`text-[10px] px-2 py-0.5 rounded-full transition-colors ${
+                aria-pressed={(rule.event_types || []).includes(dt)}
+                className={`text-xs min-h-[44px] px-3 py-1 rounded-full transition-colors ${
                   (rule.event_types || []).includes(dt)
                     ? 'bg-signal-blue text-white'
                     : 'bg-deep-slate text-cool-gray/60 border border-white/10 hover:border-white/30'
@@ -42,12 +52,13 @@ function RuleRow({ rule, index, onChange, onDelete }) {
           </div>
         </div>
         <div>
-          <label className="text-[11px] text-cool-gray/60 mb-1 block">Min Severity</label>
-          <div className="flex gap-0.5">
+          <label className="text-[11px] text-cool-gray/60 mb-1 block" id={`rule-severity-label-${index}`}>Min Severity</label>
+          <div className="flex gap-0.5" role="group" aria-labelledby={`rule-severity-label-${index}`}>
             {[1, 2, 3, 4, 5].map((s) => (
               <button key={s}
                 onClick={() => onChange(index, 'min_severity', s)}
-                className={`flex-1 py-1.5 text-xs font-bold rounded transition-colors ${
+                aria-label={`Severity ${s}`}
+                className={`flex-1 min-h-[44px] py-1.5 text-xs font-bold rounded transition-colors ${
                   rule.min_severity === s
                     ? 'bg-crisis-red text-white'
                     : 'bg-deep-slate text-cool-gray/60 border border-white/10 hover:border-white/30'
@@ -58,8 +69,9 @@ function RuleRow({ rule, index, onChange, onDelete }) {
           </div>
         </div>
         <div className="flex items-end justify-end">
-          <button onClick={() => onDelete(index)}
-            className="p-2 rounded-lg text-cool-gray/60 hover:text-crisis-red hover:bg-crisis-red/10 transition-colors">
+          <button onClick={handleDelete}
+            aria-label="Delete rule"
+            className="p-2.5 rounded-lg text-cool-gray/60 hover:text-crisis-red hover:bg-crisis-red/10 transition-colors">
             <Trash2 size={16} />
           </button>
         </div>
@@ -96,7 +108,7 @@ export default function Alerts() {
   const deleteRule = (index) => setRules(rules.filter((_, i) => i !== index))
 
   return (
-    <div className="min-h-screen bg-deep-slate">
+    <main className="min-h-screen bg-deep-slate">
       <Navbar />
       <div className="pt-14">
         <div className="max-w-4xl mx-auto px-4 py-6 animate-fade-in">
@@ -107,12 +119,13 @@ export default function Alerts() {
             <div className="bg-surface/30 border border-white/[0.06] rounded-xl p-6 mb-8">
               <h2 className="text-lg font-semibold text-glacier-white mb-4">Get disaster alerts by email</h2>
               <form onSubmit={handleSubscribe} className="flex gap-3">
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                <label htmlFor="alert-email" className="sr-only">Email address for alerts</label>
+                <input id="alert-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   className="flex-1 bg-deep-slate border border-white/10 rounded-lg px-4 py-2.5 text-sm text-glacier-white placeholder-cool-gray/50 focus:outline-none focus:border-signal-blue/50 transition-colors"
                   required />
                 <button type="submit"
-                  className="bg-signal-blue hover:bg-signal-blue/90 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all hover:scale-[1.02] flex items-center gap-2 shadow-lg shadow-signal-blue/20">
+                  className="bg-signal-blue hover:bg-signal-blue/90 text-white px-6 py-2.5 min-h-[44px] rounded-lg text-sm font-semibold transition-all hover:scale-[1.02] flex items-center gap-2 shadow-lg shadow-signal-blue/20">
                   <Bell size={16} />
                   Subscribe
                 </button>
@@ -199,6 +212,6 @@ export default function Alerts() {
         </div>
       </div>
       <Footer />
-    </div>
+    </main>
   )
 }

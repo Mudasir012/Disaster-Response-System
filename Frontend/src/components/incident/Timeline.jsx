@@ -5,7 +5,7 @@ const sourceColors = {
   usgs: 'bg-signal-blue',
   noaa: 'bg-amber',
   newsapi: 'bg-ai-purple',
-  gdelt: 'bg-sky-400',
+  gdelt: 'bg-status-teal',
 }
 
 const sourceLabels = {

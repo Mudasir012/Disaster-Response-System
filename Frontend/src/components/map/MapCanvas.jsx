@@ -52,7 +52,7 @@ export default function MapCanvas({ onIncidentClick }) {
           'circle-radius': ['step', ['get', 'point_count'], 20, 5, 28, 10, 36],
           'circle-opacity': 0.75,
           'circle-stroke-width': 2,
-          'circle-stroke-color': '#ffffff',
+          'circle-stroke-color': '#f8fafc',
           'circle-stroke-opacity': 0.3,
         },
       })
@@ -67,7 +67,7 @@ export default function MapCanvas({ onIncidentClick }) {
           'text-font': ['Open Sans Bold'],
           'text-size': 12,
         },
-        paint: { 'text-color': '#ffffff' },
+        paint: { 'text-color': '#f8fafc' },
       })
 
       m.addLayer({
@@ -80,7 +80,7 @@ export default function MapCanvas({ onIncidentClick }) {
           'circle-radius': ['get', 'radius'],
           'circle-opacity': 0.9,
           'circle-stroke-width': 2,
-          'circle-stroke-color': '#ffffff',
+          'circle-stroke-color': '#f8fafc',
           'circle-stroke-opacity': 0.4,
         },
       })
@@ -131,11 +131,11 @@ export default function MapCanvas({ onIncidentClick }) {
             <div style="padding:10px 14px;min-width:180px">
               <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
                 <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${p.color};${p.severity >= 4 ? 'box-shadow:0 0 6px ' + p.color : ''}"></span>
-                <span style="font-size:11px;font-weight:600;text-transform:capitalize;color:#e2e8f0">${p.event_type}</span>
+                <span style="font-size:11px;font-weight:600;text-transform:capitalize;color:var(--color-slate-border,#e2e8f0)">${p.event_type}</span>
                 <span style="font-size:10px;padding:1px 8px;border-radius:999px;background:${p.color}20;color:${p.color};font-weight:600;margin-left:auto">SEV-${p.severity}</span>
               </div>
-              <div style="font-size:13px;font-weight:600;color:#f8fafc;margin-bottom:2px">${p.location_name}</div>
-              <div style="font-size:11px;color:#94a3b8">${p.time_ago}</div>
+              <div style="font-size:13px;font-weight:600;color:var(--color-glacier-white,#f8fafc);margin-bottom:2px">${p.location_name}</div>
+              <div style="font-size:11px;color:var(--color-cool-gray,#94a3b8)">${p.time_ago}</div>
             </div>
           `)
           .addTo(m)
@@ -191,5 +191,5 @@ export default function MapCanvas({ onIncidentClick }) {
     }
   }, [incidents, types, severityMin, severityMax, region, mapLoaded])
 
-  return <div ref={mapContainer} className="absolute inset-0" />
+  return <div ref={mapContainer} role="application" aria-label="Disaster map" className="absolute inset-0" />
 }

@@ -1,26 +1,38 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Landing from './pages/Landing'
-import MapDashboard from './pages/MapDashboard'
-import IncidentDetail from './pages/IncidentDetail'
-import Analytics from './pages/Analytics'
-import Alerts from './pages/Alerts'
-import Admin from './pages/Admin'
-import AdminLogin from './pages/AdminLogin'
-import About from './pages/About'
+
+const Landing = lazy(() => import('./pages/Landing'))
+const MapDashboard = lazy(() => import('./pages/MapDashboard'))
+const IncidentDetail = lazy(() => import('./pages/IncidentDetail'))
+const Analytics = lazy(() => import('./pages/Analytics'))
+const Alerts = lazy(() => import('./pages/Alerts'))
+const Admin = lazy(() => import('./pages/Admin'))
+const AdminLogin = lazy(() => import('./pages/AdminLogin'))
+const About = lazy(() => import('./pages/About'))
+
+function PageLoader() {
+  return (
+    <div className="min-h-screen bg-deep-slate flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-crisis-red border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+}
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/map" element={<MapDashboard />} />
-        <Route path="/incident/:id" element={<IncidentDetail />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/alerts" element={<Alerts />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/map" element={<MapDashboard />} />
+          <Route path="/incident/:id" element={<IncidentDetail />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/alerts" element={<Alerts />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }

@@ -19,19 +19,19 @@ export default function IncidentDetail() {
 
   if (!activeIncident) {
     return (
-      <div className="min-h-screen bg-deep-slate flex items-center justify-center">
+      <main className="min-h-screen bg-deep-slate flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-crisis-red border-t-transparent rounded-full animate-spin mx-auto mb-3" />
           <p className="text-sm text-cool-gray/60">Loading incident...</p>
         </div>
-      </div>
+      </main>
     )
   }
 
   const inc = activeIncident
 
   return (
-    <div className="min-h-screen bg-deep-slate">
+    <main className="min-h-screen bg-deep-slate">
       <Navbar />
       <div className="pt-14">
         <div className="max-w-5xl mx-auto px-4 py-6 animate-fade-in">
@@ -126,11 +126,11 @@ export default function IncidentDetail() {
                   <Bell size={16} />
                   Alert me if this escalates
                 </button>
-                <button className="w-full flex items-center gap-2 bg-surface/30 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-glacier-white card-hover">
+                <button aria-label="Copy link to this incident" className="w-full flex items-center gap-2 bg-surface/30 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-glacier-white card-hover">
                   <Share2 size={16} className="text-cool-gray" />
                   Copy link
                 </button>
-                <button className="w-full flex items-center gap-2 bg-surface/30 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-glacier-white card-hover">
+                <button aria-label="Export incident as JSON" className="w-full flex items-center gap-2 bg-surface/30 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-glacier-white card-hover">
                   <Download size={16} className="text-cool-gray" />
                   Export as JSON
                 </button>
@@ -166,6 +166,6 @@ export default function IncidentDetail() {
         </div>
       </div>
       <Footer />
-    </div>
+    </main>
   )
 }

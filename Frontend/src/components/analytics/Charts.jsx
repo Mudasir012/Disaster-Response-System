@@ -3,13 +3,15 @@ import {
   PieChart, Pie, Cell, BarChart, Bar, Legend,
 } from 'recharts'
 
-const tooltipStyle = {
-  contentStyle: {
-    background: '#1c2333', border: '1px solid rgba(255,255,255,0.1)',
-    borderRadius: '8px', color: '#f8fafc', fontSize: '12px',
-  },
-  labelStyle: { color: '#94a3b8' },
+const contentStyle = {
+  backgroundColor: 'var(--color-surface, #1c2333)',
+  border: '1px solid rgba(255,255,255,0.1)',
+  borderRadius: '8px',
+  color: 'var(--color-glacier-white, #f8fafc)',
+  fontSize: '12px',
 }
+const labelStyle = { color: 'var(--color-cool-gray, #94a3b8)' }
+const tooltipStyle = { contentStyle, labelStyle }
 
 const colors = {
   earthquake: '#e94560', flood: '#0f7ddb', wildfire: '#d97706',
@@ -33,8 +35,8 @@ export function IncidentsOverTime({ data }) {
             ))}
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-          <XAxis dataKey="date" tick={{ fill: '#94a3b8', fontSize: 11 }} tickLine={false} axisLine={false} />
-          <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} tickLine={false} axisLine={false} />
+          <XAxis dataKey="date" tick={{ fill: 'var(--color-cool-gray, #94a3b8)', fontSize: 11 }} tickLine={false} axisLine={false} />
+          <YAxis tick={{ fill: 'var(--color-cool-gray, #94a3b8)', fontSize: 11 }} tickLine={false} axisLine={false} />
           <Tooltip {...tooltipStyle} />
           {Object.keys(colors).map((key) => (
             <Area key={key} type="monotone" dataKey={key} stackId="1"
@@ -62,7 +64,7 @@ export function SeverityDistribution({ data }) {
           </Pie>
           <Tooltip {...tooltipStyle} />
           <Legend
-            formatter={(value) => <span style={{ color: '#94a3b8', fontSize: 12 }}>SEV-{value}</span>}
+            formatter={(value) => <span style={{ color: 'var(--color-cool-gray, #94a3b8)', fontSize: 12 }}>SEV-{value}</span>}
           />
         </PieChart>
       </ResponsiveContainer>
@@ -79,8 +81,8 @@ export function TopRegions({ data }) {
       <ResponsiveContainer width="100%" height={240}>
         <BarChart data={data} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-          <XAxis type="number" tick={{ fill: '#94a3b8', fontSize: 11 }} tickLine={false} axisLine={false} />
-          <YAxis type="category" dataKey="region" tick={{ fill: '#f8fafc', fontSize: 12 }} tickLine={false} axisLine={false} />
+          <XAxis type="number" tick={{ fill: 'var(--color-cool-gray, #94a3b8)', fontSize: 11 }} tickLine={false} axisLine={false} />
+          <YAxis type="category" dataKey="region" tick={{ fill: 'var(--color-glacier-white, #f8fafc)', fontSize: 12 }} tickLine={false} axisLine={false} />
           <Tooltip {...tooltipStyle} />
           <Bar dataKey="count" radius={[0, 4, 4, 0]}>
             {data.map((entry, i) => (
@@ -102,10 +104,10 @@ export function DisasterTrend({ data, types }) {
       <ResponsiveContainer width="100%" height={280}>
         <AreaChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-          <XAxis dataKey="date" tick={{ fill: '#94a3b8', fontSize: 11 }} tickLine={false} axisLine={false} />
-          <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} tickLine={false} axisLine={false} />
+          <XAxis dataKey="date" tick={{ fill: 'var(--color-cool-gray, #94a3b8)', fontSize: 11 }} tickLine={false} axisLine={false} />
+          <YAxis tick={{ fill: 'var(--color-cool-gray, #94a3b8)', fontSize: 11 }} tickLine={false} axisLine={false} />
           <Tooltip {...tooltipStyle} />
-          <Legend formatter={(value) => <span style={{ color: '#94a3b8', fontSize: 12 }}>{value}</span>} />
+          <Legend formatter={(value) => <span style={{ color: 'var(--color-cool-gray, #94a3b8)', fontSize: 12 }}>{value}</span>} />
           {(types || Object.keys(colors)).map((key) => (
             <Area key={key} type="monotone" dataKey={key} stroke={colors[key]}
               fill="transparent" strokeWidth={2} dot={false} />

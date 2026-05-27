@@ -85,7 +85,7 @@ export default function Admin() {
             {tabs.map((tab) => (
               <button key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                className={`w-full text-left px-3 py-3 rounded-lg text-sm transition-colors ${
                   activeTab === tab.key
                     ? 'bg-amber/10 text-amber font-medium'
                     : 'text-cool-gray/60 hover:text-glacier-white hover:bg-white/5'

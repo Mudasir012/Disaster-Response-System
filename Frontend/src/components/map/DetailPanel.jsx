@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { X, ExternalLink, MapPin, Bell, Share2 } from 'lucide-react'
 import SeverityBadge from '../ui/SeverityBadge'
@@ -7,20 +7,28 @@ import { timeAgo } from '../../utils/timeAgo'
 
 export default function DetailPanel({ incidentId, onClose }) {
   const { activeIncident, fetchIncident } = useIncidentStore()
+  const [closing, setClosing] = useState(false)
 
   useEffect(() => {
     if (incidentId) fetchIncident(incidentId)
   }, [incidentId])
+
+  const handleClose = () => {
+    setClosing(true)
+    setTimeout(() => onClose(), 250)
+  }
 
   if (!activeIncident) return null
 
   const inc = activeIncident
 
   return (
-    <div className="absolute right-0 top-0 bottom-0 w-[380px] bg-deep-slate/95 backdrop-blur-xl border-l border-white/[0.06] z-20 animate-slide-in overflow-y-auto shadow-2xl">
+    <div className={`absolute right-0 top-0 bottom-0 w-full md:w-[380px] max-w-[95vw] bg-deep-slate/95 backdrop-blur-xl border-l border-white/[0.06] z-20 overflow-y-auto shadow-2xl ${
+      closing ? 'animate-slide-out' : 'animate-slide-in-right'
+    }`}>
       <div className="sticky top-0 bg-deep-slate/95 backdrop-blur-xl border-b border-white/[0.06] p-4 flex items-center justify-between">
         <SeverityBadge severity={inc.severity} />
-        <button onClick={onClose} className="p-1.5 rounded-md text-cool-gray hover:text-glacier-white hover:bg-white/10 transition-colors">
+        <button onClick={handleClose} aria-label="Close detail panel" className="p-2.5 rounded-md text-cool-gray hover:text-glacier-white hover:bg-white/10 transition-colors">
           <X size={18} />
         </button>
       </div>
@@ -45,7 +53,7 @@ export default function DetailPanel({ incidentId, onClose }) {
           )}
         </div>
 
-        <div className="bg-gradient-to-br from-[#1a1040] to-[#110a2e] border border-ai-purple/20 rounded-lg p-4 border-l-4 border-l-ai-purple">
+        <div className="bg-ai-purple/[0.06] border border-ai-purple/20 rounded-lg p-4">
           <div className="flex items-center gap-1.5 mb-2">
             <span className="text-[10px] font-semibold text-ai-purple bg-ai-purple/15 px-2 py-0.5 rounded">AI GENERATED</span>
           </div>
