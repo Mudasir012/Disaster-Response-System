@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+jspm_packages/
+
+# Production/Build outputs
+dist/
+dist-ssr/
+build/
+out/
+stats.html
+report.html
+
+# Environment / Secret / Sensitive Files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.pem
+*.key
+secrets.*
+
+# Agentic / Skill / Task state files (local workspace only)
+.agents/
+skills-lock.json
+.opencode/
+
+# Logs and Debug
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Diagnostic reports
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools
+coverage/
+*.lcov
+
+# IDEs and Editors
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sw?
+.DS_Store
+Thumbs.db
