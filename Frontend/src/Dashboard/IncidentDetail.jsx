@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import DashboardLayout from './DashboardLayout'
 import { SEVERITY } from './constants'
 import { api } from '../lib/api'
 import { mapBackendIncidentToFrontend } from '../utils/mapper'
+
+const easeLusion = [0.4, 0, 0.1, 1]
 
 function timeAgo(ts) {
   const diff = Date.now() - ts
@@ -73,19 +76,31 @@ export default function IncidentDetail() {
 
   return (
     <DashboardLayout>
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto relative">
+        {/* Cross decorations */}
+        <div className="pointer-events-none absolute top-4 left-4 text-cool-gray/[0.04] z-10"><span className="cross" /></div>
+        <div className="pointer-events-none absolute top-4 right-4 text-cool-gray/[0.04] z-10"><span className="cross" /></div>
+
         <div className="max-w-5xl mx-auto p-6 space-y-6">
-          <button
+          <motion.button
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, ease: easeLusion }}
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-sm text-cool-gray/50 hover:text-glacier-white transition-colors duration-200"
+            className="flex items-center gap-2 text-sm text-cool-gray/50 hover:text-glacier-white transition-colors duration-200 group"
           >
-            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:-translate-x-0.5">
               <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
             </svg>
             <span>Back</span>
-          </button>
+          </motion.button>
 
-          <div className="flex items-start justify-between gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 16, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.5, delay: 0.1, ease: easeLusion }}
+            className="flex items-start justify-between gap-6"
+          >
             <div className="min-w-0">
               <div className="flex items-center gap-3">
                 <span className="w-3 h-3 rounded-full" style={{ background: sev.color }} />
@@ -114,21 +129,34 @@ export default function IncidentDetail() {
               <p className="mt-0.5 font-mono text-xs text-cool-gray/40">{incident.id} &middot; {timeAgo(incident.timestamp)} &middot; {incident.source}</p>
             </div>
             <div className="flex gap-3 shrink-0">
-              <button className="rounded-lg border border-white/10 px-4 py-2 text-xs font-medium text-glacier-white/70 hover:border-white/20 hover:text-glacier-white transition-all duration-200">
+              <button className="rounded-lg border border-white/10 px-4 py-2 text-xs font-medium text-glacier-white/70 hover:border-white/20 hover:text-glacier-white transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)]">
                 Share
               </button>
-              <button className="rounded-lg bg-crisis-red px-5 py-2 text-xs font-semibold text-white hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+              <button className="rounded-lg bg-crisis-red px-5 py-2 text-xs font-semibold text-white transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_4px_20px_-3px_rgba(233,69,96,0.3)] active:scale-[0.98]">
                 Subscribe to updates
               </button>
             </div>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            transition={{ staggerChildren: 0.08, delayChildren: 0.2 }}
+            className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          >
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 20, filter: 'blur(6px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)' } }}
+              transition={{ duration: 0.5, ease: easeLusion }}
+              className="lg:col-span-2 space-y-6"
+            >
+              <motion.div
+                variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}
+                transition={{ duration: 0.4, ease: easeLusion }}
+                className="bg-surface rounded-xl border border-white/[0.04] p-5"
+              >
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-3">Summary</h2>
                 <p className="text-sm text-glacier-white/80 leading-relaxed">{incident.summary}</p>
-              </div>
+              </motion.div>
 
               <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-4">Impact</h2>
@@ -172,9 +200,13 @@ export default function IncidentDetail() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="space-y-6">
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 20, filter: 'blur(6px)' }, visible: { opacity: 1, y: 0, filter: 'blur(0px)' } }}
+              transition={{ duration: 0.5, delay: 0.15, ease: easeLusion }}
+              className="space-y-6"
+            >
               <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-3">Location</h2>
                 <div className="aspect-square bg-deep-slate rounded-lg flex items-center justify-center">
@@ -218,8 +250,8 @@ export default function IncidentDetail() {
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </DashboardLayout>

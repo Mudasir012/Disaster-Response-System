@@ -1,26 +1,43 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll } from 'framer-motion'
 import LoginForm from './LoginForm'
 import SignupForm from './SignupForm'
 import ResetPassword from './ResetPassword'
 import VerifyEmail from './VerifyEmail'
 import OAuthButtons from './OAuthButtons'
 
-const easeOut = [0.16, 1, 0.3, 1]
+const easeLusion = [0.4, 0, 0.1, 1]
 
 function fadeUp(delay = 0) {
   return {
     initial: { opacity: 0, y: 12, filter: 'blur(2px)' },
     animate: { opacity: 1, y: 0, filter: 'blur(0px)' },
-    transition: { duration: 0.5, delay, ease: easeOut },
+    transition: { duration: 0.5, delay, ease: easeLusion },
   }
+}
+
+function CrossDecor() {
+  return (
+    <>
+      <div className="absolute top-8 left-8 text-cool-gray/[0.07]"><span className="cross" /></div>
+      <div className="absolute top-8 right-8 text-cool-gray/[0.07]"><span className="cross" /></div>
+      <div className="absolute bottom-8 left-8 text-cool-gray/[0.07]"><span className="cross" /></div>
+      <div className="absolute bottom-8 right-8 text-cool-gray/[0.07]"><span className="cross" /></div>
+    </>
+  )
 }
 
 export default function AuthPage() {
   const [tab, setTab] = useState('login')
   const [flow, setFlow] = useState('form')
   const [email, setEmail] = useState('')
+  const { scrollYProgress } = useScroll()
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    return scrollYProgress.on('change', setProgress)
+  }, [scrollYProgress])
 
   const goToReset = useCallback((e) => {
     setEmail(e || '')
@@ -39,6 +56,13 @@ export default function AuthPage() {
 
   return (
     <div className="relative min-h-[100dvh] bg-deep-slate flex flex-col overflow-hidden">
+      <div className="scroll-progress" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-label="Page scroll progress">
+        <div className="scroll-progress-track" />
+        <div className="scroll-progress-bar" style={{ height: `${progress * 100}%` }} />
+      </div>
+
+      <CrossDecor />
+
       <div
         className="pointer-events-none fixed inset-0 opacity-[0.07]"
         style={{
@@ -76,7 +100,7 @@ export default function AuthPage() {
                 initial={{ opacity: 0, y: 16, filter: 'blur(4px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, y: -12, filter: 'blur(4px)' }}
-                transition={{ duration: 0.4, ease: easeOut }}
+                transition={{ duration: 0.4, ease: easeLusion }}
               >
                 <div className="text-center mb-12">
                   <motion.h1 {...fadeUp(0.1)} className="font-sora text-4xl font-bold tracking-tight text-glacier-white leading-[1.1]">
@@ -120,7 +144,7 @@ export default function AuthPage() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.25, ease: easeOut }}
+                    transition={{ duration: 0.25, ease: easeLusion }}
                   >
                     {tab === 'login' && <LoginForm onForgotPassword={goToReset} />}
                     {tab === 'signup' && <SignupForm onSuccess={onSignupSuccess} />}
@@ -139,7 +163,7 @@ export default function AuthPage() {
                 initial={{ opacity: 0, y: 16, filter: 'blur(4px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, y: -12, filter: 'blur(4px)' }}
-                transition={{ duration: 0.4, ease: easeOut }}
+                transition={{ duration: 0.4, ease: easeLusion }}
               >
                 <div className="text-center mb-12">
                   <h1 className="font-sora text-4xl font-bold tracking-tight text-glacier-white leading-[1.1]">
@@ -159,7 +183,7 @@ export default function AuthPage() {
                 initial={{ opacity: 0, y: 16, filter: 'blur(4px)' }}
                 animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, y: -12, filter: 'blur(4px)' }}
-                transition={{ duration: 0.4, ease: easeOut }}
+                transition={{ duration: 0.4, ease: easeLusion }}
               >
                 <div className="text-center mb-12">
                   <h1 className="font-sora text-4xl font-bold tracking-tight text-glacier-white leading-[1.1]">

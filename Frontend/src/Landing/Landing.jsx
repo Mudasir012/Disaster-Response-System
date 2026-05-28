@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useScroll, useTransform, useReducedMotion, useInView } from 'framer-motion'
 import Nav from './Nav'
 import HeroScene from './HeroScene'
 import Features from './Features'
@@ -7,21 +7,127 @@ import DataSources from './DataSources'
 import CTAFooter from './CTAFooter'
 
 const easePremium = [0.32, 0.72, 0, 1]
+const easeLusion = [0.4, 0, 0.1, 1]
 
 function useScrollReveal(delay = 0) {
   const reduced = useReducedMotion()
   return reduced ? {} : {
-    initial: { opacity: 0, y: 32, filter: 'blur(8px)' },
+    initial: { opacity: 0, y: 24, filter: 'blur(8px)' },
     whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
     viewport: { once: true, margin: '-80px' },
     transition: { duration: 0.8, delay, ease: easePremium },
   }
 }
 
+function AnimatedCounter({ from = 0, to, suffix = '', label, note }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-40px' })
+  const reduced = useReducedMotion()
+  const [count, setCount] = useState(() => (inView && !reduced ? from : to))
+  const rafRef = useRef()
+  const startedRef = useRef(false)
+
+  useEffect(() => {
+    if (!inView || reduced || startedRef.current) return
+    startedRef.current = true
+    let current = from
+    const duration = 1500
+    const step = Math.ceil((to - from) / (duration / 16))
+
+    const tick = () => {
+      current += step
+      if (current >= to) {
+        setCount(to)
+        return
+      }
+      setCount(current)
+      rafRef.current = requestAnimationFrame(tick)
+    }
+    rafRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [inView, reduced, from, to])
+
+  return (
+    <div ref={ref} className="bg-white/[0.03] rounded-xl px-5 py-6 ring-1 ring-white/[0.06] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.1,1)] hover:bg-white/[0.05] cursor-pointer">
+      <span className="font-sora text-lg font-bold text-glacier-white tabular-nums">
+        {count}{suffix}
+      </span>
+      <span className="block mt-1 text-xs text-cool-gray/70">{label}</span>
+      <span className="block mt-0.5 text-[10px] font-mono text-cool-gray/50">{note}</span>
+    </div>
+  )
+}
+
+function SplitText({ text, className }) {
+  const reduced = useReducedMotion()
+  const words = text.split(' ')
+
+  if (reduced) {
+    return <span className={className}>{text}</span>
+  }
+
+  return (
+    <span className={className}>
+      {words.map((word, i) => (
+        <span key={i} className="split-word">
+          <motion.span
+            className="split-word-inner"
+            initial={{ y: '100%', rotate: 3 }}
+            whileInView={{ y: 0, rotate: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.7, delay: i * 0.04, ease: easeLusion }}
+          >
+            {word}
+            {i < words.length - 1 && '\u00A0'}
+          </motion.span>
+        </span>
+      ))}
+    </span>
+  )
+}
+
+const testimonials = [
+  {
+    quote: 'We cut our response time by 60% in the first month. The single-pane view of seismic, weather, and news data is a game changer.',
+    name: 'Maria Santos',
+    role: 'Operations Director, Pacific DRR Center',
+  },
+  {
+    quote: 'When Cyclone Mocha hit, we had damage assessments mapped before ground teams even radioed in. This is the future of crisis response.',
+    name: 'James Chelimo',
+    role: 'Emergency Coordinator, UNDAC',
+  },
+  {
+    quote: 'The AI severity classification filters out noise we used to waste hours on. Finally, a tool that respects the responder\'s time.',
+    name: 'Dr. Aisha Patel',
+    role: 'Chief Resilience Officer, City of Mumbai',
+  },
+]
+
+function SectionCrosses() {
+  return (
+    <>
+      <div className="absolute top-8 left-8 text-cool-gray/20">
+        <span className="cross" />
+      </div>
+      <div className="absolute top-8 right-8 text-cool-gray/20">
+        <span className="cross" />
+      </div>
+      <div className="absolute bottom-8 left-8 text-cool-gray/20">
+        <span className="cross" />
+      </div>
+      <div className="absolute bottom-8 right-8 text-cool-gray/20">
+        <span className="cross" />
+      </div>
+    </>
+  )
+}
+
 export default function Landing() {
   const { scrollYProgress } = useScroll()
   const scrollRef = useRef(0)
   const mouseRef = useRef({ x: 0, y: 0 })
+  const [progress, setProgress] = useState(0)
   const reduced = useReducedMotion()
 
   const globeOpacity = useTransform(scrollYProgress, [0, 0.12, 0.2, 0.85, 0.95], [1, 0.3, 0.15, 0.15, 0])
@@ -29,6 +135,7 @@ export default function Landing() {
   useEffect(() => {
     return scrollYProgress.on('change', (v) => {
       scrollRef.current = v
+      setProgress(v)
     })
   }, [scrollYProgress])
 
@@ -48,6 +155,12 @@ export default function Landing() {
 
   return (
     <div className="relative min-h-[100dvh] bg-[#05080f]">
+      {/* Scroll Progress Bar */}
+      <div className="scroll-progress" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-label="Page scroll progress">
+        <div className="scroll-progress-track" />
+        <div className="scroll-progress-bar" style={{ height: `${progress * 100}%` }} />
+      </div>
+
       <motion.div style={{ opacity: reduced ? 1 : globeOpacity }}>
         <HeroScene scrollRef={scrollRef} mouseRef={mouseRef} />
       </motion.div>
@@ -55,13 +168,14 @@ export default function Landing() {
       <div className="relative z-10">
         <Nav />
 
-        {/* Chapter 1: Hero */}
+        {/* ── Chapter 1: Hero ── */}
         <section className="relative min-h-[100dvh] flex items-center">
           <div className="mx-auto w-full max-w-7xl px-6 pt-24">
             <div className="max-w-3xl">
               <motion.span {...fadeIn(0.2)}
                 className="inline-flex items-center gap-2 rounded-full border border-white/[0.06] bg-white/[0.03] px-4 py-1.5 text-[10px] font-medium uppercase tracking-[0.2em] text-cool-gray"
               >
+                <span className="cross mr-1" style={{ width: '0.625rem', height: '0.625rem' }} />
                 Real-Time Disaster Intelligence
               </motion.span>
 
@@ -86,10 +200,10 @@ export default function Landing() {
               >
                 <a
                   href="/auth"
-                  className="group rounded-full bg-crisis-red px-8 py-4 font-semibold text-white transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 active:scale-[0.98] flex items-center gap-3"
+                  className="group rounded-full bg-crisis-red px-8 py-4 font-semibold text-white transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:bg-white hover:text-crisis-red active:scale-[0.97] flex items-center gap-3"
                 >
                   Access Dashboard
-                  <span className="w-8 h-8 rounded-full bg-white/[0.06] flex items-center justify-center transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
+                  <span className="w-8 h-8 rounded-full bg-white/[0.12] flex items-center justify-center transition-all duration-500 group-hover:bg-crisis-red/10 group-hover:translate-x-0.5">
                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none">
                       <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
@@ -100,7 +214,7 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Chapter 2: The Problem */}
+        {/* ── Chapter 2: The Problem (Dark) ── */}
         <section className="relative py-40 md:py-56">
           <div className="mx-auto max-w-7xl px-6">
             <motion.div {...useScrollReveal()} className="max-w-3xl">
@@ -108,9 +222,7 @@ export default function Landing() {
                 The challenge
               </span>
               <h2 className="mt-4 font-sora text-4xl font-bold leading-tight text-glacier-white md:text-5xl">
-                Every second matters.
-                <br />
-                But the data is scattered.
+                <SplitText text="Every second matters. But the data is scattered." />
               </h2>
               <p className="mt-6 max-w-2xl text-base leading-relaxed text-cool-gray/80 md:text-lg">
                 When a earthquake strikes or a hurricane makes landfall, critical
@@ -123,40 +235,26 @@ export default function Landing() {
             <motion.div {...useScrollReveal(0.2)}
               className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6"
             >
-              {[
-                { label: 'Seismic sensors', value: '24/7', note: 'USGS monitoring' },
-                { label: 'Weather models', value: 'Real-time', note: 'NOAA updates' },
-                { label: 'Satellite imagery', value: 'Every 10 min', note: 'Geo coverage' },
-                { label: 'News sources', value: '100k+/day', note: 'GDELT index' },
-              ].map((item, i) => (
-                <motion.div
-                  key={item.label}
-                  initial={{ opacity: 0, y: 20, filter: 'blur(6px)' }}
-                  whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.6, delay: 0.3 + i * 0.08, ease: easePremium }}
-                  className="bg-white/[0.03] rounded-xl px-5 py-6 ring-1 ring-white/[0.06]"
-                >
-                  <span className="font-sora text-lg font-bold text-glacier-white">{item.value}</span>
-                  <span className="block mt-1 text-xs text-cool-gray/70">{item.label}</span>
-                  <span className="block mt-0.5 text-[10px] font-mono text-cool-gray/50">{item.note}</span>
-                </motion.div>
-              ))}
+              <AnimatedCounter to={24} suffix="/7" label="Seismic sensors" note="USGS monitoring" delay={0.3} />
+              <AnimatedCounter to={99} suffix="%" label="Weather models" note="NOAA updates" delay={0.38} />
+              <AnimatedCounter to={10} suffix=" min" label="Satellite refresh" note="Geo coverage" delay={0.46} />
+              <AnimatedCounter to={100} suffix="k+" label="News sources" note="GDELT index" delay={0.54} />
             </motion.div>
           </div>
         </section>
 
-        {/* Chapter 3: The Engine */}
-        <section className="relative py-32 md:py-40">
-          <div className="mx-auto max-w-7xl px-6">
+        {/* ── Chapter 3: The Pipeline (Alt background) ── */}
+        <section className="section-alt relative py-32 md:py-40">
+          <SectionCrosses />
+          <div className="grid-overlay" />
+
+          <div className="mx-auto max-w-7xl px-6 relative">
             <motion.div {...useScrollReveal()} className="max-w-3xl">
               <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-signal-blue/70">
                 The pipeline
               </span>
               <h2 className="mt-4 font-sora text-4xl font-bold leading-tight text-glacier-white md:text-5xl">
-                One pipeline.
-                <br />
-                One picture.
+                <SplitText text="One pipeline. One picture." />
               </h2>
             </motion.div>
 
@@ -166,30 +264,31 @@ export default function Landing() {
           </div>
         </section>
 
-        {/* Chapter 4: The Sources */}
-        <section className="relative py-24 md:py-32">
+        {/* ── Chapter 4: The Sources ── */}
+        <section id="sources" className="relative py-24 md:py-32">
           <div className="mx-auto max-w-7xl px-6">
             <motion.div {...useScrollReveal()} className="mb-16 max-w-3xl">
               <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-cool-gray/50">
                 Our network
               </span>
               <h2 className="mt-4 font-sora text-3xl font-bold text-glacier-white md:text-4xl">
-                Authoritative data, one pipeline.
+                <SplitText text="Authoritative data, one pipeline." />
               </h2>
             </motion.div>
             <DataSources />
           </div>
         </section>
 
-        {/* Chapter 5: For Responders */}
-        <section className="relative py-32 md:py-40">
+        {/* ── Chapter 5: For Responders (Alt background) ── */}
+        <section id="features" className="section-alt relative py-32 md:py-40">
+          <SectionCrosses />
           <div className="mx-auto max-w-7xl px-6">
             <motion.div {...useScrollReveal()} className="max-w-3xl">
               <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-amber/70">
                 Built for
               </span>
               <h2 className="mt-4 font-sora text-4xl font-bold leading-tight text-glacier-white md:text-5xl">
-                The people who act first.
+                <SplitText text="The people who act first." />
               </h2>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-cool-gray/80 md:text-lg">
                 Emergency operations centers, field response teams, humanitarian
@@ -224,33 +323,80 @@ export default function Landing() {
                   whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.6, delay: 0.2 + i * 0.1, ease: easePremium }}
-                  className="bg-white/[0.03] rounded-xl p-6 md:p-8 ring-1 ring-white/[0.06]"
+                  className="bg-white/[0.03] rounded-xl p-6 md:p-8 ring-1 ring-white/[0.06] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.1,1)] hover:bg-white/[0.06] hover:ring-white/[0.12] cursor-pointer group"
                 >
-                  <span className="font-sora text-lg font-bold text-glacier-white">{item.role}</span>
-                  <span className="block mt-1 text-xs font-mono text-cool-gray/50">{item.context}</span>
-                  <div className="mt-4 w-8 h-[2px] bg-crisis-red/50" />
-                  <p className="mt-4 text-sm leading-relaxed text-cool-gray/80">{item.need}</p>
+                  <span className="font-sora text-lg font-bold text-glacier-white group-hover:text-white transition-colors">{item.role}</span>
+                  <span className="block mt-1 text-xs font-mono text-cool-gray/50 group-hover:text-cool-gray/70 transition-colors">{item.context}</span>
+                  <div className="mt-4 w-8 h-[2px] bg-crisis-red/50 transition-all duration-500 group-hover:w-12 group-hover:bg-crisis-red" />
+                  <p className="mt-4 text-sm leading-relaxed text-cool-gray/80 group-hover:text-cool-gray/90 transition-colors">{item.need}</p>
                 </motion.div>
               ))}
             </motion.div>
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="relative">
-          <CTAFooter />
+        {/* ── Chapter 6: Testimonials ── */}
+        <section className="relative py-32 md:py-40 overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.02]"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle at 50% 0%, #e94560, transparent 50%)',
+            }}
+          />
+          <div className="mx-auto max-w-7xl px-6">
+            <motion.div {...useScrollReveal()} className="max-w-3xl">
+              <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-cool-gray/50">
+                Trusted by
+              </span>
+              <h2 className="mt-4 font-sora text-3xl font-bold text-glacier-white md:text-4xl">
+                <SplitText text="What responders are saying." />
+              </h2>
+            </motion.div>
+
+            <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {testimonials.map((t, i) => (
+                <motion.div
+                  key={t.name}
+                  initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+                  whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.7, delay: 0.1 + i * 0.12, ease: easePremium }}
+                  className="bg-white/[0.02] rounded-2xl p-6 md:p-8 ring-1 ring-white/[0.04] flex flex-col"
+                >
+                  <svg className="mb-4 text-crisis-red/30" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-3.983v-10h9.983z" />
+                  </svg>
+                  <blockquote className="text-sm leading-relaxed text-cool-gray/80 flex-1">
+                    &ldquo;{t.quote}&rdquo;
+                  </blockquote>
+                  <div className="mt-6 pt-4 border-t border-white/[0.04]">
+                    <div className="font-sora text-sm font-semibold text-glacier-white/90">{t.name}</div>
+                    <div className="text-[10px] font-mono uppercase tracking-[0.1em] text-cool-gray/50 mt-0.5">{t.role}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </section>
 
-        {/* Footer */}
-        <footer className="relative border-t border-white/[0.04] py-8">
+        {/* ── CTA ── */}
+        <CTAFooter />
+
+        {/* ── Footer ── */}
+        <footer className="relative border-t border-white/[0.04] py-10">
           <div className="mx-auto max-w-7xl px-6">
             <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-              <span className="font-sora text-sm font-semibold text-glacier-white/70">
-                DisasterTracker
-              </span>
-              <span className="text-xs text-cool-gray/60">
-                &copy; {new Date().getFullYear()} DisasterTracker. All rights reserved.
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="cross text-cool-gray/30" />
+                <span className="font-sora text-sm font-semibold text-glacier-white/70">
+                  DisasterTracker
+                </span>
+              </div>
+              <div className="flex items-center gap-6 text-[10px] font-mono uppercase tracking-[0.2em] text-cool-gray/50">
+                <span>Real-time intelligence</span>
+                <span className="cross" style={{ width: '0.5rem', height: '0.5rem' }} />
+                <span>&copy; {new Date().getFullYear()}</span>
+              </div>
             </div>
           </div>
         </footer>

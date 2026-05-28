@@ -82,7 +82,7 @@ export default function ResetPassword({ email: initialEmail, onBack }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-crisis-red py-3.5 text-sm font-bold text-white tracking-wide transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_8px_25px_-5px_rgba(233,69,96,0.3)] active:scale-[0.97] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none flex items-center justify-center gap-2"
+        className="w-full rounded-xl bg-crisis-red py-3.5 text-sm font-bold text-white tracking-wide transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_8px_25px_-5px_rgba(233,69,96,0.3)] active:scale-[0.97] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none flex items-center justify-center gap-2"
       >
         {loading ? (
           <>

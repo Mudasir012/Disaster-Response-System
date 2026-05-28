@@ -1,59 +1,69 @@
 import { motion } from 'framer-motion'
 
-const easePremium = [0.32, 0.72, 0, 1]
+const easeLusion = [0.4, 0, 0.1, 1]
+
+function PillCTA({ href, label, variant = 'primary' }) {
+  return (
+    <a
+      href={href}
+      className={`cta-pill ${variant === 'primary'
+        ? 'bg-crisis-red text-white hover:bg-white hover:text-crisis-red'
+        : 'bg-white/[0.06] text-glacier-white/80 border border-white/10 hover:bg-white/10 hover:text-glacier-white hover:border-white/20'
+      }`}
+    >
+      <span className="cta-dot" style={{ background: variant === 'primary' ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.2)' }} />
+      <span className="cta-text">{label}</span>
+      <span className="cta-arrow">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none">
+          <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+    </a>
+  )
+}
 
 export default function CTAFooter() {
   return (
-    <div className="relative py-32 md:py-40 overflow-hidden">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+    <section id="cta" className="relative py-32 md:py-40 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
-            'radial-gradient(circle at 50% 50%, #e94560, transparent 60%)',
+            'radial-gradient(circle at 30% 50%, #e94560, transparent 50%), radial-gradient(circle at 70% 50%, #0f7ddb, transparent 50%)',
         }}
       />
-      <div className="mx-auto max-w-4xl px-6 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
-          whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.8, ease: easePremium }}
-        >
-          <h2 className="font-sora text-4xl font-bold leading-tight text-glacier-white md:text-5xl">
-            Monitor the planet.<br />Protect what matters.
-          </h2>
-          <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-cool-gray/80">
-            Join agencies and responders worldwide who trust DisasterTracker
-            for real-time intelligence.
-          </p>
+      <div className="grid-overlay" />
 
-          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a
-              href="/auth"
-              className="group rounded-full bg-crisis-red px-8 py-4 font-semibold text-white transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:scale-105 active:scale-[0.98] flex items-center gap-3"
-            >
-              Access Dashboard
-              <span className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:scale-105">
-                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </a>
+      <motion.div
+        initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+        whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.8, ease: easeLusion }}
+        className="mx-auto max-w-4xl px-6 text-center relative"
+      >
+        <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-crisis-red/70">
+          Get started
+        </span>
 
-            <a
-              href="/auth"
-              className="group rounded-full border border-white/10 px-8 py-4 font-semibold text-glacier-white/80 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] hover:border-white/20 hover:text-glacier-white active:scale-[0.98] flex items-center gap-3"
-            >
-              API Docs
-              <span className="w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center transition-transform duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5">
-                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </a>
-          </div>
-        </motion.div>
+        <h2 className="mt-6 font-sora text-4xl font-bold leading-tight text-glacier-white md:text-6xl">
+          Monitor the planet.<br />Protect what matters.
+        </h2>
+
+        <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-cool-gray/70">
+          Join agencies and responders worldwide who trust DisasterTracker
+          for real-time intelligence.
+        </p>
+
+        <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <PillCTA href="/auth" label="Access Dashboard" variant="primary" />
+          <PillCTA href="/auth" label="API Docs" variant="secondary" />
+        </div>
+      </motion.div>
+
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.2em] text-cool-gray/40">
+        <span className="cross" />
+        <span>Respond faster</span>
+        <span className="cross" />
       </div>
-    </div>
+    </section>
   )
 }

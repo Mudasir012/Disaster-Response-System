@@ -78,7 +78,11 @@ export default function IncidentList() {
 
   return (
     <DashboardLayout>
-      <div className="flex-1 flex flex-col min-h-0 p-6">
+      <div className="flex-1 flex flex-col min-h-0 p-6 relative">
+        {/* Cross decorations */}
+        <div className="pointer-events-none absolute top-4 left-4 text-cool-gray/[0.04]"><span className="cross" /></div>
+        <div className="pointer-events-none absolute top-4 right-4 text-cool-gray/[0.04]"><span className="cross" /></div>
+
         <div className="flex flex-col gap-4 mb-5">
           <div className="flex items-center justify-between">
             <h1 className="font-sora text-xl font-bold text-glacier-white">Incidents</h1>
@@ -157,7 +161,7 @@ export default function IncidentList() {
                     <tr
                       key={inc.id}
                       onClick={() => navigate(`/incidents/${inc.id}`)}
-                      className="border-b border-white/[0.02] transition-colors duration-150 hover:bg-white/[0.02] cursor-pointer"
+                      className="border-b border-white/[0.02] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] hover:bg-white/[0.03] hover:shadow-[inset_2px_0_0_var(--color-crisis-red)] cursor-pointer group"
                     >
                       <td className="px-4 py-3.5">
                         <span className="font-mono text-xs text-cool-gray/50">{inc.id}</span>

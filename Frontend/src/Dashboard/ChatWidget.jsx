@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
 import { api } from '../lib/api'
-import { mapBackendIncidentToFrontend } from '../utils/mapper'
 
 const suggestedQuestions = [
   'Summarize current emergencies near me',
@@ -66,29 +65,11 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [incidents, setIncidents] = useState([])
   const bottomRef = useRef(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
-
-  useEffect(() => {
-    if (open) {
-      api.incidents({ limit: 100 })
-        .then((data) => {
-          const mapped = (data.incidents || []).map(mapBackendIncidentToFrontend)
-          setIncidents(mapped)
-        })
-        .catch((err) => console.error('Failed to load chat incidents context:', err))
-    }
-  }, [open])
-
-  const activeIncidents = incidents.filter((i) => i.status !== 'resolved')
-  const context = {
-    activeCount: activeIncidents.length,
-    incidentTypes: [...new Set(activeIncidents.map((i) => i.type))],
-  }
 
   const handleSend = async (text) => {
     const query = text || input
@@ -122,7 +103,7 @@ export default function ChatWidget() {
     <>
       <button
         onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#7c3aed] shadow-[0_4px_20px_rgba(124,58,237,0.3)] flex items-center justify-center transition-all duration-300 hover:scale-105 active:scale-95"
+        className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#7c3aed] shadow-[0_4px_20px_rgba(124,58,237,0.3)] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-110 hover:shadow-[0_4px_28px_rgba(124,58,237,0.5)] active:scale-95"
         aria-label="Open AI assistant"
       >
         {open ? (

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import DashboardLayout from './DashboardLayout'
 import { api } from '../lib/api'
 import {
@@ -6,6 +7,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   AreaChart, Area,
 } from 'recharts'
+
+const easeLusion = [0.4, 0, 0.1, 1]
 
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload) return null
@@ -21,12 +24,18 @@ function CustomTooltip({ active, payload, label }) {
   )
 }
 
-function ChartCard({ title, children, className }) {
+function ChartCard({ title, children, className, delay = 0 }) {
   return (
-    <div className={`bg-surface rounded-xl border border-white/[0.04] p-5 ${className || ''}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 16, filter: 'blur(4px)' }}
+      whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.6, delay, ease: easeLusion }}
+      className={`bg-surface rounded-xl border border-white/[0.04] p-5 ${className || ''}`}
+    >
       <h3 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-4">{title}</h3>
       {children}
-    </div>
+    </motion.div>
   )
 }
 
@@ -118,14 +127,32 @@ export default function Analytics() {
 
   return (
     <DashboardLayout>
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-6 relative">
+        {/* Cross decorations */}
+        <div className="pointer-events-none absolute top-4 left-4 text-cool-gray/[0.04]"><span className="cross" /></div>
+        <div className="pointer-events-none absolute top-4 right-4 text-cool-gray/[0.04]"><span className="cross" /></div>
+
         <div className="mb-6">
-          <h1 className="font-sora text-xl font-bold text-glacier-white">Analytics</h1>
-          <p className="text-sm text-cool-gray/60 mt-1">Incident trends and distribution over the past 7 days</p>
+          <motion.h1
+            initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.5, ease: easeLusion }}
+            className="font-sora text-xl font-bold text-glacier-white"
+          >
+            Analytics
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.08, ease: easeLusion }}
+            className="text-sm text-cool-gray/60 mt-1"
+          >
+            Incident trends and distribution over the past 7 days
+          </motion.p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ChartCard title="Incidents Over Time">
+          <ChartCard title="Incidents Over Time" delay={0.15}>
             <ResponsiveContainer width="100%" height={260}>
               <AreaChart data={timeline}>
                 <defs>
@@ -143,7 +170,7 @@ export default function Analytics() {
             </ResponsiveContainer>
           </ChartCard>
 
-          <ChartCard title="Severity Distribution">
+          <ChartCard title="Severity Distribution" delay={0.25}>
             <ResponsiveContainer width="100%" height={260}>
               <PieChart>
                 <Pie
@@ -172,7 +199,7 @@ export default function Analytics() {
             </div>
           </ChartCard>
 
-          <ChartCard title="By Incident Type">
+          <ChartCard title="By Incident Type" delay={0.35}>
             <ResponsiveContainer width="100%" height={260}>
               <BarChart data={typeDist}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
@@ -184,7 +211,7 @@ export default function Analytics() {
             </ResponsiveContainer>
           </ChartCard>
 
-          <ChartCard title="Quick Summary">
+          <ChartCard title="Quick Summary" delay={0.45}>
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: 'Total Incidents', value: summary?.total || 0, change: `+${summary?.today || 0} today`, color: '#e94560' },

@@ -1,7 +1,8 @@
 import { Router } from 'express'
-import model from '../config/gemini.js'
+import { chatModel as model } from '../config/gemini.js'
 import { Incident } from '../models/Incident.js'
 import logger from '../utils/logger.js'
+
 
 const router = Router()
 
