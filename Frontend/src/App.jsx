@@ -1,21 +1,36 @@
+import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import Landing from './Landing/Landing'
-import AuthPage from './Auth/AuthPage'
-import Dashboard from './Dashboard/Dashboard'
-import IncidentList from './Dashboard/IncidentList'
-import IncidentDetail from './Dashboard/IncidentDetail'
-import Analytics from './Dashboard/Analytics'
+
+const Landing = lazy(() => import('./Landing/Landing'))
+const AuthPage = lazy(() => import('./Auth/AuthPage'))
+const Dashboard = lazy(() => import('./Dashboard/Dashboard'))
+const IncidentList = lazy(() => import('./Dashboard/IncidentList'))
+const IncidentDetail = lazy(() => import('./Dashboard/IncidentDetail'))
+const Analytics = lazy(() => import('./Dashboard/Analytics'))
+
+function PageFallback() {
+  return (
+    <div className="min-h-[100dvh] bg-[#05080f] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-6 h-6 rounded-full border-2 border-white/10 border-t-crisis-red animate-spin" />
+        <span className="text-xs text-cool-gray/50 font-mono uppercase tracking-widest">Loading</span>
+      </div>
+    </div>
+  )
+}
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Landing />} />
-      <Route path="/auth" element={<AuthPage />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/incidents" element={<IncidentList />} />
-      <Route path="/incidents/:id" element={<IncidentDetail />} />
-      <Route path="/analytics" element={<Analytics />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <Suspense fallback={<PageFallback />}>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/incidents" element={<IncidentList />} />
+        <Route path="/incidents/:id" element={<IncidentDetail />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Suspense>
   )
 }

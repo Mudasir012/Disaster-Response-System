@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, lazy, Suspense } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion, useInView } from 'framer-motion'
 import Nav from './Nav'
-import HeroScene from './HeroScene'
 import Features from './Features'
 import DataSources from './DataSources'
 import CTAFooter from './CTAFooter'
+
+const HeroScene = lazy(() => import('./HeroScene'))
 
 const easePremium = [0.32, 0.72, 0, 1]
 const easeLusion = [0.4, 0, 0.1, 1]
@@ -162,7 +163,9 @@ export default function Landing() {
       </div>
 
       <motion.div style={{ opacity: reduced ? 1 : globeOpacity }}>
-        <HeroScene scrollRef={scrollRef} mouseRef={mouseRef} />
+        <Suspense fallback={<div className="fixed inset-0 bg-[#05080f]" />}>
+          <HeroScene scrollRef={scrollRef} mouseRef={mouseRef} />
+        </Suspense>
       </motion.div>
 
       <div className="relative z-10">

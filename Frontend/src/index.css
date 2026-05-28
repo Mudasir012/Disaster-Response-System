@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Geist';
+  src: url('https://fonts.gstatic.com/s/geist/v1/gyByhwUxId8gMEw.woff2') format('woff2');
+  font-display: swap;
+  font-style: normal;
+}
+
 @theme {
   --color-deep-slate: #0d1117;
   --color-surface: #1c2333;
@@ -166,6 +173,25 @@ body {
 .cta-pill:hover .cta-arrow {
   opacity: 1;
   transform: translateX(0);
+}
+
+/* ── Performance: CSS containment for independent regions ── */
+.map-region {
+  contain: layout style paint size;
+}
+.sidebar-region {
+  contain: layout style paint;
+}
+.chart-region {
+  contain: layout style paint;
+}
+.table-region {
+  contain: layout style;
+}
+
+/* ── Font display swap for Google Fonts fallback ── */
+html {
+  font-display: swap;
 }
 
 /* ── MapLibre overrides ── */
