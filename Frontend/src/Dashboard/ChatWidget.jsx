@@ -1,6 +1,13 @@
 import { useState, useRef, useEffect } from 'react'
-import { getChatResponse, suggestedQuestions } from './mockChatResponses'
-import incidentsData from './mockData'
+import { api } from '../lib/api'
+import { mapBackendIncidentToFrontend } from '../utils/mapper'
+
+const suggestedQuestions = [
+  'Summarize current emergencies near me',
+  'What should I do during an earthquake?',
+  'How to prepare for a hurricane?',
+  'Latest severity assessment',
+]
 
 function Message({ role, data }) {
   if (role === 'user') {
@@ -59,13 +66,25 @@ export default function ChatWidget() {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [incidents, setIncidents] = useState([])
   const bottomRef = useRef(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const activeIncidents = incidentsData.filter((i) => i.status !== 'resolved')
+  useEffect(() => {
+    if (open) {
+      api.incidents({ limit: 100 })
+        .then((data) => {
+          const mapped = (data.incidents || []).map(mapBackendIncidentToFrontend)
+          setIncidents(mapped)
+        })
+        .catch((err) => console.error('Failed to load chat incidents context:', err))
+    }
+  }, [open])
+
+  const activeIncidents = incidents.filter((i) => i.status !== 'resolved')
   const context = {
     activeCount: activeIncidents.length,
     incidentTypes: [...new Set(activeIncidents.map((i) => i.type))],
@@ -77,11 +96,27 @@ export default function ChatWidget() {
     setInput('')
     setMessages((prev) => [...prev, { role: 'user', data: query }])
     setLoading(true)
-    await new Promise((r) => setTimeout(r, 800 + Math.random() * 700))
-    const response = getChatResponse(query, context)
-    setMessages((prev) => [...prev, { role: 'assistant', data: response }])
-    setLoading(false)
+    try {
+      const response = await api.chat(query)
+      setMessages((prev) => [...prev, { role: 'assistant', data: response }])
+    } catch (err) {
+      console.error('Chat error:', err)
+      const fallback = {
+        severity: 'Service Offline',
+        summary: 'The AI assistant is temporarily unavailable. Please verify your connection or check back later.',
+        steps: [
+          'Monitor the active incidents sidebar for updates.',
+          'Verify your network connection.',
+          'Refer to local emergency broadcast channels.',
+        ],
+        badge: '#e94560',
+      }
+      setMessages((prev) => [...prev, { role: 'assistant', data: fallback }])
+    } finally {
+      setLoading(false)
+    }
   }
+
 
   return (
     <>

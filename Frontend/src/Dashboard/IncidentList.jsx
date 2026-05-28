@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DashboardLayout from './DashboardLayout'
 import FilterBar from './FilterBar'
 import StatsBar from './StatsBar'
 import { SEVERITY, SEVERITY_ORDER } from './constants'
-import incidentsData from './mockData'
+import { api } from '../lib/api'
+import { mapBackendIncidentToFrontend } from '../utils/mapper'
 
 function timeAgo(ts) {
   const diff = Date.now() - ts
@@ -17,13 +18,37 @@ function timeAgo(ts) {
 
 export default function IncidentList() {
   const navigate = useNavigate()
+  const [incidents, setIncidents] = useState([])
+  const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState(null)
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('timestamp')
   const [sortDir, setSortDir] = useState('desc')
 
+  useEffect(() => {
+    let active = true
+    async function fetchIncidents() {
+      try {
+        setLoading(true)
+        const data = await api.incidents({ limit: 100 })
+        if (active) {
+          const mapped = (data.incidents || []).map(mapBackendIncidentToFrontend)
+          setIncidents(mapped)
+        }
+      } catch (err) {
+        console.error('Failed to fetch real-time incidents:', err)
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+    fetchIncidents()
+    return () => {
+      active = false
+    }
+  }, [])
+
   const filtered = useMemo(() => {
-    let list = [...incidentsData]
+    let list = [...incidents]
     if (filter) list = list.filter((i) => i.severity === filter)
     if (search.trim()) {
       const q = search.toLowerCase()
@@ -44,7 +69,7 @@ export default function IncidentList() {
       return sortDir === 'desc' ? -cmp : cmp
     })
     return list
-  }, [filter, search, sortBy, sortDir])
+  }, [incidents, filter, search, sortBy, sortDir])
 
   const toggleSort = (field) => {
     if (sortBy === field) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
@@ -57,7 +82,7 @@ export default function IncidentList() {
         <div className="flex flex-col gap-4 mb-5">
           <div className="flex items-center justify-between">
             <h1 className="font-sora text-xl font-bold text-glacier-white">Incidents</h1>
-            <StatsBar incidents={incidentsData} />
+            <StatsBar incidents={incidents} />
           </div>
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-xs">
@@ -110,7 +135,16 @@ export default function IncidentList() {
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan={7} className="px-4 py-16 text-center">
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-4 h-4 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
+                      <span className="text-xs text-cool-gray/50">Loading incidents...</span>
+                    </div>
+                  </td>
+                </tr>
+              ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-16 text-center">
                     <p className="text-sm text-cool-gray/40 font-medium">No incidents match your filters</p>
@@ -172,3 +206,4 @@ export default function IncidentList() {
     </DashboardLayout>
   )
 }
+

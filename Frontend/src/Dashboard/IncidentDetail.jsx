@@ -1,8 +1,9 @@
-import { useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import DashboardLayout from './DashboardLayout'
 import { SEVERITY } from './constants'
-import incidentsData from './mockData'
+import { api } from '../lib/api'
+import { mapBackendIncidentToFrontend } from '../utils/mapper'
 
 function timeAgo(ts) {
   const diff = Date.now() - ts
@@ -16,11 +17,40 @@ function timeAgo(ts) {
 export default function IncidentDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const [incident, setIncident] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const incident = useMemo(
-    () => incidentsData.find((i) => i.id === id),
-    [id]
-  )
+  useEffect(() => {
+    let active = true
+    async function fetchIncident() {
+      try {
+        setLoading(true)
+        const data = await api.incident(id)
+        if (active) {
+          setIncident(mapBackendIncidentToFrontend(data))
+        }
+      } catch (err) {
+        console.error('Failed to fetch incident details:', err)
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+    fetchIncident()
+    return () => {
+      active = false
+    }
+  }, [id])
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex-1 flex flex-col items-center justify-center gap-2">
+          <div className="w-6 h-6 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
+          <span className="text-xs text-cool-gray/50">Loading incident details...</span>
+        </div>
+      </DashboardLayout>
+    )
+  }
 
   if (!incident) {
     return (
@@ -39,6 +69,7 @@ export default function IncidentDetail() {
   }
 
   const sev = SEVERITY[incident.severity] || SEVERITY.info
+
 
   return (
     <DashboardLayout>

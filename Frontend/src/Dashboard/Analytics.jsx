@@ -1,5 +1,6 @@
+import { useState, useEffect } from 'react'
 import DashboardLayout from './DashboardLayout'
-import { analyticsData } from './mockData'
+import { api } from '../lib/api'
 import {
   PieChart, Pie, Cell, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -29,7 +30,92 @@ function ChartCard({ title, children, className }) {
   )
 }
 
+const severityColors = {
+  5: { name: 'Critical', color: '#e94560' },
+  4: { name: 'Severe', color: '#f43f5e' },
+  3: { name: 'Moderate', color: '#d97706' },
+  2: { name: 'Minor', color: '#0f7ddb' },
+  1: { name: 'Info', color: '#38bdf8' },
+}
+
+const typeMap = {
+  earthquake: 'Earthquake',
+  flood: 'Flood',
+  wildfire: 'Wildfire',
+  cyclone: 'Hurricane',
+  tsunami: 'Tsunami',
+  severe_weather: 'Tornado',
+}
+
 export default function Analytics() {
+  const [loading, setLoading] = useState(true)
+  const [summary, setSummary] = useState(null)
+  const [timeline, setTimeline] = useState([])
+  const [severityDist, setSeverityDist] = useState([])
+  const [typeDist, setTypeDist] = useState([])
+
+  useEffect(() => {
+    let active = true
+    async function fetchData() {
+      try {
+        setLoading(true)
+        const [summaryData, overTimeData, severityData, typeData] = await Promise.all([
+          api.analyticsOverview(),
+          api.analyticsOverTime('7d'),
+          api.severityDistribution(),
+          api.statsByType(),
+        ])
+
+        if (active) {
+          setSummary(summaryData)
+
+          // Format timeline
+          const formattedTimeline = overTimeData.map((t) => {
+            const d = new Date(t.date)
+            const formattedDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
+            return { date: formattedDate, incidents: t.count }
+          })
+          setTimeline(formattedTimeline)
+
+          // Format severity distribution
+          const formattedSeverity = severityData.map((s) => {
+            const config = severityColors[s.severity] || { name: `Level ${s.severity}`, color: '#94a3b8' }
+            return { name: config.name, value: s.count, color: config.color }
+          })
+          setSeverityDist(formattedSeverity)
+
+          // Format type distribution
+          const formattedType = typeData.map((typeObj) => ({
+            name: typeMap[typeObj.event_type] || typeObj.event_type || 'Unknown',
+            count: typeObj.count,
+          }))
+          setTypeDist(formattedType)
+        }
+      } catch (err) {
+        console.error('Failed to fetch analytics data:', err)
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+
+    fetchData()
+
+    return () => {
+      active = false
+    }
+  }, [])
+
+  if (loading) {
+    return (
+      <DashboardLayout>
+        <div className="flex-1 flex flex-col items-center justify-center gap-2">
+          <div className="w-8 h-8 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
+          <span className="text-xs text-cool-gray/50">Loading analytics...</span>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
   return (
     <DashboardLayout>
       <div className="flex-1 overflow-y-auto p-6">
@@ -41,7 +127,7 @@ export default function Analytics() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ChartCard title="Incidents Over Time">
             <ResponsiveContainer width="100%" height={260}>
-              <AreaChart data={analyticsData.timeline}>
+              <AreaChart data={timeline}>
                 <defs>
                   <linearGradient id="timeGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#e94560" stopOpacity={0.25} />
@@ -61,7 +147,7 @@ export default function Analytics() {
             <ResponsiveContainer width="100%" height={260}>
               <PieChart>
                 <Pie
-                  data={analyticsData.severityDistribution}
+                  data={severityDist}
                   cx="50%"
                   cy="50%"
                   innerRadius={60}
@@ -69,15 +155,15 @@ export default function Analytics() {
                   paddingAngle={3}
                   dataKey="value"
                 >
-                  {analyticsData.severityDistribution.map((entry, i) => (
+                  {severityDist.map((entry, i) => (
                     <Cell key={i} fill={entry.color} />
                   ))}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
               </PieChart>
             </ResponsiveContainer>
-            <div className="flex justify-center gap-5 mt-2">
-              {analyticsData.severityDistribution.map((entry) => (
+            <div className="flex justify-center gap-5 mt-2 flex-wrap">
+              {severityDist.map((entry) => (
                 <div key={entry.name} className="flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full" style={{ background: entry.color }} />
                   <span className="text-[10px] text-cool-gray/50">{entry.name}</span>
@@ -88,7 +174,7 @@ export default function Analytics() {
 
           <ChartCard title="By Incident Type">
             <ResponsiveContainer width="100%" height={260}>
-              <BarChart data={analyticsData.typeDistribution}>
+              <BarChart data={typeDist}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
                 <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 10, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
@@ -101,10 +187,10 @@ export default function Analytics() {
           <ChartCard title="Quick Summary">
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label: 'Total Incidents', value: '15', change: '+3 today', color: '#e94560' },
-                { label: 'Active', value: '7', change: 'Requires attention', color: '#0d9488' },
-                { label: 'Avg Response', value: '4.2m', change: '12% faster', color: '#0f7ddb' },
-                { label: 'Sources Active', value: '6', change: 'All operational', color: '#16a34a' },
+                { label: 'Total Incidents', value: summary?.total || 0, change: `+${summary?.today || 0} today`, color: '#e94560' },
+                { label: 'Active Incidents', value: summary?.active || 0, change: summary?.critical > 0 ? `${summary?.critical} critical` : 'All stable', color: '#0d9488' },
+                { label: 'Regions Affected', value: summary?.countries || 0, change: 'Across continents', color: '#0f7ddb' },
+                { label: 'Most Common Type', value: summary?.most_common_type ? (typeMap[summary.most_common_type] || summary.most_common_type) : 'N/A', change: 'Based on raw events', color: '#16a34a' },
               ].map((stat) => (
                 <div key={stat.label} className="bg-deep-slate rounded-lg p-4">
                   <p className="text-2xl font-bold text-glacier-white">{stat.value}</p>
@@ -119,3 +205,4 @@ export default function Analytics() {
     </DashboardLayout>
   )
 }
+
