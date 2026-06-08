@@ -28,7 +28,7 @@ function Message({ role, data }) {
             <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
           </svg>
         </div>
-        <span className="text-xs font-semibold text-[#7c3aed]">Gemini</span>
+        <span className="text-xs font-semibold text-[#7c3aed]">Groq</span>
       </div>
       <div className="bg-gradient-to-br from-[#1a1040] to-[#110a2e] rounded-2xl rounded-tl-md px-4 py-3 border border-[#7c3aed]/10">
         <div className="flex items-center gap-2 mb-2">
@@ -60,20 +60,23 @@ function Message({ role, data }) {
   )
 }
 
-export default function ChatWidget() {
-  const [open, setOpen] = useState(false)
+export default function ChatWidget({ onClose }) {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const bottomRef = useRef(null)
+  const lastSendRef = useRef(0)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
   const handleSend = async (text) => {
+    const now = Date.now()
+    if (now - lastSendRef.current < 2000) return
     const query = text || input
     if (!query.trim() || loading) return
+    lastSendRef.current = now
     setInput('')
     setMessages((prev) => [...prev, { role: 'user', data: query }])
     setLoading(true)
@@ -82,128 +85,124 @@ export default function ChatWidget() {
       setMessages((prev) => [...prev, { role: 'assistant', data: response }])
     } catch (err) {
       console.error('Chat error:', err)
-      const fallback = {
-        severity: 'Service Offline',
-        summary: 'The AI assistant is temporarily unavailable. Please verify your connection or check back later.',
-        steps: [
-          'Monitor the active incidents sidebar for updates.',
-          'Verify your network connection.',
-          'Refer to local emergency broadcast channels.',
-        ],
-        badge: '#e94560',
-      }
+      const isRateLimited = err.message?.toLowerCase().includes('rate limit') || err.message?.toLowerCase().includes('too many')
+      const fallback = isRateLimited
+        ? {
+            severity: 'Rate Limited',
+            summary: 'Please wait a moment before sending another request. The AI assistant has a rate limit to ensure fair usage for everyone.',
+            steps: ['Wait a few seconds and try again.', 'Consider summarizing your question into a single message.'],
+            badge: '#d97706',
+          }
+        : {
+            severity: 'Service Offline',
+            summary: 'The AI assistant is temporarily unavailable. Please verify your connection or check back later.',
+            steps: [
+              'Monitor the active incidents sidebar for updates.',
+              'Verify your network connection.',
+              'Refer to local emergency broadcast channels.',
+            ],
+            badge: '#e94560',
+          }
       setMessages((prev) => [...prev, { role: 'assistant', data: fallback }])
     } finally {
       setLoading(false)
     }
   }
 
-
   return (
-    <>
-      <button
-        onClick={() => setOpen(!open)}
-        className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#7c3aed] shadow-[0_4px_20px_rgba(124,58,237,0.3)] flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-110 hover:shadow-[0_4px_28px_rgba(124,58,237,0.5)] active:scale-95"
-        aria-label="Open AI assistant"
-      >
-        {open ? (
-          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        ) : (
-          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-        )}
-      </button>
-
-      {open && (
-        <div className="fixed bottom-24 right-6 z-40 w-[380px] max-w-[calc(100vw-32px)] h-[520px] max-h-[calc(100vh-160px)] bg-deep-slate/95 backdrop-blur-xl border border-white/[0.06] rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-3.5 border-b border-white/[0.04]">
-            <div className="flex items-center gap-2.5">
-              <div className="w-7 h-7 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
-                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
-                  <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-glacier-white">AI Assistant</p>
-                <p className="text-[10px] text-cool-gray/40">Gemini-powered</p>
-              </div>
-            </div>
+    <div className="h-full bg-deep-slate/95 backdrop-blur-xl border-r border-white/[0.06] flex flex-col overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/[0.04]">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
+              <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
+            </svg>
           </div>
-
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-6 text-center">
-                <div className="w-10 h-10 rounded-full bg-[#7c3aed]/10 flex items-center justify-center mb-3">
-                  <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
-                    <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
-                  </svg>
-                </div>
-                <p className="text-sm text-glacier-white font-medium mb-1">How can I help?</p>
-                <p className="text-xs text-cool-gray/40 mb-4">Ask about emergencies or safety guidance</p>
-                <div className="w-full space-y-2">
-                  {suggestedQuestions.map((q) => (
-                    <button
-                      key={q}
-                      onClick={() => handleSend(q)}
-                      className="w-full text-left px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-cool-gray/60 hover:text-glacier-white hover:bg-white/[0.06] transition-all duration-200"
-                    >
-                      {q}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            {messages.map((msg, i) => (
-              <Message key={i} role={msg.role} data={msg.data} />
-            ))}
-            {loading && (
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
-                  <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
-                    <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
-                  </svg>
-                </div>
-                <div className="flex gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#7c3aed]/40 animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#7c3aed]/40 animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#7c3aed]/40 animate-bounce" style={{ animationDelay: '300ms' }} />
-                </div>
-              </div>
-            )}
-            <div ref={bottomRef} />
-          </div>
-
-          <div className="p-4 border-t border-white/[0.04]">
-            <div className="flex items-center gap-2">
-              <input
-                type="text"
-                placeholder="Ask about emergencies..."
-                aria-label="Ask the AI assistant about emergencies"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                className="flex-1 rounded-xl border border-white/[0.07] bg-surface px-4 py-2.5 text-sm text-glacier-white placeholder:text-cool-gray/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/40"
-              />
-              <button
-                onClick={() => handleSend()}
-                disabled={!input.trim() || loading}
-                aria-label="Send message"
-                className="w-10 h-10 rounded-xl bg-[#7c3aed] flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100"
-              >
-                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
-                </svg>
-              </button>
-            </div>
+          <div>
+            <p className="text-sm font-semibold text-glacier-white">AI Assistant</p>
+            <p className="text-[10px] text-cool-gray/40">Groq-powered</p>
           </div>
         </div>
-      )}
-    </>
+        <button
+          onClick={onClose}
+          className="w-7 h-7 rounded-lg hover:bg-white/[0.06] flex items-center justify-center transition-colors duration-200"
+          aria-label="Close AI assistant"
+        >
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-cool-gray/50">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-6 text-center">
+            <div className="w-10 h-10 rounded-full bg-[#7c3aed]/10 flex items-center justify-center mb-3">
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
+                <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
+              </svg>
+            </div>
+            <p className="text-sm text-glacier-white font-medium mb-1">How can I help?</p>
+            <p className="text-xs text-cool-gray/40 mb-4">Ask about emergencies or safety guidance</p>
+            <div className="w-full space-y-2">
+              {suggestedQuestions.map((q) => (
+                <button
+                  key={q}
+                  onClick={() => handleSend(q)}
+                  className="w-full text-left px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-cool-gray/60 hover:text-glacier-white hover:bg-white/[0.06] transition-all duration-200 cursor-pointer"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {messages.map((msg, i) => (
+          <Message key={i} role={msg.role} data={msg.data} />
+        ))}
+        {loading && (
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
+                <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
+              </svg>
+            </div>
+            <div className="flex gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#7c3aed]/40 animate-bounce" style={{ animationDelay: '0ms' }} />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#7c3aed]/40 animate-bounce" style={{ animationDelay: '150ms' }} />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#7c3aed]/40 animate-bounce" style={{ animationDelay: '300ms' }} />
+            </div>
+          </div>
+        )}
+        <div ref={bottomRef} />
+      </div>
+
+      <div className="p-4 border-t border-white/[0.04]">
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            placeholder="Ask about emergencies..."
+            aria-label="Ask the AI assistant about emergencies"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            className="flex-1 rounded-xl border border-white/[0.07] bg-surface px-4 py-2.5 text-sm text-glacier-white placeholder:text-cool-gray/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/40"
+          />
+          <button
+            onClick={() => handleSend()}
+            disabled={!input.trim() || loading}
+            aria-label="Send message"
+            className="w-10 h-10 rounded-xl bg-[#7c3aed] flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 cursor-pointer"
+          >
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }

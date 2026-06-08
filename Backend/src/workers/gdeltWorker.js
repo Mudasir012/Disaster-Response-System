@@ -1,18 +1,17 @@
 import hashUrl from '../utils/hashUrl.js'
 import parseGDELTDate from '../utils/parseGDELTDate.js'
+import { fetchGDELTData } from '../services/gdeltApi.js'
 
 export default async function fetchGDELT() {
-  const query = 'earthquake OR flood OR wildfire OR cyclone OR tsunami OR hurricane OR tornado'
-  const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${encodeURIComponent(query)}&mode=artlist&maxrecords=50&timespan=15min&format=json&sourcelang=english`
+  const params = new URLSearchParams({
+    query: 'earthquake OR flood OR wildfire OR cyclone OR tsunami OR hurricane OR tornado',
+    mode: 'ArtList',
+    maxrecords: 50,
+    format: 'json',
+    sourcelang: 'english',
+  })
 
-  const res = await fetch(url, { signal: AbortSignal.timeout(15000) })
-  if (!res.ok) {
-    console.warn(`[GDELT] HTTP ${res.status}`)
-    return []
-  }
-
-  const data = await res.json()
-  const articles = data.articles || []
+  const { articles } = await fetchGDELTData(params, 'worker:gdelt')
 
   return articles.map((article) => ({
     source: 'gdelt',

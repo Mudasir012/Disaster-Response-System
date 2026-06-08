@@ -1,5 +1,5 @@
 export default async function fetchUSGS() {
-  const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_hour.geojson'
+  const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson'
 
   const res = await fetch(url, { signal: AbortSignal.timeout(15000) })
   if (!res.ok) {

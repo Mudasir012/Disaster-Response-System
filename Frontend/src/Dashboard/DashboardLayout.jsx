@@ -4,7 +4,7 @@ import { motion, useScroll } from 'framer-motion'
 import { NAV_LINKS } from './constants'
 import NotificationBell from './NotificationBell'
 
-export default function DashboardLayout({ children, onWatchRegions }) {
+export default function DashboardLayout({ children, onWatchRegions, selectedCountry, onClearCountry }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const { scrollYProgress } = useScroll()
@@ -56,13 +56,17 @@ export default function DashboardLayout({ children, onWatchRegions }) {
               ))}
               <button
                 onClick={onWatchRegions}
-                className="px-3.5 py-1.5 text-sm font-medium rounded-lg text-cool-gray/70 hover:text-glacier-white hover:bg-white/[0.04] transition-all duration-200 ease-[cubic-bezier(0.4,0,0.1,1)] flex items-center gap-2"
+                className={`px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 ease-[cubic-bezier(0.4,0,0.1,1)] flex items-center gap-2 ${
+                  selectedCountry
+                    ? 'bg-[#0f7ddb]/15 text-signal-blue'
+                    : 'text-cool-gray/70 hover:text-glacier-white hover:bg-white/[0.04]'
+                }`}
               >
                 <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   <circle cx="12" cy="10" r="3" />
                 </svg>
-                Regions
+                {selectedCountry ? selectedCountry : 'Regions'}
               </button>
             </nav>
           </div>

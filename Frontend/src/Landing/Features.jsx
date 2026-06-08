@@ -19,7 +19,7 @@ const steps = [
     label: 'Classify',
     title: 'AI that understands context',
     description:
-      'Google Gemini analyzes each event, classifies severity, and extracts actionable intelligence. From a tremor to a landfall, it prioritizes what demands attention.',
+      'Groq analyzes each event, classifies severity, and extracts actionable intelligence. From a tremor to a landfall, it prioritizes what demands attention.',
     accent: '#7c3aed',
   },
   {

@@ -6,12 +6,13 @@ const router = Router()
 
 router.get('/', async (req, res, next) => {
   try {
-    const { severity, type, region, from, to, limit = 100, page = 1, sort = 'recent' } = req.query
+    const { severity, type, region, country, from, to, limit = 100, page = 1, sort = 'recent' } = req.query
     const filter = { status: { $ne: 'deleted' } }
 
     if (severity) filter.severity = parseInt(severity)
     if (type) filter.event_type = type
     if (region) { filter['location.continent'] = { $regex: region, $options: 'i' } }
+    if (country) { filter['location.country'] = { $regex: country, $options: 'i' } }
     if (from || to) {
       filter.created_at = {}
       if (from) filter.created_at.$gte = new Date(from)
@@ -34,12 +35,13 @@ router.get('/', async (req, res, next) => {
 
 router.get('/geojson', async (req, res, next) => {
   try {
-    const { severity, type, region, from, to } = req.query
+    const { severity, type, region, country, from, to } = req.query
     const filter = { status: { $ne: 'deleted' }, 'location.lat': { $ne: null }, 'location.lng': { $ne: null } }
 
     if (severity) filter.severity = parseInt(severity)
     if (type) filter.event_type = type
     if (region) filter['location.continent'] = { $regex: region, $options: 'i' }
+    if (country) filter['location.country'] = { $regex: country, $options: 'i' }
     if (from || to) {
       filter.created_at = {}
       if (from) filter.created_at.$gte = new Date(from)

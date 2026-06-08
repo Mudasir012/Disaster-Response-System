@@ -15,3 +15,11 @@ export const adminLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: 'Too many admin requests, please try again later' },
 })
+
+export const aiRateLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'AI request limit reached. Please wait before requesting another summary or action suggestion.' },
+})

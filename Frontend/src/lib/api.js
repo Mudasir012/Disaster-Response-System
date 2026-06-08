@@ -96,6 +96,14 @@ export const api = {
   adminReprocessIncident: (id) =>
     adminRequest(`/admin/incidents/${id}/reprocess`, { method: 'POST' }),
 
+  // GDELT Feed
+  gdeltFeed: (location) => {
+    const q = location ? `?location=${encodeURIComponent(location)}` : ''
+    return request(`/gdelt/feed${q}`)
+  },
+  gdeltCities: (query) => request(`/gdelt/cities?q=${encodeURIComponent(query)}`),
+  gdeltCountries: (query) => request(`/gdelt/countries?q=${encodeURIComponent(query)}`),
+
   // Health
   health: () => request('/health'),
 }

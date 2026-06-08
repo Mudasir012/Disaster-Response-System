@@ -32,9 +32,16 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
     })
 
     map.addControl(new maplibregl.NavigationControl(), 'bottom-right')
+
+    const resizeObserver = new ResizeObserver(() => {
+      map.resize()
+    })
+    resizeObserver.observe(containerRef.current)
+
     mapRef.current = map
 
     return () => {
+      resizeObserver.disconnect()
       map.remove()
       mapRef.current = null
     }
@@ -81,30 +88,33 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
     })
   }, [incidents, selectedId, onSelect])
 
-  if (loading) {
-    return (
-      <div className="absolute inset-0 flex items-center justify-center bg-surface/50">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
-          <span className="text-xs text-cool-gray/60">Loading map data...</span>
+  return (
+    <div className="absolute inset-0">
+      <div
+        ref={containerRef}
+        className="absolute inset-0"
+        style={{ contain: 'layout style paint' }}
+      >
+        <div className="absolute bottom-4 left-4 z-10 flex gap-2">
+          {SEVERITY_ORDER.filter((k) => k !== 'tsunami').map((key) => {
+            const sev = SEVERITY[key]
+            return (
+              <div key={key} className="flex items-center gap-1.5 bg-deep-slate/80 backdrop-blur-sm px-2.5 py-1.5 rounded-md">
+                <span className="w-2 h-2 rounded-full" style={{ background: sev.color }} />
+                <span className="text-[10px] text-cool-gray/70 font-medium">{sev.label}</span>
+              </div>
+            )
+          })}
         </div>
       </div>
-    )
-  }
-
-  return (
-    <div ref={containerRef} className="absolute inset-0" style={{ contain: 'layout style paint' }}>
-      <div className="absolute bottom-4 left-4 z-10 flex gap-2">
-        {SEVERITY_ORDER.filter((k) => k !== 'tsunami').map((key) => {
-          const sev = SEVERITY[key]
-          return (
-            <div key={key} className="flex items-center gap-1.5 bg-deep-slate/80 backdrop-blur-sm px-2.5 py-1.5 rounded-md">
-              <span className="w-2 h-2 rounded-full" style={{ background: sev.color }} />
-              <span className="text-[10px] text-cool-gray/70 font-medium">{sev.label}</span>
-            </div>
-          )
-        })}
-      </div>
+      {loading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-surface/50 z-10">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-8 h-8 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
+            <span className="text-xs text-cool-gray/60">Loading map data...</span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import model from '../config/gemini.js'
+import { pipelineClient, PIPELINE_MODEL } from '../config/groq.js'
 import { AILog } from '../models/AILog.js'
 import normalize from './normalizer.js'
 
@@ -17,21 +17,15 @@ no preamble. Use exactly these keys:
   const start = Date.now()
 
   const attempt = async (prompt, retry = false) => {
-    let text
-    if (retry) {
-      const result = await model.generateContent([
-        { text: systemInstruction },
-        { text: `${prompt}\n\nYou must return only a JSON object, nothing else.` },
-      ])
-      text = result.response.text()
-    } else {
-      const result = await model.generateContent([
-        { text: systemInstruction },
-        { text: prompt },
-      ])
-      text = result.response.text()
-    }
-    return text
+    const messages = [
+      { role: 'system', content: systemInstruction },
+      { role: 'user', content: retry ? `${prompt}\n\nYou must return only a JSON object, nothing else.` : prompt },
+    ]
+    const completion = await pipelineClient.chat.completions.create({
+      model: PIPELINE_MODEL,
+      messages,
+    })
+    return completion.choices[0]?.message?.content || ''
   }
 
   let parsed

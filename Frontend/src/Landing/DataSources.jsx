@@ -51,11 +51,12 @@ function ReliefWebLogo() {
   )
 }
 
-function GeminiLogo() {
+function GroqLogo() {
   return (
     <svg viewBox="0 0 40 40" fill="none" className="w-9 h-9">
       <circle cx="20" cy="20" r="18" stroke="#e94560" strokeWidth="1.5" opacity="0.3" />
-      <path d="M20 8L23 17H32L25 22.5L27.5 32L20 26L12.5 32L15 22.5L8 17H17L20 8Z" stroke="#e94560" strokeWidth="1.5" strokeLinejoin="round" />
+      <path d="M10 10L30 30M30 10L10 30" stroke="#e94560" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="20" cy="20" r="5" stroke="#e94560" strokeWidth="1.5" />
     </svg>
   )
 }
@@ -66,7 +67,7 @@ const iconMap = {
   GDACS: GDACSLogo,
   GDELT: GDELTLogo,
   ReliefWeb: ReliefWebLogo,
-  'Google Gemini': GeminiLogo,
+  Groq: GroqLogo,
 }
 
 const colorMap = {
@@ -75,7 +76,7 @@ const colorMap = {
   GDACS: 'from-amber-400/20',
   GDELT: 'from-violet-400/20',
   ReliefWeb: 'from-cyan-400/20',
-  'Google Gemini': 'from-crisis-red/20',
+  Groq: 'from-crisis-red/20',
 }
 
 const sources = [
@@ -84,7 +85,7 @@ const sources = [
   { name: 'GDACS', desc: 'Global Disaster Alerts' },
   { name: 'GDELT', desc: 'Global News Monitor' },
   { name: 'ReliefWeb', desc: 'Humanitarian Updates' },
-  { name: 'Google Gemini', desc: 'AI Classification Engine' },
+  { name: 'Groq', desc: 'AI Classification Engine' },
 ]
 
 export default function DataSources() {

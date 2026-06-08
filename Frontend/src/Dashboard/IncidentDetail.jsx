@@ -183,7 +183,7 @@ export default function IncidentDetail() {
                       <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
                       <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
                     </svg>
-                    <span className="text-xs font-semibold text-[#7c3aed]">Gemini Assessment</span>
+                    <span className="text-xs font-semibold text-[#7c3aed]">AI Assessment</span>
                   </div>
                   <p className="text-sm text-glacier-white/70 leading-relaxed">
                     This {incident.type.toLowerCase()} event in {incident.location} is assessed as {sev.label.toLowerCase()} severity. 

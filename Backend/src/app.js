@@ -10,6 +10,7 @@ import alertRoutes from './routes/alerts.js'
 import chatRoutes from './routes/chat.js'
 import adminRoutes from './routes/admin.js'
 import healthRoutes from './routes/health.js'
+import gdeltRoutes from './routes/gdelt.js'
 
 const app = express()
 
@@ -25,6 +26,7 @@ app.use('/api/alerts', alertRoutes)
 app.use('/api/chat', chatRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/health', healthRoutes)
+app.use('/api/gdelt', gdeltRoutes)
 
 
 app.get('/api/stats/summary', async (req, res) => {

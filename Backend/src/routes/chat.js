@@ -1,12 +1,13 @@
 import { Router } from 'express'
-import { chatModel as model } from '../config/gemini.js'
+import { chatClient, CHAT_MODEL } from '../config/groq.js'
 import { Incident } from '../models/Incident.js'
+import { aiRateLimiter } from '../middleware/rateLimiter.js'
 import logger from '../utils/logger.js'
 
 
 const router = Router()
 
-router.post('/', async (req, res, next) => {
+router.post('/', aiRateLimiter, async (req, res, next) => {
   try {
     const { message } = req.body
     if (!message) {
@@ -41,12 +42,15 @@ Use exactly this JSON schema:
 
     const prompt = `User Query: "${message}"\n\nReturn JSON response:`
 
-    const result = await model.generateContent([
-      { text: systemInstruction },
-      { text: prompt },
-    ])
+    const completion = await chatClient.chat.completions.create({
+      model: CHAT_MODEL,
+      messages: [
+        { role: 'system', content: systemInstruction },
+        { role: 'user', content: prompt },
+      ],
+    })
 
-    let text = result.response.text().trim()
+    let text = (completion.choices[0]?.message?.content || '').trim()
 
     // Clean markdown code blocks if the model wrapped them
     if (text.startsWith('```')) {
@@ -57,7 +61,7 @@ Use exactly this JSON schema:
     try {
       parsed = JSON.parse(text)
     } catch (err) {
-      logger.error('Failed to parse Gemini chat response as JSON. Raw text: ' + text)
+      logger.error('Failed to parse Groq chat response as JSON. Raw text: ' + text)
       // Fallback response format if JSON parsing failed
       parsed = {
         severity: 'Information',
