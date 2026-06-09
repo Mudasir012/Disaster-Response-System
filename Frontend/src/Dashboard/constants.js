@@ -24,5 +24,6 @@ export const INCIDENT_TYPES = Object.keys(DISASTER_TYPES)
 export const NAV_LINKS = [
   { label: 'Dashboard', path: '/dashboard' },
   { label: 'Incidents', path: '/incidents' },
+  { label: 'Tracking', path: '/tracking' },
   { label: 'Analytics', path: '/analytics' },
 ]

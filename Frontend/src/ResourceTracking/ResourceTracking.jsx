@@ -3,6 +3,7 @@ import { createSocket } from '../lib/socket'
 import { api } from '../lib/api'
 import ResourceMap from './ResourceMap'
 import ResourceSidebar from './ResourceSidebar'
+import AddResourceModal from './AddResourceModal'
 
 const TYPE_COLORS = {
   vehicle: '#3b82f6',
@@ -26,6 +27,8 @@ export default function ResourceTracking() {
   const [selected, setSelected] = useState(null)
   const [route, setRoute] = useState(null)
   const [isochrones, setIsochrones] = useState([])
+  const [placing, setPlacing] = useState(false)
+  const [modalPos, setModalPos] = useState(null)
   const sidebarRef = useRef(null)
 
   const fetchResources = useCallback(async () => {
@@ -69,7 +72,17 @@ export default function ResourceTracking() {
     }
   }, [])
 
-  const handleRoute = async (from, to) => {
+  const handlePlace = useCallback((lng, lat) => {
+    setModalPos({ lng, lat })
+    setPlacing(false)
+  }, [])
+
+  const handleSave = useCallback(async (data) => {
+    await api.createResource(data)
+    await fetchResources()
+  }, [fetchResources])
+
+  const handleRoute = useCallback(async (from, to) => {
     try {
       const data = await api.routingDirections({
         coordinates: [[from.lng, from.lat], [to.lng, to.lat]],
@@ -79,9 +92,9 @@ export default function ResourceTracking() {
     } catch {
       setRoute(null)
     }
-  }
+  }, [])
 
-  const handleIsochrone = async (lng, lat, ranges = [5000, 10000, 30000]) => {
+  const handleIsochrone = useCallback(async (lng, lat, ranges = [5000, 10000, 30000]) => {
     try {
       const data = await api.routingIsochrones({
         location: [lng, lat],
@@ -92,12 +105,12 @@ export default function ResourceTracking() {
     } catch {
       setIsochrones([])
     }
-  }
+  }, [])
 
-  const clearOverlays = () => {
+  const clearOverlays = useCallback(() => {
     setRoute(null)
     setIsochrones([])
-  }
+  }, [])
 
   const filtered = filter === 'all'
     ? resources
@@ -105,6 +118,9 @@ export default function ResourceTracking() {
 
   return (
     <div className="h-[100dvh] w-full bg-[#05080f] relative overflow-hidden">
+      <div className="absolute top-2 left-2 z-50 px-2 py-1 rounded bg-purple-500/80 text-[10px] text-white font-mono">
+        Tracking page loaded — {resources.length} resources
+      </div>
       <ResourceMap
         resources={filtered}
         selected={selected}
@@ -118,18 +134,14 @@ export default function ResourceTracking() {
         STATUS_COLORS={STATUS_COLORS}
         onRefresh={fetchResources}
         sidebarRef={sidebarRef}
+        placing={placing}
+        onPlace={handlePlace}
       />
 
       <div className="absolute top-0 right-0 bottom-0 w-[380px] lg:w-[420px] z-20 pointer-events-none">
         <div className="w-full h-full pointer-events-auto" ref={sidebarRef}>
           <ResourceSidebar
             resources={resources}
-            counts={resources.reduce((acc, r) => {
-              const t = r.type
-              if (!acc[t]) acc[t] = []
-              acc[t].push(r)
-              return acc
-            }, {})}
             filter={filter}
             onFilter={setFilter}
             selected={selected}
@@ -143,9 +155,35 @@ export default function ResourceTracking() {
             clearOverlays={clearOverlays}
             onRoute={handleRoute}
             onIsochrone={handleIsochrone}
+            onAddClick={() => setPlacing(true)}
+            placing={placing}
           />
         </div>
       </div>
+
+      {/* Floating Add button */}
+      {!placing && (
+        <button
+          onClick={() => setPlacing(true)}
+          className="absolute bottom-6 left-6 z-30 w-11 h-11 rounded-full bg-purple-500/80 hover:bg-purple-500
+            text-white flex items-center justify-center shadow-lg
+            transition-all hover:scale-105 active:scale-95 cursor-pointer"
+          title="Add resource — click on map to place"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </button>
+      )}
+
+      {modalPos && (
+        <AddResourceModal
+          position={modalPos}
+          onClose={() => { setModalPos(null); clearOverlays() }}
+          onSave={handleSave}
+        />
+      )}
     </div>
   )
 }

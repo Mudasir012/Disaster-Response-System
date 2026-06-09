@@ -39,14 +39,21 @@ function StatCard({ label, total, color, statuses, STATUS_COLORS }) {
 }
 
 export default function ResourceSidebar({
-  resources, counts, filter, onFilter,
+  resources, filter, onFilter,
   selected, onSelect, loading, onRefresh,
   TYPE_COLORS, STATUS_COLORS,
   route, isochrones, clearOverlays, onRoute, onIsochrone,
+  onAddClick, placing,
 }) {
   const typeKeys = Object.keys(TYPE_LABELS)
   const totalResources = resources.length
   const selectedResource = selected ? resources.find((r) => r._id === selected) : null
+
+  const counts = typeKeys.reduce((acc, key) => {
+    const typeResources = resources.filter((r) => r.type === key)
+    if (typeResources.length) acc[key] = typeResources
+    return acc
+  }, {})
 
   return (
     <div className="h-full flex flex-col bg-[#05080f]/90 backdrop-blur-sm border-l border-white/5">
@@ -59,6 +66,16 @@ export default function ResourceSidebar({
             </p>
           </div>
           <div className="flex gap-1">
+            <button
+              onClick={onAddClick}
+              disabled={placing}
+              className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider rounded
+                bg-purple-500/20 text-purple-300 border border-purple-500/30
+                hover:bg-purple-500/30 transition-all
+                disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+            >
+              + Add
+            </button>
             <button
               onClick={clearOverlays}
               disabled={!route && !isochrones.length}
@@ -148,8 +165,17 @@ export default function ResourceSidebar({
             ))}
           </div>
         ) : resources.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-[11px] text-cool-gray/30 font-mono">
-            No resources found
+          <div className="flex flex-col items-center justify-center h-full px-6 text-center">
+            <div className="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center mb-3">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" strokeWidth="2" strokeLinecap="round">
+                <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </div>
+            <p className="text-[11px] text-cool-gray/30 font-mono mb-1">No resources yet</p>
+            <p className="text-[10px] text-cool-gray/20 font-mono leading-relaxed">
+              Click <span className="text-purple-400/60">+ Add</span> above or the floating<br />
+              <span className="text-purple-400/60">+</span> button, then click the map to place one.
+            </p>
           </div>
         ) : (
           <div className="p-3 space-y-1">
