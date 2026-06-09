@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react'
 import FilterBar from './FilterBar'
 import StatsBar from './StatsBar'
 import IncidentCard from './IncidentCard'
+import SidebarSkeleton from './SidebarSkeleton'
 import { SEVERITY_ORDER } from './constants'
 
 export default function SidebarPanel({ incidents, selectedId, onSelect, loading }) {
@@ -28,6 +29,14 @@ export default function SidebarPanel({ incidents, selectedId, onSelect, loading 
       .concat(list.filter((i) => !SEVERITY_ORDER.includes(i.severity)))
   }, [incidents, filter, search])
 
+  if (loading) {
+    return (
+      <div className="w-full h-full flex flex-col bg-deep-slate border-l border-white/[0.04]" style={{ contain: 'layout style paint' }}>
+        <SidebarSkeleton />
+      </div>
+    )
+  }
+
   return (
     <div className="w-full h-full flex flex-col bg-deep-slate border-l border-white/[0.04]" style={{ contain: 'layout style paint' }}>
       <div className="shrink-0 px-4 pt-4 pb-3 space-y-3">
@@ -49,11 +58,7 @@ export default function SidebarPanel({ incidents, selectedId, onSelect, loading 
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2 min-h-0">
-        {loading ? (
-          <div className="flex items-center justify-center py-12">
-            <div className="w-6 h-6 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
-          </div>
-        ) : filtered.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <p className="text-sm text-cool-gray/40 font-medium">No incidents found</p>
             <p className="text-xs text-cool-gray/30 mt-1">Try adjusting your filters</p>

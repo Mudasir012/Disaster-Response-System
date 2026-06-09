@@ -1,11 +1,53 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 import maplibregl from 'maplibre-gl'
 import { DISASTER_TYPES } from './constants'
+import MapSkeleton from './MapSkeleton'
+
+function createMarkerEl(inc, isSelected, disaster, onClick) {
+  const size = 12
+  const selectedSize = 18
+
+  const el = document.createElement('div')
+  el.style.cssText = `
+    width: ${isSelected ? selectedSize : size}px;
+    height: ${isSelected ? selectedSize : size}px;
+    border-radius: 50%;
+    background: ${disaster.color};
+    opacity: ${inc.status === 'resolved' ? 0.4 : 1};
+    border: ${isSelected ? '2px solid #f8fafc' : '2px solid rgba(248,250,252,0.25)'};
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 14px ${disaster.glow};
+    pointer-events: auto;
+  `
+  el.addEventListener('click', onClick)
+  return el
+}
+
+function updateMarkerEl(el, inc, isSelected, disaster) {
+  const size = 12
+  const selectedSize = 18
+  el.style.width = `${isSelected ? selectedSize : size}px`
+  el.style.height = `${isSelected ? selectedSize : size}px`
+  el.style.background = disaster.color
+  el.style.opacity = inc.status === 'resolved' ? '0.4' : '1'
+  el.style.border = isSelected ? '2px solid #f8fafc' : '2px solid rgba(248,250,252,0.25)'
+  el.style.boxShadow = `0 0 14px ${disaster.glow}`
+}
 
 export default function MapView({ incidents, selectedId, onSelect, loading }) {
   const containerRef = useRef(null)
   const mapRef = useRef(null)
-  const markersRef = useRef([])
+  const markersRef = useRef(new Map())
+  const onSelectRef = useRef(onSelect)
+
+  useEffect(() => {
+    onSelectRef.current = onSelect
+  }, [onSelect])
+
+  const handleClick = useCallback((id) => {
+    onSelectRef.current?.(id)
+  }, [])
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return
@@ -51,41 +93,37 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
     const map = mapRef.current
     if (!map || !incidents) return
 
-    markersRef.current.forEach((m) => m.remove())
-    markersRef.current = []
+    const markers = markersRef.current
+    const prevIds = new Set(markers.keys())
+    const nextIds = new Set()
 
     incidents.forEach((inc) => {
       if (!inc.lat || !inc.lng) return
+      nextIds.add(inc.id)
 
       const disaster = DISASTER_TYPES[inc.type] || { color: '#94a3b8', glow: 'rgba(148,163,184,0.35)' }
       const isSelected = selectedId === inc.id
-      const size = 12
-      const selectedSize = 18
 
-      const el = document.createElement('div')
-
-      el.style.cssText = `
-        width: ${isSelected ? selectedSize : size}px;
-        height: ${isSelected ? selectedSize : size}px;
-        border-radius: 50%;
-        background: ${disaster.color};
-        opacity: ${inc.status === 'resolved' ? 0.4 : 1};
-        border: ${isSelected ? '2px solid #f8fafc' : '2px solid rgba(248,250,252,0.25)'};
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 0 14px ${disaster.glow};
-        pointer-events: auto;
-      `
-
-      el.addEventListener('click', () => onSelect?.(inc.id))
-
-      const marker = new maplibregl.Marker({ element: el })
-        .setLngLat([inc.lng, inc.lat])
-        .addTo(map)
-
-      markersRef.current.push(marker)
+      if (markers.has(inc.id)) {
+        const existing = markers.get(inc.id)
+        updateMarkerEl(existing.getElement(), inc, isSelected, disaster)
+        existing.setLngLat([inc.lng, inc.lat])
+      } else {
+        const el = createMarkerEl(inc, isSelected, disaster, () => handleClick(inc.id))
+        const marker = new maplibregl.Marker({ element: el })
+          .setLngLat([inc.lng, inc.lat])
+          .addTo(map)
+        markers.set(inc.id, marker)
+      }
     })
-  }, [incidents, selectedId, onSelect])
+
+    for (const id of prevIds) {
+      if (!nextIds.has(id)) {
+        markers.get(id).remove()
+        markers.delete(id)
+      }
+    }
+  }, [incidents, selectedId, handleClick])
 
   return (
     <div className="absolute inset-0">
@@ -107,11 +145,8 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
         </div>
       </div>
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-surface/50 z-10">
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-8 h-8 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
-            <span className="text-xs text-cool-gray/60">Loading map data...</span>
-          </div>
+        <div className="absolute inset-0 z-10 transition-opacity duration-500 ease-[cubic-bezier(0.4,0,0.1,1)]">
+          <MapSkeleton />
         </div>
       )}
     </div>

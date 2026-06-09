@@ -104,6 +104,37 @@ export const api = {
   gdeltCities: (query) => request(`/gdelt/cities?q=${encodeURIComponent(query)}`),
   gdeltCountries: (query) => request(`/gdelt/countries?q=${encodeURIComponent(query)}`),
 
+  // Resources
+  resources: (params) => {
+    const q = params ? '?' + new URLSearchParams(params).toString() : ''
+    return request(`/resources${q}`)
+  },
+  resource: (id) => request(`/resources/${id}`),
+  createResource: (data) =>
+    request('/resources', { method: 'POST', body: JSON.stringify(data) }),
+  updateResource: (id, data) =>
+    request(`/resources/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteResource: (id) =>
+    request(`/resources/${id}`, { method: 'DELETE' }),
+  resourcesNear: (params) => {
+    const q = new URLSearchParams(params).toString()
+    return request(`/resources/near?${q}`)
+  },
+  resourceCounts: () => request('/resources/counts'),
+
+  // Routing (ORS)
+  routingDirections: (data) =>
+    request('/routing/directions', { method: 'POST', body: JSON.stringify(data) }),
+  routingIsochrones: (data) =>
+    request('/routing/isochrones', { method: 'POST', body: JSON.stringify(data) }),
+
+  // Traccar
+  traccarDevices: () => request('/traccar/devices'),
+  traccarPositions: (deviceId) => {
+    const q = deviceId ? `?deviceId=${deviceId}` : ''
+    return request(`/traccar/positions${q}`)
+  },
+
   // Health
   health: () => request('/health'),
 }

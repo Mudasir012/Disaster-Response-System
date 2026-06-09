@@ -7,6 +7,7 @@ const Dashboard = lazy(() => import('./Dashboard/Dashboard'))
 const IncidentList = lazy(() => import('./Dashboard/IncidentList'))
 const IncidentDetail = lazy(() => import('./Dashboard/IncidentDetail'))
 const Analytics = lazy(() => import('./Dashboard/Analytics'))
+const ResourceTracking = lazy(() => import('./ResourceTracking/ResourceTracking'))
 
 function PageFallback() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/incidents" element={<IncidentList />} />
         <Route path="/incidents/:id" element={<IncidentDetail />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/tracking" element={<ResourceTracking />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>

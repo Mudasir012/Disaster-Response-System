@@ -1,4 +1,4 @@
-import { useRef, Suspense, useMemo } from 'react'
+import { useRef, Suspense, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import * as THREE from 'three'
 
@@ -137,9 +137,11 @@ void main() {
 }
 `
 
-function EarthTextures({ dayTexture, nightTexture, brcTexture, scrollRef, mouseRef }) {
+function EarthTextures({ dayTexture, nightTexture, brcTexture, scrollRef, mouseRef, active }) {
   const earthRef = useRef()
   const atmosphereRef = useRef()
+  const activeRef = useRef(active)
+  useEffect(() => { activeRef.current = active }, [active])
 
   const sunDirection = useMemo(() => new THREE.Vector3(0, 0, 1), [])
 
@@ -181,6 +183,7 @@ function EarthTextures({ dayTexture, nightTexture, brcTexture, scrollRef, mouseR
   }), [sunDirection])
 
   useFrame((state, delta) => {
+    if (!activeRef.current) return
     const s = Math.min(Math.max(scrollRef.current, 0), 1)
     const speed = 0.04 + s * 0.2
     const t = state.clock.elapsedTime
@@ -203,10 +206,10 @@ function EarthTextures({ dayTexture, nightTexture, brcTexture, scrollRef, mouseR
   return (
     <>
       <mesh ref={earthRef} material={earthMaterial}>
-        <sphereGeometry args={[GLOBE_RADIUS, 64, 64]} />
+        <sphereGeometry args={[GLOBE_RADIUS, 48, 48]} />
       </mesh>
       <mesh ref={atmosphereRef} material={atmosphereMaterial} scale={1.04}>
-        <sphereGeometry args={[GLOBE_RADIUS, 64, 64]} />
+        <sphereGeometry args={[GLOBE_RADIUS, 48, 48]} />
       </mesh>
       {MARKER_DATA.map((d, i) => (
         <PulsingMarker key={i} position={d.pos} offset={d.offset} />
@@ -215,14 +218,14 @@ function EarthTextures({ dayTexture, nightTexture, brcTexture, scrollRef, mouseR
   )
 }
 
-function Earth({ scrollRef, mouseRef }) {
+function Earth({ scrollRef, mouseRef, active }) {
   const [day, night, brc] = useLoader(THREE.TextureLoader, [
     'https://threejs.org/examples/textures/planets/earth_day_4096.jpg',
     'https://threejs.org/examples/textures/planets/earth_night_4096.jpg',
     'https://threejs.org/examples/textures/planets/earth_bump_roughness_clouds_4096.jpg',
   ])
 
-  return <EarthTextures dayTexture={day} nightTexture={night} brcTexture={brc} scrollRef={scrollRef} mouseRef={mouseRef} />
+  return <EarthTextures dayTexture={day} nightTexture={night} brcTexture={brc} scrollRef={scrollRef} mouseRef={mouseRef} active={active} />
 }
 
 function PulsingMarker({ position, offset }) {
@@ -268,11 +271,26 @@ function SceneFallback() {
 }
 
 export default function HeroScene({ scrollRef, mouseRef }) {
+  const containerRef = useRef(null)
+  const [inView, setInView] = useState(true)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: '-200px 0px' }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none' }}>
+    <div ref={containerRef} style={{ position: 'fixed', inset: 0, pointerEvents: 'none' }}>
       <Canvas
+        frameloop={inView ? 'always' : 'never'}
         camera={{ position: [0, 0, 2.2], fov: 40 }}
-        dpr={[1, 1.5]}
+        dpr={[1, 1.25]}
         gl={{ antialias: true, alpha: false }}
         style={{ width: '100%', height: '100%' }}
       >
@@ -280,7 +298,7 @@ export default function HeroScene({ scrollRef, mouseRef }) {
         <ambientLight intensity={0.2} />
         <directionalLight position={[0, 0, 3]} intensity={1.5} />
         <Suspense fallback={<SceneFallback />}>
-          <Earth scrollRef={scrollRef} mouseRef={mouseRef} />
+          <Earth scrollRef={scrollRef} mouseRef={mouseRef} active={inView} />
         </Suspense>
         <Stars />
       </Canvas>

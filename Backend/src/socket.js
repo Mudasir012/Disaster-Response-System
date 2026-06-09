@@ -49,6 +49,18 @@ export function emitStatsUpdate(stats) {
   if (io) io.emit('stats_update', stats)
 }
 
+export function emitResourceUpdate(resource) {
+  if (io) io.emit('resource_update', resource)
+}
+
+export function emitResourceDelete(resourceId) {
+  if (io) io.emit('resource_delete', { resource_id: resourceId })
+}
+
+export function emitResourceCounts(counts) {
+  if (io) io.emit('resource_counts', counts)
+}
+
 export function getConnectedClients() {
   return connectedClients
 }

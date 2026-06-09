@@ -13,7 +13,7 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules/three/')) return 'three'
           if (id.includes('node_modules/maplibre-gl/')) return 'maplibre'
-          if (id.includes('node_modules/recharts/')) return 'recharts'
+          if (id.includes('node_modules/leaflet/')) return 'leaflet'
           if (id.includes('node_modules/socket.io-client/')) return 'socketio'
           if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/react-router/')) return 'vendor'
         },

@@ -11,6 +11,9 @@ import chatRoutes from './routes/chat.js'
 import adminRoutes from './routes/admin.js'
 import healthRoutes from './routes/health.js'
 import gdeltRoutes from './routes/gdelt.js'
+import resourceRoutes from './routes/resources.js'
+import traccarRoutes from './routes/traccar.js'
+import routingRoutes from './routes/routing.js'
 
 const app = express()
 
@@ -27,7 +30,9 @@ app.use('/api/chat', chatRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/health', healthRoutes)
 app.use('/api/gdelt', gdeltRoutes)
-
+app.use('/api/resources', resourceRoutes)
+app.use('/api/traccar', traccarRoutes)
+app.use('/api/routing', routingRoutes)
 
 app.get('/api/stats/summary', async (req, res) => {
   const { Incident } = await import('./models/Incident.js')

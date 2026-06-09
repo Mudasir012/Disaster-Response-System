@@ -218,7 +218,7 @@ export default function Landing() {
         </section>
 
         {/* ── Chapter 2: The Problem (Dark) ── */}
-        <section className="relative py-40 md:py-56">
+        <section className="section-deferred relative py-40 md:py-56">
           <div className="mx-auto max-w-7xl px-6">
             <motion.div {...useScrollReveal()} className="max-w-3xl">
               <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-crisis-red/70">
@@ -247,7 +247,7 @@ export default function Landing() {
         </section>
 
         {/* ── Chapter 3: The Pipeline (Alt background) ── */}
-        <section className="section-alt relative py-32 md:py-40">
+        <section className="section-deferred section-alt relative py-32 md:py-40">
           <SectionCrosses />
           <div className="grid-overlay" />
 
@@ -268,7 +268,7 @@ export default function Landing() {
         </section>
 
         {/* ── Chapter 4: The Sources ── */}
-        <section id="sources" className="relative py-24 md:py-32">
+        <section id="sources" className="section-deferred relative py-24 md:py-32">
           <div className="mx-auto max-w-7xl px-6">
             <motion.div {...useScrollReveal()} className="mb-16 max-w-3xl">
               <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-cool-gray/50">
@@ -283,7 +283,7 @@ export default function Landing() {
         </section>
 
         {/* ── Chapter 5: For Responders (Alt background) ── */}
-        <section id="features" className="section-alt relative py-32 md:py-40">
+        <section id="features" className="section-deferred section-alt relative py-32 md:py-40">
           <SectionCrosses />
           <div className="mx-auto max-w-7xl px-6">
             <motion.div {...useScrollReveal()} className="max-w-3xl">
@@ -339,7 +339,7 @@ export default function Landing() {
         </section>
 
         {/* ── Chapter 6: Testimonials ── */}
-        <section className="relative py-32 md:py-40 overflow-hidden">
+        <section className="section-deferred relative py-32 md:py-40 overflow-hidden">
           <div className="pointer-events-none absolute inset-0 opacity-[0.02]"
             style={{
               backgroundImage:
