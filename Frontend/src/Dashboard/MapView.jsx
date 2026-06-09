@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
-import { SEVERITY, SEVERITY_ORDER } from './constants'
+import { DISASTER_TYPES } from './constants'
 
 export default function MapView({ incidents, selectedId, onSelect, loading }) {
   const containerRef = useRef(null)
@@ -54,27 +54,26 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
     markersRef.current.forEach((m) => m.remove())
     markersRef.current = []
 
-    const sorted = SEVERITY_ORDER
-      .flatMap((key) => incidents.filter((i) => i.severity === key))
-      .concat(incidents.filter((i) => !SEVERITY_ORDER.includes(i.severity)))
+    incidents.forEach((inc) => {
+      if (!inc.lat || !inc.lng) return
 
-    sorted.forEach((inc) => {
-      const sev = SEVERITY[inc.severity] || SEVERITY.info
+      const disaster = DISASTER_TYPES[inc.type] || { color: '#94a3b8', glow: 'rgba(148,163,184,0.35)' }
+      const isSelected = selectedId === inc.id
+      const size = 12
+      const selectedSize = 18
+
       const el = document.createElement('div')
 
-      const size = inc.severity === 'critical' || inc.severity === 'severe' ? 14 : 10
-      const isSelected = selectedId === inc.id
-
       el.style.cssText = `
-        width: ${isSelected ? size + 8 : size}px;
-        height: ${isSelected ? size + 8 : size}px;
+        width: ${isSelected ? selectedSize : size}px;
+        height: ${isSelected ? selectedSize : size}px;
         border-radius: 50%;
-        background: ${sev.color};
+        background: ${disaster.color};
         opacity: ${inc.status === 'resolved' ? 0.4 : 1};
-        border: ${isSelected ? '2px solid #f8fafc' : '2px solid rgba(248,250,252,0.3)'};
+        border: ${isSelected ? '2px solid #f8fafc' : '2px solid rgba(248,250,252,0.25)'};
         cursor: pointer;
         transition: all 0.2s ease;
-        box-shadow: 0 0 12px ${sev.color}40;
+        box-shadow: 0 0 14px ${disaster.glow};
         pointer-events: auto;
       `
 
@@ -95,16 +94,16 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
         className="absolute inset-0"
         style={{ contain: 'layout style paint' }}
       >
-        <div className="absolute bottom-4 left-4 z-10 flex gap-2">
-          {SEVERITY_ORDER.filter((k) => k !== 'tsunami').map((key) => {
-            const sev = SEVERITY[key]
-            return (
-              <div key={key} className="flex items-center gap-1.5 bg-deep-slate/80 backdrop-blur-sm px-2.5 py-1.5 rounded-md">
-                <span className="w-2 h-2 rounded-full" style={{ background: sev.color }} />
-                <span className="text-[10px] text-cool-gray/70 font-medium">{sev.label}</span>
-              </div>
-            )
-          })}
+        <div className="absolute bottom-4 left-4 z-10 flex flex-wrap gap-1.5">
+          {Object.entries(DISASTER_TYPES).map(([type, spec]) => (
+            <div
+              key={type}
+              className="flex items-center gap-1.5 bg-deep-slate/80 backdrop-blur-sm px-2.5 py-1.5 rounded-md"
+            >
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ background: spec.color }} />
+              <span className="text-[10px] text-cool-gray/70 font-medium whitespace-nowrap">{type}</span>
+            </div>
+          ))}
         </div>
       </div>
       {loading && (

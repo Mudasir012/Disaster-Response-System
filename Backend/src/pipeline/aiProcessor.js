@@ -7,7 +7,7 @@ export default async function processWithAI(normalisedEvent) {
 extract structured data. Return ONLY valid JSON with no markdown, no code fences,
 no preamble. Use exactly these keys:
 {
-  "event_type": one of ["earthquake","flood","wildfire","cyclone","tsunami","severe_weather","unknown"],
+  "event_type": one of ["earthquake","flood","wildfire","hurricane","tsunami","tornado","volcanic_eruption","landslide","unknown"],
   "location_name": "most specific place name mentioned, or null",
   "severity": integer 1-5 based on: 1=minor/no injuries, 2=property damage, 3=significant damage/possible fatalities, 4=major disaster/confirmed deaths, 5=catastrophic/mass casualties,
   "summary": "plain English summary max 60 words",

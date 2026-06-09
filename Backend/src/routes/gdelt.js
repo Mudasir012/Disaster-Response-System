@@ -3,7 +3,7 @@ import { Incident } from '../models/Incident.js'
 import { searchCities, getCountryName, countries } from '../services/cities.js'
 import { fetchGDELTData } from '../services/gdeltApi.js'
 
-const DISASTER_QUERY = 'earthquake OR flood OR wildfire OR cyclone OR tsunami OR hurricane OR tornado OR volcanic eruption OR landslide OR storm'
+const DISASTER_QUERY = 'earthquake OR flood OR wildfire OR hurricane OR tsunami OR tornado OR volcanic eruption OR landslide'
 
 const router = Router()
 

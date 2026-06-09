@@ -51,7 +51,7 @@ import { AlertSubscription } from '../models/AlertSubscription.js'
 import { emitNewIncident } from '../socket.js'
 
 export default async function buildIncident(aiResult, geoResult, normalisedEvent, rawEventDoc) {
-  const eventType = aiResult.event_type === 'unknown' ? 'severe_weather' : aiResult.event_type
+  const eventType = aiResult.event_type === 'unknown' ? 'tornado' : aiResult.event_type
 
   const incidentData = {
     event_type: eventType,

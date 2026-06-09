@@ -152,7 +152,7 @@ router.post('/incidents/:id/reprocess', auth, async (req, res, next) => {
     const geoResult = await geocode(aiResult.location_name, null, null)
 
     const update = {
-      event_type: aiResult.event_type === 'unknown' ? 'severe_weather' : aiResult.event_type,
+      event_type: aiResult.event_type === 'unknown' ? 'tornado' : aiResult.event_type,
       'location.name': aiResult.location_name || 'Unknown',
       'location.lat': geoResult.lat,
       'location.lng': geoResult.lng,

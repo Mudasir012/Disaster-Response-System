@@ -4,7 +4,7 @@ import { fetchGDELTData } from '../services/gdeltApi.js'
 
 export default async function fetchGDELT() {
   const params = new URLSearchParams({
-    query: 'earthquake OR flood OR wildfire OR cyclone OR tsunami OR hurricane OR tornado',
+    query: 'earthquake OR flood OR wildfire OR hurricane OR tsunami OR tornado OR volcanic eruption OR landslide',
     mode: 'ArtList',
     maxrecords: 50,
     format: 'json',

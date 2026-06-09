@@ -85,7 +85,7 @@ export default function Dashboard() {
     >
       <h1 className="sr-only">Dashboard</h1>
 
-      <div className="absolute inset-0 top-14">
+      <div className="absolute inset-0">
         <MapView
           incidents={incidents}
           selectedId={selectedId}
@@ -94,7 +94,7 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="absolute top-14 left-0 bottom-0 z-20 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] overflow-hidden"
+      <div className="absolute top-0 left-0 bottom-0 z-20 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] overflow-hidden"
         style={{ width: chatOpen ? '380px' : '0px' }}
       >
         <div className="w-[380px] h-full">
@@ -125,7 +125,7 @@ export default function Dashboard() {
         </svg>
       </button>
 
-      <div className="absolute top-14 right-0 bottom-0 w-[400px] lg:w-[460px] z-10">
+      <div className="absolute top-0 right-0 bottom-0 w-[400px] lg:w-[460px] z-10">
         <SidebarPanel
           incidents={incidents}
           selectedId={selectedId}

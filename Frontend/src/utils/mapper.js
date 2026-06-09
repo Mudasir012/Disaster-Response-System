@@ -18,15 +18,17 @@ export function mapBackendIncidentToFrontend(inc) {
   }
 
   // Event type mapping:
-  // Backend uses lowercase: 'earthquake', 'flood', 'wildfire', 'cyclone', 'tsunami', 'severe_weather'
+  // Backend uses lowercase: 'earthquake', 'flood', 'wildfire', 'hurricane', 'tsunami', 'tornado', 'volcanic_eruption', 'landslide'
   // Frontend expects titlecase matching INCIDENT_TYPES: 'Earthquake', 'Hurricane', 'Wildfire', 'Tsunami', 'Flood', etc.
   const typeMap = {
     earthquake: 'Earthquake',
     flood: 'Flood',
     wildfire: 'Wildfire',
-    cyclone: 'Hurricane',
+    hurricane: 'Hurricane',
     tsunami: 'Tsunami',
-    severe_weather: 'Tornado',
+    tornado: 'Tornado',
+    volcanic_eruption: 'Volcanic Eruption',
+    landslide: 'Landslide',
   }
   const type = typeMap[inc.event_type] || inc.event_type || 'Unknown'
 

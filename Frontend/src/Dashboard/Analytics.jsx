@@ -51,8 +51,12 @@ const typeMap = {
   earthquake: 'Earthquake',
   flood: 'Flood',
   wildfire: 'Wildfire',
-  cyclone: 'Hurricane',
+  hurricane: 'Hurricane',
   tsunami: 'Tsunami',
+  tornado: 'Tornado',
+  volcanic_eruption: 'Volcanic Eruption',
+  landslide: 'Landslide',
+  cyclone: 'Hurricane',
   severe_weather: 'Tornado',
 }
 

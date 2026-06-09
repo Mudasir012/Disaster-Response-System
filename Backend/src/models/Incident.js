@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const incidentSchema = new mongoose.Schema({
   event_type: {
     type: String,
-    enum: ['earthquake', 'flood', 'wildfire', 'cyclone', 'tsunami', 'severe_weather'],
+    enum: ['earthquake', 'flood', 'wildfire', 'hurricane', 'tsunami', 'tornado', 'volcanic_eruption', 'landslide'],
     required: true,
   },
   subtype: String,
