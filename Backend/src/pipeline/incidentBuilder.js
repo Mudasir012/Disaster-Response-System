@@ -94,9 +94,14 @@ export default async function buildIncident(aiResult, geoResult, normalisedEvent
       const subscriptions = await AlertSubscription.find({ confirmed: true })
       for (const sub of subscriptions) {
         for (const rule of sub.rules) {
-          const regionMatch = rule.region === 'worldwide' ||
-            rule.region?.toLowerCase() === (incidentData.location.continent || '').toLowerCase() ||
-            rule.region?.toLowerCase() === (aiResult.location_name || '').toLowerCase()
+          const subRegion = (rule.region || '').toLowerCase()
+          const incidentLocation = (aiResult.location_name || '').toLowerCase()
+          const incidentContinent = (incidentData.location.continent || '').toLowerCase()
+          const regionMatch = subRegion === 'worldwide' ||
+            subRegion === incidentContinent ||
+            subRegion === incidentLocation ||
+            incidentLocation.includes(subRegion) ||
+            subRegion.includes(incidentLocation)
 
           const typeMatch = !rule.event_types || rule.event_types.length === 0 ||
             rule.event_types.includes(eventType)

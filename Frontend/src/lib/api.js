@@ -66,6 +66,8 @@ export const api = {
   getAlerts: (token) => request(`/alerts/${token}`),
   updateAlerts: (token, data) =>
     request(`/alerts/${token}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  confirmAlert: (token) =>
+    request(`/alerts/${token}/confirm`, { method: 'POST' }),
   testAlert: (token, ruleIndex) =>
     request(`/alerts/${token}/test`, { method: 'POST', body: JSON.stringify({ rule_index: ruleIndex }) }),
   unsubscribeAlerts: (token) =>

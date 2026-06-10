@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { createSocket } from '../lib/socket'
 import { api } from '../lib/api'
+import DashboardLayout from '../Dashboard/DashboardLayout'
 import ResourceMap from './ResourceMap'
 import ResourceSidebar from './ResourceSidebar'
 import AddResourceModal from './AddResourceModal'
@@ -117,73 +118,72 @@ export default function ResourceTracking() {
     : resources.filter((r) => r.type === filter)
 
   return (
-    <div className="h-[100dvh] w-full bg-[#05080f] relative overflow-hidden">
-      <div className="absolute top-2 left-2 z-50 px-2 py-1 rounded bg-purple-500/80 text-[10px] text-white font-mono">
-        Tracking page loaded — {resources.length} resources
-      </div>
-      <ResourceMap
-        resources={filtered}
-        selected={selected}
-        onSelect={setSelected}
-        route={route}
-        isochrones={isochrones}
-        onRoute={handleRoute}
-        onIsochrone={handleIsochrone}
-        clearOverlays={clearOverlays}
-        TYPE_COLORS={TYPE_COLORS}
-        STATUS_COLORS={STATUS_COLORS}
-        onRefresh={fetchResources}
-        sidebarRef={sidebarRef}
-        placing={placing}
-        onPlace={handlePlace}
-      />
-
-      <div className="absolute top-0 right-0 bottom-0 w-[380px] lg:w-[420px] z-20 pointer-events-none">
-        <div className="w-full h-full pointer-events-auto" ref={sidebarRef}>
-          <ResourceSidebar
-            resources={resources}
-            filter={filter}
-            onFilter={setFilter}
-            selected={selected}
-            onSelect={setSelected}
-            loading={loading}
-            onRefresh={fetchResources}
-            TYPE_COLORS={TYPE_COLORS}
-            STATUS_COLORS={STATUS_COLORS}
-            route={route}
-            isochrones={isochrones}
-            clearOverlays={clearOverlays}
-            onRoute={handleRoute}
-            onIsochrone={handleIsochrone}
-            onAddClick={() => setPlacing(true)}
-            placing={placing}
-          />
-        </div>
-      </div>
-
-      {/* Floating Add button */}
-      {!placing && (
-        <button
-          onClick={() => setPlacing(true)}
-          className="absolute bottom-6 left-6 z-30 w-11 h-11 rounded-full bg-purple-500/80 hover:bg-purple-500
-            text-white flex items-center justify-center shadow-lg
-            transition-all hover:scale-105 active:scale-95 cursor-pointer"
-          title="Add resource — click on map to place"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </button>
-      )}
-
-      {modalPos && (
-        <AddResourceModal
-          position={modalPos}
-          onClose={() => { setModalPos(null); clearOverlays() }}
-          onSave={handleSave}
+    <DashboardLayout>
+      <div className="flex-1 w-full bg-[#05080f] relative overflow-hidden">
+        <ResourceMap
+          resources={filtered}
+          selected={selected}
+          onSelect={setSelected}
+          route={route}
+          isochrones={isochrones}
+          onRoute={handleRoute}
+          onIsochrone={handleIsochrone}
+          clearOverlays={clearOverlays}
+          TYPE_COLORS={TYPE_COLORS}
+          STATUS_COLORS={STATUS_COLORS}
+          onRefresh={fetchResources}
+          sidebarRef={sidebarRef}
+          placing={placing}
+          onPlace={handlePlace}
         />
-      )}
-    </div>
+
+        <div className="absolute top-0 right-0 bottom-0 w-[380px] lg:w-[420px] z-20 pointer-events-none">
+          <div className="w-full h-full pointer-events-auto" ref={sidebarRef}>
+            <ResourceSidebar
+              resources={resources}
+              filter={filter}
+              onFilter={setFilter}
+              selected={selected}
+              onSelect={setSelected}
+              loading={loading}
+              onRefresh={fetchResources}
+              TYPE_COLORS={TYPE_COLORS}
+              STATUS_COLORS={STATUS_COLORS}
+              route={route}
+              isochrones={isochrones}
+              clearOverlays={clearOverlays}
+              onRoute={handleRoute}
+              onIsochrone={handleIsochrone}
+              onAddClick={() => setPlacing(true)}
+              placing={placing}
+            />
+          </div>
+        </div>
+
+        {/* Floating Add button */}
+        {!placing && (
+          <button
+            onClick={() => setPlacing(true)}
+            className="absolute bottom-6 left-6 z-30 w-11 h-11 rounded-full bg-purple-500/80 hover:bg-purple-500
+              text-white flex items-center justify-center shadow-lg
+              transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            title="Add resource — click on map to place"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+        )}
+
+        {modalPos && (
+          <AddResourceModal
+            position={modalPos}
+            onClose={() => { setModalPos(null); clearOverlays() }}
+            onSave={handleSave}
+          />
+        )}
+      </div>
+    </DashboardLayout>
   )
 }

@@ -71,6 +71,20 @@ router.patch('/:token', async (req, res, next) => {
   }
 })
 
+router.post('/:token/confirm', async (req, res, next) => {
+  try {
+    const sub = await AlertSubscription.findOneAndUpdate(
+      { token: req.params.token },
+      { confirmed: true },
+      { new: true }
+    )
+    if (!sub) return res.status(404).json({ error: 'Subscription not found' })
+    res.json({ message: 'Subscription confirmed' })
+  } catch (err) {
+    next(err)
+  }
+})
+
 router.post('/:token/test', async (req, res, next) => {
   try {
     const sub = await AlertSubscription.findOne({ token: req.params.token })

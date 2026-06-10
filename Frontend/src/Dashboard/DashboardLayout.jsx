@@ -68,6 +68,17 @@ export default function DashboardLayout({ children, onWatchRegions, selectedCoun
                 </svg>
                 {selectedCountry ? selectedCountry : 'Regions'}
               </button>
+              <NavLink
+                to="/subscribe"
+                className="px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 ease-[cubic-bezier(0.4,0,0.1,1)]
+                  bg-purple-500/20 text-purple-300 border border-purple-500/30
+                  hover:bg-purple-500/30 hover:text-purple-200 inline-flex items-center gap-2"
+              >
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 2 11 13" /><path d="M22 2 15 22 11 13 2 9 22 2z" />
+                </svg>
+                Get Alerts
+              </NavLink>
             </nav>
           </div>
           <div className="flex items-center gap-3">

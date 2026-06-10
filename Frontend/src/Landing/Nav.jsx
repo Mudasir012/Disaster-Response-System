@@ -5,6 +5,7 @@ const links = [
   { label: 'Platform', href: '#features' },
   { label: 'Sources', href: '#sources' },
   { label: 'Contact', href: '#cta' },
+  { label: 'Get Alerts', href: '/subscribe' },
 ]
 
 export default function Nav() {

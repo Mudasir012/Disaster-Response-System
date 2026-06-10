@@ -1,7 +1,30 @@
 import { Resend } from 'resend'
 import { AlertSubscription } from '../models/AlertSubscription.js'
+import GUIDANCE from '../utils/safetyGuidance.js'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
+
+function buildSafetyHtml(eventType) {
+  const guidance = GUIDANCE[eventType]
+  if (!guidance) return ''
+
+  function listItems(items, icon) {
+    return items.map((item) => `<tr><td style="padding:4px 0;font-size:13px;line-height:1.5;color:#cbd5e1;vertical-align:top;width:20px">${icon}</td><td style="padding:4px 0;font-size:13px;line-height:1.5;color:#cbd5e1">${item}</td></tr>`).join('')
+  }
+
+  return `
+    <div style="margin:20px 0;padding:20px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.06)">
+      <h2 style="font-size:15px;font-weight:700;margin:0 0 12px;color:#f1f5f9">${guidance.title} — What To Do</h2>
+      <table style="width:100%;border-collapse:collapse">
+        <tr><td colspan="2" style="padding:0 0 4px;font-size:12px;font-weight:600;color:#22c55e">✓ DO</td></tr>
+        ${listItems(guidance.do, '✓')}
+        <tr><td colspan="2" style="padding:12px 0 4px;font-size:12px;font-weight:600;color:#ef4444">✗ DON\'T</td></tr>
+        ${listItems(guidance.dont, '✗')}
+        <tr><td colspan="2" style="padding:12px 0 4px;font-size:12px;font-weight:600;color:#0f7ddb">◆ PREPARE</td></tr>
+        ${listItems(guidance.prepare, '◆')}
+      </table>
+    </div>`
+}
 
 export default async function processAlertJob(job) {
   const { incident, subscription_email, rule } = job.data
@@ -14,6 +37,7 @@ export default async function processAlertJob(job) {
 
   const severityColors = { 1: '#64748b', 2: '#0f7ddb', 3: '#d97706', 4: '#e94560', 5: '#dc2626' }
   const color = severityColors[incident.severity] || '#64748b'
+  const safetyHtml = buildSafetyHtml(incident.event_type)
 
   const html = `
 <!DOCTYPE html>
@@ -39,7 +63,8 @@ export default async function processAlertJob(job) {
       ${incident.location.continent || ''} &middot; ${new Date(incident.first_seen).toLocaleString()}
     </div>
     <div class="summary">${incident.summary || 'No summary available.'}</div>
-    <a href="${frontendUrl}/incident/${incident._id}" class="btn">View on Map</a>
+    ${safetyHtml}
+    <a href="${frontendUrl}/incidents/${incident._id}" class="btn">View on Map</a>
     <div class="footer">
       <p>You received this alert because your subscription matches this event.</p>
       <p><a href="${unsubscribeUrl}" style="color: #e94560;">Unsubscribe or manage alerts</a></p>

@@ -9,6 +9,8 @@ const IncidentDetail = lazy(() => import('./Dashboard/IncidentDetail'))
 const Analytics = lazy(() => import('./Dashboard/Analytics'))
 const ResourceTracking = lazy(() => import('./ResourceTracking/ResourceTracking'))
 const ErrorBoundary = lazy(() => import('./ResourceTracking/ErrorBoundary'))
+const AlertSubscribe = lazy(() => import('./Dashboard/AlertSubscribe'))
+const AlertManage = lazy(() => import('./Dashboard/AlertManage'))
 
 function PageFallback() {
   return (
@@ -32,6 +34,9 @@ export default function App() {
         <Route path="/incidents/:id" element={<IncidentDetail />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/tracking" element={<ErrorBoundary><ResourceTracking /></ErrorBoundary>} />
+        <Route path="/subscribe" element={<AlertSubscribe />} />
+        <Route path="/alerts/manage" element={<AlertManage />} />
+        <Route path="/alerts/confirm" element={<AlertManage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
