@@ -34,6 +34,19 @@ function simplifyLocation(name) {
   return parts.filter(Boolean).join(', ')
 }
 
+async function photonSearch(query) {
+  const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=1`
+  const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
+  if (!res.ok) return null
+  const data = await res.json()
+  const feature = data.features?.[0]
+  if (!feature) return null
+  return {
+    lat: feature.geometry.coordinates[1],
+    lon: feature.geometry.coordinates[0],
+  }
+}
+
 export default async function geocode(locationName, existingLat, existingLng) {
   if (existingLat && existingLng) {
     return { lat: existingLat, lng: existingLng }
@@ -62,6 +75,17 @@ export default async function geocode(locationName, existingLat, existingLng) {
       }
     } catch (err) {
       console.warn(`[Geocoder] Nominatim error for "${query}":`, err.message)
+    }
+
+    try {
+      const result = await photonSearch(query)
+      if (result) {
+        const coords = { lat: parseFloat(result.lat), lng: parseFloat(result.lon) }
+        try { await redis.setex(cacheKey, 86400, JSON.stringify(coords)) } catch {}
+        return coords
+      }
+    } catch (err) {
+      console.warn(`[Geocoder] Photon error for "${query}":`, err.message)
     }
   }
 
