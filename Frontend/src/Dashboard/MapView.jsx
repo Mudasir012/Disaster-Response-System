@@ -20,7 +20,8 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
 
     const map = L.map(container, {
       center: [20, 20],
-      zoom: 1.8,
+      zoom: 2,
+      minZoom: 2,
       attributionControl: false,
       zoomControl: false,
     })
@@ -29,6 +30,7 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
       tileSize: 256,
       attribution: '&copy; CARTO',
       maxZoom: 19,
+      noWrap: true,
     }).addTo(map)
 
     L.control.zoom({ position: 'bottomright' }).addTo(map)
