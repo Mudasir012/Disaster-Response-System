@@ -159,7 +159,7 @@ export default function Landing() {
       {/* Scroll Progress Bar */}
       <div className="scroll-progress" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-label="Page scroll progress">
         <div className="scroll-progress-track" />
-        <div className="scroll-progress-bar" style={{ height: `${progress * 100}%` }} />
+        <div className="scroll-progress-bar" style={{ '--progress': progress }} />
       </div>
 
       <motion.div style={{ opacity: reduced ? 1 : globeOpacity }}>

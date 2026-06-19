@@ -22,15 +22,15 @@ function Message({ role, data }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
+          <div className="w-6 h-6 rounded-full bg-ai-purple/20 flex items-center justify-center">
           <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
             <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
           </svg>
         </div>
-        <span className="text-xs font-semibold text-[#7c3aed]">Groq</span>
+        <span className="text-xs font-semibold text-ai-purple">Groq</span>
       </div>
-      <div className="bg-gradient-to-br from-[#1a1040] to-[#110a2e] rounded-2xl rounded-tl-md px-4 py-3 border border-[#7c3aed]/10">
+        <div className="bg-gradient-to-br from-ai-purple/10 to-ai-purple/5 rounded-2xl rounded-tl-md px-4 py-3 border border-ai-purple/10">
         <div className="flex items-center gap-2 mb-2">
           <span
             className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
@@ -84,7 +84,6 @@ export default function ChatWidget({ onClose }) {
       const response = await api.chat(query)
       setMessages((prev) => [...prev, { role: 'assistant', data: response }])
     } catch (err) {
-      console.error('Chat error:', err)
       const isRateLimited = err.message?.toLowerCase().includes('rate limit') || err.message?.toLowerCase().includes('too many')
       const fallback = isRateLimited
         ? {
@@ -113,7 +112,7 @@ export default function ChatWidget({ onClose }) {
     <div className="h-full bg-deep-slate/95 backdrop-blur-xl border-r border-white/[0.06] flex flex-col overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/[0.04]">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
+          <div className="w-7 h-7 rounded-full bg-ai-purple/20 flex items-center justify-center">
             <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
               <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
@@ -138,7 +137,7 @@ export default function ChatWidget({ onClose }) {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center py-6 text-center">
-            <div className="w-10 h-10 rounded-full bg-[#7c3aed]/10 flex items-center justify-center mb-3">
+            <div className="w-10 h-10 rounded-full bg-ai-purple/10 flex items-center justify-center mb-3">
               <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
                 <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
@@ -164,16 +163,16 @@ export default function ChatWidget({ onClose }) {
         ))}
         {loading && (
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-[#7c3aed]/20 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-full bg-ai-purple/20 flex items-center justify-center">
               <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
                 <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
               </svg>
             </div>
             <div className="flex gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#7c3aed]/40 animate-bounce" style={{ animationDelay: '0ms' }} />
-              <span className="w-1.5 h-1.5 rounded-full bg-[#7c3aed]/40 animate-bounce" style={{ animationDelay: '150ms' }} />
-              <span className="w-1.5 h-1.5 rounded-full bg-[#7c3aed]/40 animate-bounce" style={{ animationDelay: '300ms' }} />
+              <span className="w-1.5 h-1.5 rounded-full bg-ai-purple/40 animate-pulse" style={{ animationDelay: '0ms' }} />
+              <span className="w-1.5 h-1.5 rounded-full bg-ai-purple/40 animate-pulse" style={{ animationDelay: '150ms' }} />
+              <span className="w-1.5 h-1.5 rounded-full bg-ai-purple/40 animate-pulse" style={{ animationDelay: '300ms' }} />
             </div>
           </div>
         )}
@@ -195,7 +194,7 @@ export default function ChatWidget({ onClose }) {
             onClick={() => handleSend()}
             disabled={!input.trim() || loading}
             aria-label="Send message"
-            className="w-10 h-10 rounded-xl bg-[#7c3aed] flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 cursor-pointer"
+            className="w-10 h-10 rounded-xl bg-ai-purple flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 cursor-pointer"
           >
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />

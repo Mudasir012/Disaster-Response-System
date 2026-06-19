@@ -20,6 +20,7 @@ export default function IncidentList() {
   const navigate = useNavigate()
   const [incidents, setIncidents] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [filter, setFilter] = useState(null)
   const [search, setSearch] = useState('')
   const [sortBy, setSortBy] = useState('timestamp')
@@ -30,13 +31,14 @@ export default function IncidentList() {
     async function fetchIncidents() {
       try {
         setLoading(true)
+        setError(null)
         const data = await api.incidents({ limit: 100 })
         if (active) {
           const mapped = (data.incidents || []).map(mapBackendIncidentToFrontend)
           setIncidents(mapped)
         }
-      } catch (err) {
-        console.error('Failed to fetch real-time incidents:', err)
+      } catch {
+        if (active) setError('Unable to load incidents.')
       } finally {
         if (active) setLoading(false)
       }
@@ -82,6 +84,12 @@ export default function IncidentList() {
         {/* Cross decorations */}
         <div className="pointer-events-none absolute top-4 left-4 text-cool-gray/[0.04]"><span className="cross" /></div>
         <div className="pointer-events-none absolute top-4 right-4 text-cool-gray/[0.04]"><span className="cross" /></div>
+
+        {error && (
+          <div className="mb-4 bg-amber/10 border border-amber/20 rounded-lg px-4 py-3">
+            <p className="text-xs text-amber/80 text-center">{error}</p>
+          </div>
+        )}
 
         <div className="flex flex-col gap-4 mb-5">
           <div className="flex items-center justify-between">
@@ -161,7 +169,7 @@ export default function IncidentList() {
                     <tr
                       key={inc.id}
                       onClick={() => navigate(`/incidents/${inc.id}`)}
-                      className="border-b border-white/[0.02] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] hover:bg-white/[0.03] hover:shadow-[inset_2px_0_0_var(--color-crisis-red)] cursor-pointer group"
+                      className="border-b border-white/[0.02] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] hover:bg-white/[0.04] cursor-pointer group"
                     >
                       <td className="px-4 py-3.5">
                         <span className="font-mono text-xs text-cool-gray/50">{inc.id}</span>

@@ -14,18 +14,20 @@ export default function Dashboard() {
   const [showRegions, setShowRegions] = useState(false)
   const [selectedCountry, setSelectedCountry] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [chatOpen, setChatOpen] = useState(false)
 
   const fetchIncidents = useCallback(async (country) => {
     try {
       setLoading(true)
+      setError(null)
       const params = { limit: 100 }
       if (country) params.country = country
       const data = await api.incidents(params)
       const mapped = (data.incidents || []).map(mapBackendIncidentToFrontend)
       setIncidents(mapped)
-    } catch (err) {
-      console.error('Failed to fetch incidents:', err)
+    } catch {
+      setError('Unable to load incidents. Retrying automatically.')
     } finally {
       setLoading(false)
     }
@@ -104,7 +106,7 @@ export default function Dashboard() {
 
       <button
         onClick={() => setChatOpen((prev) => !prev)}
-        className="fixed top-1/2 left-0 -translate-y-1/2 z-30 w-8 h-16 rounded-r-lg bg-[#7c3aed] flex items-center justify-center transition-all duration-300 hover:w-9 hover:shadow-[0_4px_20px_rgba(124,58,237,0.4)] active:scale-95 cursor-pointer"
+        className="fixed top-1/2 left-0 -translate-y-1/2 z-30 w-8 h-16 rounded-r-lg bg-ai-purple flex items-center justify-center transition-all duration-300 hover:w-9 hover:shadow-[0_4px_20px_rgba(124,58,237,0.4)] active:scale-95 cursor-pointer"
         style={{ left: chatOpen ? '380px' : '0px' }}
         aria-label={chatOpen ? 'Close AI assistant' : 'Open AI assistant'}
       >
@@ -124,6 +126,12 @@ export default function Dashboard() {
           <polyline points="15 18 9 12 15 6" />
         </svg>
       </button>
+
+      {error && (
+        <div className="absolute bottom-4 left-4 right-4 z-40 max-w-md mx-auto bg-amber/15 border border-amber/20 rounded-lg px-4 py-2.5">
+          <p className="text-xs text-amber/80 text-center">{error}</p>
+        </div>
+      )}
 
       <div className="absolute top-0 right-0 bottom-0 w-[400px] lg:w-[460px] z-10">
         <SidebarPanel

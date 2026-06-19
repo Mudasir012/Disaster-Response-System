@@ -22,18 +22,20 @@ export default function IncidentDetail() {
   const navigate = useNavigate()
   const [incident, setIncident] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     let active = true
     async function fetchIncident() {
       try {
         setLoading(true)
+        setError(null)
         const data = await api.incident(id)
         if (active) {
           setIncident(mapBackendIncidentToFrontend(data))
         }
-      } catch (err) {
-        console.error('Failed to fetch incident details:', err)
+      } catch {
+        if (active) setError('Unable to load incident details.')
       } finally {
         if (active) setLoading(false)
       }
@@ -50,6 +52,27 @@ export default function IncidentDetail() {
         <div className="flex-1 flex flex-col items-center justify-center gap-2">
           <div className="w-6 h-6 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
           <span className="text-xs text-cool-gray/50">Loading incident details...</span>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="flex-1 flex flex-col items-center justify-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-amber/10 flex items-center justify-center">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <p className="text-sm text-cool-gray/50">{error}</p>
+          <button
+            onClick={() => navigate('/incidents')}
+            className="text-sm text-signal-blue hover:text-glacier-white transition-colors duration-200"
+          >
+            Back to incidents
+          </button>
         </div>
       </DashboardLayout>
     )

@@ -22,7 +22,7 @@ export default function DashboardLayout({ children, onWatchRegions, selectedCoun
       {/* Scroll progress bar */}
       <div className="scroll-progress" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-label="Page scroll progress">
         <div className="scroll-progress-track" />
-        <div className="scroll-progress-bar" style={{ height: `${progress * 100}%` }} />
+        <div className="scroll-progress-bar" style={{ '--progress': progress }} />
       </div>
 
       <header
@@ -58,7 +58,7 @@ export default function DashboardLayout({ children, onWatchRegions, selectedCoun
                 onClick={onWatchRegions}
                 className={`px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 ease-[cubic-bezier(0.4,0,0.1,1)] flex items-center gap-2 ${
                   selectedCountry
-                    ? 'bg-[#0f7ddb]/15 text-signal-blue'
+                    ? 'bg-signal-blue/15 text-signal-blue'
                     : 'text-cool-gray/70 hover:text-glacier-white hover:bg-white/[0.04]'
                 }`}
               >
@@ -71,8 +71,8 @@ export default function DashboardLayout({ children, onWatchRegions, selectedCoun
               <NavLink
                 to="/subscribe"
                 className="px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-200 ease-[cubic-bezier(0.4,0,0.1,1)]
-                  bg-purple-500/20 text-purple-300 border border-purple-500/30
-                  hover:bg-purple-500/30 hover:text-purple-200 inline-flex items-center gap-2"
+                  bg-signal-blue/15 text-signal-blue/90 border border-signal-blue/20
+                  hover:bg-signal-blue/25 hover:text-signal-blue inline-flex items-center gap-2"
               >
                 <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 2 11 13" /><path d="M22 2 15 22 11 13 2 9 22 2z" />

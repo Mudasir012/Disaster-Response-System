@@ -83,8 +83,8 @@ export default function ResourceMap({
 
       mapRef.current = map
       setReady(true)
-    } catch (e) {
-      console.error('Map init failed:', e)
+    } catch {
+      mapRef.current = null
     }
   }, [])
 

@@ -62,6 +62,7 @@ const typeMap = {
 
 export default function Analytics() {
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [summary, setSummary] = useState(null)
   const [timeline, setTimeline] = useState([])
   const [severityDist, setSeverityDist] = useState([])
@@ -72,6 +73,7 @@ export default function Analytics() {
     async function fetchData() {
       try {
         setLoading(true)
+        setError(null)
         const [summaryData, overTimeData, severityData, typeData] = await Promise.all([
           api.analyticsOverview(),
           api.analyticsOverTime('7d'),
@@ -104,8 +106,8 @@ export default function Analytics() {
           }))
           setTypeDist(formattedType)
         }
-      } catch (err) {
-        console.error('Failed to fetch analytics data:', err)
+      } catch {
+        if (active) setError('Unable to load analytics. Please try again.')
       } finally {
         if (active) setLoading(false)
       }
@@ -124,6 +126,21 @@ export default function Analytics() {
         <div className="flex-1 flex flex-col items-center justify-center gap-2">
           <div className="w-8 h-8 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
           <span className="text-xs text-cool-gray/50">Loading analytics...</span>
+        </div>
+      </DashboardLayout>
+    )
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="flex-1 flex flex-col items-center justify-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-amber/10 flex items-center justify-center">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+          </div>
+          <p className="text-sm text-cool-gray/50">{error}</p>
         </div>
       </DashboardLayout>
     )
