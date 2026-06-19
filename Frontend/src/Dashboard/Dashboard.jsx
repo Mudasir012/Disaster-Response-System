@@ -87,7 +87,7 @@ export default function Dashboard() {
     >
       <h1 className="sr-only">Dashboard</h1>
 
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-0">
         <MapView
           incidents={incidents}
           selectedId={selectedId}
@@ -96,7 +96,7 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="absolute top-0 left-0 bottom-0 z-20 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] overflow-hidden"
+      <div className="absolute top-0 left-0 bottom-0 z-30 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] overflow-hidden"
         style={{ width: chatOpen ? '380px' : '0px' }}
       >
         <div className="w-[380px] h-full">
@@ -106,7 +106,7 @@ export default function Dashboard() {
 
       <button
         onClick={() => setChatOpen((prev) => !prev)}
-        className="fixed top-1/2 left-0 -translate-y-1/2 z-30 w-8 h-16 rounded-r-lg bg-ai-purple flex items-center justify-center transition-all duration-300 hover:w-9 hover:shadow-[0_4px_20px_rgba(124,58,237,0.4)] active:scale-95 cursor-pointer"
+        className="fixed top-1/2 left-0 -translate-y-1/2 z-40 w-8 h-16 rounded-r-lg bg-ai-purple flex items-center justify-center transition-all duration-300 hover:w-9 hover:shadow-[0_4px_20px_rgba(124,58,237,0.4)] active:scale-95 cursor-pointer"
         style={{ left: chatOpen ? '380px' : '0px' }}
         aria-label={chatOpen ? 'Close AI assistant' : 'Open AI assistant'}
       >
@@ -133,7 +133,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div className="absolute top-0 right-0 bottom-0 w-[400px] lg:w-[460px] z-10">
+      <div className="absolute top-0 right-0 bottom-0 w-[400px] lg:w-[460px] z-20">
         <SidebarPanel
           incidents={incidents}
           selectedId={selectedId}

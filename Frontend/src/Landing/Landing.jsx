@@ -386,7 +386,7 @@ export default function Landing() {
               <div className="flex items-center gap-3">
                 <span className="cross text-cool-gray/30" />
                 <span className="font-sora text-sm font-semibold text-glacier-white/70">
-                  DisasterTracker
+                  Sentinel
                 </span>
               </div>
               <div className="flex items-center gap-6 text-[10px] font-mono uppercase tracking-[0.2em] text-cool-gray/50">

@@ -30,7 +30,7 @@ router.post('/subscribe', async (req, res, next) => {
 
     try {
       await resend.emails.send({
-        from: process.env.EMAIL_FROM_ADDRESS || 'DisasterTracker <alerts@disastertracker.app>',
+        from: process.env.EMAIL_FROM_ADDRESS || 'Sentinel <alerts@sentinel.app>',
         to: email,
         subject: 'Confirm your alert subscription',
         html: `<p>Click <a href="${confirmUrl}">here</a> to confirm your alert subscription.</p>
@@ -102,10 +102,10 @@ router.post('/:token/test', async (req, res, next) => {
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173'
 
     await resend.emails.send({
-      from: process.env.EMAIL_FROM_ADDRESS || 'DisasterTracker <alerts@disastertracker.app>',
+      from: process.env.EMAIL_FROM_ADDRESS || 'Sentinel <alerts@sentinel.app>',
       to: sub.email,
       subject: `[TEST] [SEV-4] EARTHQUAKE — Test Location`,
-      html: `<p>This is a test alert from DisasterTracker.</p><p><a href="${frontendUrl}/alerts/manage?token=${sub.token}">Manage alerts</a></p>`,
+      html: `<p>This is a test alert from Sentinel.</p><p><a href="${frontendUrl}/alerts/manage?token=${sub.token}">Manage alerts</a></p>`,
     })
 
     res.json({ message: 'Test alert sent' })

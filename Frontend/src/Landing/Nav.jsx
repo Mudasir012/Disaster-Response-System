@@ -31,7 +31,7 @@ export default function Nav() {
           }`}
       >
         <span className="font-sora text-sm font-bold tracking-tight text-glacier-white/90">
-          DisasterTracker
+          Sentinel
         </span>
 
         <div className="hidden md:flex items-center gap-6">

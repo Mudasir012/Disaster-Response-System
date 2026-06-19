@@ -18,7 +18,7 @@ async function nominatimSearch(query) {
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1`
 
   const res = await fetch(url, {
-    headers: { 'User-Agent': `DisasterTracker/1.0 <${nominatimEmail}>` },
+    headers: { 'User-Agent': `Sentinel/1.0 <${nominatimEmail}>` },
     signal: AbortSignal.timeout(10000),
   })
   const data = await res.json()

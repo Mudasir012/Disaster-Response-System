@@ -18,7 +18,7 @@ function buildSafetyHtml(eventType) {
       <table style="width:100%;border-collapse:collapse">
         <tr><td colspan="2" style="padding:0 0 4px;font-size:12px;font-weight:600;color:#22c55e">✓ DO</td></tr>
         ${listItems(guidance.do, '✓')}
-        <tr><td colspan="2" style="padding:12px 0 4px;font-size:12px;font-weight:600;color:#ef4444">✗ DON\'T</td></tr>
+        <tr><td colspan="2" style="padding:12px 0 4px;font-size:12px;font-weight:600;color:#ef4444">✗ DON'T</td></tr>
         ${listItems(guidance.dont, '✗')}
         <tr><td colspan="2" style="padding:12px 0 4px;font-size:12px;font-weight:600;color:#0f7ddb">◆ PREPARE</td></tr>
         ${listItems(guidance.prepare, '◆')}
@@ -74,7 +74,7 @@ export default async function processAlertJob(job) {
 </html>`
 
   await resend.emails.send({
-    from: process.env.EMAIL_FROM_ADDRESS || 'DisasterTracker <alerts@disastertracker.app>',
+    from: process.env.EMAIL_FROM_ADDRESS || 'Sentinel <alerts@sentinel.app>',
     to: subscription_email,
     subject,
     html,

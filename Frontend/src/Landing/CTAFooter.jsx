@@ -43,7 +43,7 @@ export default function CTAFooter() {
         </h2>
 
         <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-cool-gray/70">
-          Join agencies and responders worldwide who trust DisasterTracker
+          Join agencies and responders worldwide who trust Sentinel
           for real-time intelligence.
         </p>
 

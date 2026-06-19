@@ -19,7 +19,7 @@ export default async function fetchNOAA() {
   const url = 'https://api.weather.gov/alerts/active?status=actual&message_type=alert&urgency=Immediate,Expected'
 
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'DisasterTracker/1.0' },
+    headers: { 'User-Agent': 'Sentinel/1.0' },
     signal: AbortSignal.timeout(15000),
   })
   if (!res.ok) {

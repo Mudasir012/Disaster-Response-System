@@ -1,5 +1,5 @@
 ---
-name: DisasterTracker
+name: Sentinel
 description: Real-time global disaster monitoring and alerting platform
 colors:
   deep-slate: "#0d1117"
@@ -98,7 +98,7 @@ components:
     padding: "2px 10px 2px 10px"
 ---
 
-# Design System: DisasterTracker
+# Design System: Sentinel
 
 ## 1. Overview
 

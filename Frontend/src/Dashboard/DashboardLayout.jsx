@@ -36,7 +36,7 @@ export default function DashboardLayout({ children, onWatchRegions, selectedCoun
           <div className="flex items-center gap-8">
             <NavLink to="/dashboard" className="font-sora text-base font-bold tracking-tight text-glacier-white flex items-center gap-2.5 group">
               <span className="w-1.5 h-1.5 rounded-full bg-crisis-red transition-transform duration-300 group-hover:scale-125" />
-              DisasterTracker
+              Sentinel
             </NavLink>
             <nav className="hidden md:flex items-center gap-1">
               {NAV_LINKS.map((link) => (
@@ -103,7 +103,7 @@ export default function DashboardLayout({ children, onWatchRegions, selectedCoun
                   >
                     <div className="px-4 py-3 border-b border-white/[0.04]">
                       <p className="text-xs font-semibold text-glacier-white">Elena Rivera</p>
-                      <p className="text-[10px] text-cool-gray/40">elena.rivera@disastertracker.io</p>
+                      <p className="text-[10px] text-cool-gray/40">elena.rivera@sentinel.app</p>
                     </div>
                     <div className="py-1">
                       {['Profile', 'Settings'].map((item) => (
