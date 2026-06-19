@@ -4,32 +4,6 @@ import * as THREE from 'three'
 
 const GLOBE_RADIUS = 1
 
-const DISASTER_SITES = [
-  [40.7, -73.9], [-22.9, -43.2], [35.7, 139.7], [31.2, 121.5],
-  [19.4, -99.1], [28.6, 77.2], [39.9, 116.4], [55.8, 37.6],
-  [-33.9, 151.2], [37.6, -122.4], [51.5, -0.1], [48.9, 2.3],
-  [35.7, 51.4], [41.0, 28.9], [-6.2, 106.8], [14.6, 121.0],
-  [36.2, 138.3], [-0.8, 117.4], [12.9, 121.8], [-35.7, -71.5],
-  [39.0, 35.0], [28.4, 84.1], [23.7, 90.4], [32.4, 53.7],
-  [18.2, -66.5], [18.5, -72.3], [33.7, 72.9], [-41.6, 173.0],
-  [13.7, 100.5], [-1.3, 36.8], [3.1, 101.7], [30.0, 31.2],
-]
-
-function toPosition(lat, lng, radius) {
-  const phi = (90 - lat) * Math.PI / 180
-  const theta = (lng + 180) * Math.PI / 180
-  return new THREE.Vector3(
-    -radius * Math.sin(phi) * Math.cos(theta),
-    radius * Math.cos(phi),
-    radius * Math.sin(phi) * Math.sin(theta),
-  )
-}
-
-const MARKER_DATA = DISASTER_SITES.map(([lat, lng], i) => {
-  const pos = toPosition(lat, lng, GLOBE_RADIUS * 1.01)
-  return { pos, offset: i * 0.7 + 0.1 }
-})
-
 const STAR_POSITIONS = (() => {
   const arr = new Float32Array(3000)
   for (let i = 0; i < 1000; i++) {
@@ -211,9 +185,6 @@ function EarthTextures({ dayTexture, nightTexture, brcTexture, scrollRef, mouseR
       <mesh ref={atmosphereRef} material={atmosphereMaterial} scale={1.04}>
         <sphereGeometry args={[GLOBE_RADIUS, 48, 48]} />
       </mesh>
-      {MARKER_DATA.map((d, i) => (
-        <PulsingMarker key={i} position={d.pos} offset={d.offset} />
-      ))}
     </>
   )
 }
@@ -226,23 +197,6 @@ function Earth({ scrollRef, mouseRef, active }) {
   ])
 
   return <EarthTextures dayTexture={day} nightTexture={night} brcTexture={brc} scrollRef={scrollRef} mouseRef={mouseRef} active={active} />
-}
-
-function PulsingMarker({ position, offset }) {
-  const ref = useRef()
-
-  useFrame((state) => {
-    const t = state.clock.elapsedTime * 2 + offset
-    const s = 0.7 + Math.sin(t) * 0.4
-    ref.current.scale.setScalar(s)
-  })
-
-  return (
-    <mesh ref={ref} position={position}>
-      <sphereGeometry args={[0.02, 8, 8]} />
-      <meshBasicMaterial color="#e94560" />
-    </mesh>
-  )
 }
 
 function Stars() {

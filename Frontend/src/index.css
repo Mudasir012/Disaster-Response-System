@@ -96,11 +96,6 @@ body {
   transform: scaleY(var(--progress, 0));
 }
 
-/* ── Section alternating backgrounds ── */
-.section-alt {
-  background: var(--color-section-alt);
-}
-
 /* ── Split text word animation ── */
 .split-word {
   display: inline-block;

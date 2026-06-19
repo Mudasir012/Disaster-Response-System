@@ -25,12 +25,6 @@ function PillCTA({ href, label, variant = 'primary' }) {
 export default function CTAFooter() {
   return (
     <section id="cta" className="relative py-32 md:py-40 overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 30% 50%, #e94560, transparent 50%), radial-gradient(circle at 70% 50%, #0f7ddb, transparent 50%)',
-        }}
-      />
       <div className="grid-overlay" />
 
       <motion.div

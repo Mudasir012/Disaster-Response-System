@@ -155,7 +155,7 @@ export default function Landing() {
   }
 
   return (
-    <div className="relative min-h-[100dvh] bg-[#05080f]">
+    <div className="relative min-h-[100dvh]">
       {/* Scroll Progress Bar */}
       <div className="scroll-progress" role="progressbar" aria-valuenow={Math.round(progress * 100)} aria-label="Page scroll progress">
         <div className="scroll-progress-track" />
@@ -340,12 +340,6 @@ export default function Landing() {
 
         {/* ── Chapter 6: Testimonials ── */}
         <section className="section-deferred relative py-32 md:py-40 overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 opacity-[0.02]"
-            style={{
-              backgroundImage:
-                'radial-gradient(circle at 50% 0%, #e94560, transparent 50%)',
-            }}
-          />
           <div className="mx-auto max-w-7xl px-6">
             <motion.div {...useScrollReveal()} className="max-w-3xl">
               <span className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-cool-gray/50">
