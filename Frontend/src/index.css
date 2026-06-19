@@ -8,6 +8,7 @@
 }
 
 @theme {
+  /* Brand primitives */
   --color-deep-slate: #0d1117;
   --color-surface: #1c2333;
   --color-card-bg: #1a2030;
@@ -20,6 +21,32 @@
   --color-cool-gray: #94a3b8;
   --color-landing-bg: #05080f;
   --color-section-alt: #080c18;
+
+  /* shadcn/ui semantic aliases (used by components/ui) */
+  --color-background: var(--color-deep-slate);
+  --color-foreground: var(--color-glacier-white);
+  --color-card: var(--color-card-bg);
+  --color-card-foreground: var(--color-glacier-white);
+  --color-popover: var(--color-surface);
+  --color-popover-foreground: var(--color-glacier-white);
+  --color-primary: var(--color-crisis-red);
+  --color-primary-foreground: var(--color-glacier-white);
+  --color-secondary: var(--color-surface);
+  --color-secondary-foreground: var(--color-glacier-white);
+  --color-muted: var(--color-surface);
+  --color-muted-foreground: var(--color-cool-gray);
+  --color-accent: var(--color-signal-blue);
+  --color-accent-foreground: var(--color-glacier-white);
+  --color-destructive: var(--color-crisis-red);
+  --color-destructive-foreground: var(--color-glacier-white);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-input: rgba(255, 255, 255, 0.1);
+  --color-ring: var(--color-signal-blue);
+
+  /* Spacing / utility extensions */
+  --spacing-62: 15.5rem;
+  --blur-xs: 2px;
+
   --font-sora: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-geist: "Geist", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -44,6 +71,21 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(148, 163, 184, 0.2) transparent;
+}
+
+/* ── shadcn-style pop-in animation (used by components/ui) ── */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.animate-in {
+  animation: pop-in 0.2s ease-out;
 }
 
 /* ── Cross/Plus decorations (lusion-inspired) ── */
