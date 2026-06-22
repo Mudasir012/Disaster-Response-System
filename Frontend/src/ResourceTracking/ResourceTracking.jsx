@@ -119,7 +119,7 @@ export default function ResourceTracking() {
 
   return (
     <DashboardLayout>
-      <div className="flex-1 w-full bg-[#05080f] relative overflow-hidden">
+      <div className="flex-1 w-full bg-landing-bg relative overflow-hidden">
         <ResourceMap
           resources={filtered}
           selected={selected}
@@ -165,7 +165,7 @@ export default function ResourceTracking() {
           <button
             onClick={() => setPlacing(true)}
             className="absolute bottom-6 left-6 z-30 w-11 h-11 rounded-full bg-purple-500/80 hover:bg-purple-500
-              text-white flex items-center justify-center shadow-lg
+              text-on-accent flex items-center justify-center shadow-lg
               transition-all hover:scale-105 active:scale-95 cursor-pointer"
             title="Add resource — click on map to place"
           >

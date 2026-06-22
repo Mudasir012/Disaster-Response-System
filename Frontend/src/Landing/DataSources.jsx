@@ -108,7 +108,7 @@ export default function DataSources() {
               <span className="font-sora text-base md:text-lg font-bold text-glacier-white group-hover:text-white transition-colors duration-300">
                 {source.name}
               </span>
-              <span className="mt-1.5 text-xs text-cool-gray/60 group-hover:text-cool-gray/80 transition-colors duration-300 leading-relaxed">
+              <span className="mt-1.5 text-xs text-cool-gray/70 group-hover:text-cool-gray/80 transition-colors duration-300 leading-relaxed">
                 {source.desc}
               </span>
             </div>

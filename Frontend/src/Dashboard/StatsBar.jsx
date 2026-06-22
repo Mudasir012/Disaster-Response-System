@@ -36,12 +36,12 @@ export default function StatsBar({ incidents, loading }) {
       <div className="flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-status-teal" />
         <span className="text-sm font-semibold text-glacier-white">{active}</span>
-        <span className="text-[11px] text-cool-gray/60">Active</span>
+        <span className="text-[11px] text-cool-gray/70">Active</span>
       </div>
       <div className="flex items-center gap-2">
         <span className="w-2 h-2 rounded-full bg-amber" />
         <span className="text-sm font-semibold text-glacier-white">{monitoring}</span>
-        <span className="text-[11px] text-cool-gray/60">Monitoring</span>
+        <span className="text-[11px] text-cool-gray/70">Monitoring</span>
       </div>
       <div className="w-px h-6 bg-white/[0.06]" />
       {SEVERITY_ORDER.map((key) => {

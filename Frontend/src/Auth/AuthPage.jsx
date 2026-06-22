@@ -120,7 +120,7 @@ export default function AuthPage() {
                       className={`flex-1 rounded-lg py-2.5 text-sm font-semibold transition-all duration-300 ${
                         tab === 'login'
                           ? 'bg-deep-slate text-glacier-white shadow-[0_1px_3px_rgba(0,0,0,0.3)] ring-1 ring-white/[0.06]'
-                          : 'text-cool-gray/60 hover:text-glacier-white'
+                          : 'text-cool-gray/70 hover:text-glacier-white'
                       }`}
                     >
                       Sign in
@@ -130,7 +130,7 @@ export default function AuthPage() {
                       className={`flex-1 rounded-lg py-2.5 text-sm font-semibold transition-all duration-300 ${
                         tab === 'signup'
                           ? 'bg-deep-slate text-glacier-white shadow-[0_1px_3px_rgba(0,0,0,0.3)] ring-1 ring-white/[0.06]'
-                          : 'text-cool-gray/60 hover:text-glacier-white'
+                          : 'text-cool-gray/70 hover:text-glacier-white'
                       }`}
                     >
                       Create account
@@ -202,7 +202,7 @@ export default function AuthPage() {
 
       <motion.p
         {...fadeUp(0.5)}
-        className="relative z-10 text-center pb-8 text-[11px] text-cool-gray/40"
+        className="relative z-10 text-center pb-8 text-[11px] text-cool-gray/70"
       >
         Protected by end-to-end encryption
       </motion.p>

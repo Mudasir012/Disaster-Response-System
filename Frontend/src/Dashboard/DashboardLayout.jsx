@@ -28,7 +28,7 @@ export default function DashboardLayout({ children, onWatchRegions, selectedCoun
       <header
         className={`sticky top-0 z-30 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.1,1)]
           ${scrolled
-            ? 'bg-deep-slate/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_4px_20px_rgba(0,0,0,0.3)]'
+            ? 'bg-deep-slate/95 backdrop-blur-xl border-b border-white/[0.06] shadow-[0_4px_20px_-8px_oklch(0.26_0.022_255/0.15)]'
             : 'bg-deep-slate/80 border-b border-white/[0.04]'
           }`}
       >
@@ -99,11 +99,11 @@ export default function DashboardLayout({ children, onWatchRegions, selectedCoun
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 8, scale: 0.96 }}
                     transition={{ duration: 0.2, ease: [0.4, 0, 0.1, 1] }}
-                    className="absolute right-0 top-9 z-40 w-44 bg-deep-slate/95 backdrop-blur-xl border border-white/[0.06] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.5)] overflow-hidden"
+                    className="absolute right-0 top-9 z-40 w-44 bg-deep-slate/95 backdrop-blur-xl border border-white/[0.06] rounded-xl shadow-[0_16px_48px_-12px_oklch(0.26_0.022_255/0.2)] overflow-hidden"
                   >
                     <div className="px-4 py-3 border-b border-white/[0.04]">
                       <p className="text-xs font-semibold text-glacier-white">Elena Rivera</p>
-                      <p className="text-[10px] text-cool-gray/40">elena.rivera@sentinel.app</p>
+                      <p className="text-[10px] text-cool-gray/70">elena.rivera@sentinel.app</p>
                     </div>
                     <div className="py-1">
                       {['Profile', 'Settings'].map((item) => (

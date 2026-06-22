@@ -8,7 +8,7 @@ export default function FilterBar({ activeFilter, onFilterChange }) {
         className={`px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 ${
           !activeFilter
             ? 'bg-white/[0.08] text-glacier-white'
-            : 'text-cool-gray/60 hover:text-glacier-white hover:bg-white/[0.04]'
+            : 'text-cool-gray/70 hover:text-glacier-white hover:bg-white/[0.04]'
         }`}
       >
         All
@@ -22,7 +22,7 @@ export default function FilterBar({ activeFilter, onFilterChange }) {
             className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 ${
               activeFilter === key
                 ? 'text-glacier-white'
-                : 'text-cool-gray/60 hover:text-glacier-white'
+                : 'text-cool-gray/70 hover:text-glacier-white'
             }`}
             style={{
               background: activeFilter === key ? sev.bg : 'transparent',

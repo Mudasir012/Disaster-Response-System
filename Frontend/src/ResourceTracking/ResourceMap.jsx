@@ -51,7 +51,7 @@ export default function ResourceMap({
         attributionControl: false,
       })
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 19,
       }).addTo(map)
 
@@ -67,7 +67,7 @@ export default function ResourceMap({
         onSelectRef.current(null)
         if (placeMarkerRef.current) map.removeLayer(placeMarkerRef.current)
         placeMarkerRef.current = L.circleMarker([e.latlng.lat, e.latlng.lng], {
-          radius: 6, color: '#fff', fillColor: '#8b5cf6', fillOpacity: 0.9, weight: 2,
+          radius: 6, color: '#7c3aed', fillColor: '#8b5cf6', fillOpacity: 0.9, weight: 2,
         }).addTo(map)
         onIsochroneRef.current(e.latlng.lng, e.latlng.lat)
       })
@@ -75,7 +75,7 @@ export default function ResourceMap({
       const tooltipCtrl = L.control({ position: 'topcenter' })
       tooltipCtrl.onAdd = () => {
         const div = L.DomUtil.create('div')
-        div.style.cssText = 'display:none;padding:6px 14px;border-radius:8px;background:rgba(13,17,23,0.9);border:1px solid rgba(255,255,255,0.1);color:#94a3b8;font:11px/1 monospace;backdrop-filter:blur(8px);pointer-events:none;'
+        div.style.cssText = 'display:none;padding:6px 14px;border-radius:8px;background:rgba(255,255,255,0.92);border:1px solid rgba(15,23,42,0.08);color:#475569;font:11px/1 monospace;backdrop-filter:blur(8px);pointer-events:none;'
         tooltipRef.current = div
         return div
       }
@@ -116,10 +116,10 @@ export default function ResourceMap({
         const marker = L.marker([lat, lng], { icon }).addTo(map)
         const d = r.details || {}
         marker.bindPopup(
-          `<div style="font:13px/1.5 monospace;color:#e2e8f0;min-width:180px">
-            <div style="font-weight:700;margin-bottom:4px;color:${TYPE_COLORS[r.type] || '#fff'}">${r.name}</div>
+          `          <div style="font:13px/1.5 monospace;color:#1e293b;min-width:180px">
+            <div style="font-weight:700;margin-bottom:4px;color:${TYPE_COLORS[r.type] || '#1e293b'}">${r.name}</div>
             <div>Type: ${r.type.replace(/_/g, ' ')}</div>
-            <div>Status: <span style="color:${STATUS_COLORS[r.status] || '#22c55e'}">${r.status}</span></div>
+            <div>Status: <span style="color:${STATUS_COLORS[r.status] || '#16a34a'}">${r.status}</span></div>
             ${d.capacity ? `<div>Capacity: ${d.capacity}</div>` : ''}
             ${d.current_load ? `<div>Load: ${d.current_load}</div>` : ''}
           </div>`,

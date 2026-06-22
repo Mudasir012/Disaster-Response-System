@@ -10,7 +10,7 @@ const liquidButtonVariants = cva(
       variant: {
         default: 'bg-transparent hover:scale-105 duration-300 transition text-primary',
         destructive:
-          'bg-destructive text-white hover:bg-destructive/90',
+          'bg-destructive text-on-accent hover:bg-destructive/90',
         outline:
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
         secondary:

@@ -19,10 +19,10 @@ function StatCard({ label, total, color, statuses, STATUS_COLORS }) {
   return (
     <div className="rounded-lg border border-white/5 bg-white/[0.03] p-3">
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-xs font-mono text-cool-gray/50 uppercase tracking-wider">{label}</span>
+        <span className="text-xs font-mono text-cool-gray/75 uppercase tracking-wider">{label}</span>
         <span className="text-sm font-bold text-white font-mono">{total}</span>
       </div>
-      <div className="flex gap-2 text-[11px] font-mono text-cool-gray/40">
+      <div className="flex gap-2 text-[11px] font-mono text-cool-gray/70">
         {Object.entries(STATUS_LABELS).map(([key, slabel]) => {
           const count = statuses?.[key] || 0
           if (!count) return null
@@ -56,12 +56,12 @@ export default function ResourceSidebar({
   }, {})
 
   return (
-    <div className="h-full flex flex-col bg-[#05080f]/90 backdrop-blur-sm border-l border-white/5">
+    <div className="h-full flex flex-col bg-landing-bg/90 backdrop-blur-sm border-l border-white/5">
       <div className="flex-shrink-0 px-4 py-4 border-b border-white/5">
         <div className="flex items-center justify-between mb-3">
           <div>
             <h2 className="text-sm font-bold text-white font-mono tracking-wide">Resources</h2>
-            <p className="text-[11px] text-cool-gray/40 font-mono mt-0.5">
+            <p className="text-[11px] text-cool-gray/70 font-mono mt-0.5">
               {loading ? 'Loading...' : `${totalResources} total`}
             </p>
           </div>
@@ -70,7 +70,7 @@ export default function ResourceSidebar({
               onClick={onAddClick}
               disabled={placing}
               className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider rounded
-                bg-purple-500/20 text-purple-300 border border-purple-500/30
+                bg-purple-500/20 text-purple-700 border border-purple-500/30
                 hover:bg-purple-500/30 transition-all
                 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
             >
@@ -80,7 +80,7 @@ export default function ResourceSidebar({
               onClick={clearOverlays}
               disabled={!route && !isochrones.length}
               className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider rounded
-                bg-white/5 text-cool-gray/40 border border-white/5
+                bg-white/5 text-cool-gray/70 border border-white/5
                 hover:bg-white/10 hover:text-white transition-all
                 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer"
             >
@@ -89,7 +89,7 @@ export default function ResourceSidebar({
             <button
               onClick={onRefresh}
               className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider rounded
-                bg-white/5 text-cool-gray/40 border border-white/5
+                bg-white/5 text-cool-gray/70 border border-white/5
                 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
             >
               Refresh
@@ -104,7 +104,7 @@ export default function ResourceSidebar({
             className={`px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider rounded-full border transition-all cursor-pointer ${
               filter === 'all'
                 ? 'bg-white/10 text-white border-white/20'
-                : 'bg-white/[0.03] text-cool-gray/40 border-white/5 hover:bg-white/10 hover:text-white'
+                : 'bg-white/[0.03] text-cool-gray/70 border-white/5 hover:bg-white/10 hover:text-white'
             }`}
           >
             All
@@ -120,7 +120,7 @@ export default function ResourceSidebar({
                 className={`px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider rounded-full border transition-all cursor-pointer ${
                   filter === key
                     ? 'text-white border-white/20'
-                    : 'text-cool-gray/40 border-white/5 hover:bg-white/10 hover:text-white'
+                    : 'text-cool-gray/70 border-white/5 hover:bg-white/10 hover:text-white'
                 }`}
                 style={{
                   background: filter === key ? `${TYPE_COLORS[key]}30` : 'rgba(255,255,255,0.03)',
@@ -171,10 +171,10 @@ export default function ResourceSidebar({
                 <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
               </svg>
             </div>
-            <p className="text-[11px] text-cool-gray/30 font-mono mb-1">No resources yet</p>
-            <p className="text-[10px] text-cool-gray/20 font-mono leading-relaxed">
-              Click <span className="text-purple-400/60">+ Add</span> above or the floating<br />
-              <span className="text-purple-400/60">+</span> button, then click the map to place one.
+            <p className="text-[11px] text-cool-gray/65 font-mono mb-1">No resources yet</p>
+            <p className="text-[10px] text-cool-gray/70 font-mono leading-relaxed">
+              Click <span className="text-purple-600/60">+ Add</span> above or the floating<br />
+              <span className="text-purple-600/60">+</span> button, then click the map to place one.
             </p>
           </div>
         ) : (
@@ -212,7 +212,7 @@ export default function ResourceSidebar({
                       {r.status}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] font-mono text-cool-gray/40 ml-4">
+                  <div className="flex items-center gap-3 text-[10px] font-mono text-cool-gray/70 ml-4">
                     <span>{TYPE_LABELS[r.type] || r.type}</span>
                     <span>{lat?.toFixed(3)}, {lng?.toFixed(3)}</span>
                     {detail.capacity && <span>Cap: {detail.capacity}</span>}
@@ -227,7 +227,7 @@ export default function ResourceSidebar({
       {/* Selected resource actions */}
       {selectedResource && (
         <div className="flex-shrink-0 p-3 border-t border-white/5 bg-white/[0.02]">
-          <p className="text-[10px] font-mono text-cool-gray/40 uppercase tracking-wider mb-2">
+          <p className="text-[10px] font-mono text-cool-gray/70 uppercase tracking-wider mb-2">
             {selectedResource.name} — Actions
           </p>
           <div className="flex flex-wrap gap-1.5">
@@ -245,7 +245,7 @@ export default function ResourceSidebar({
                 }
               }}
               className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider rounded
-                bg-purple-500/20 text-purple-300 border border-purple-500/30
+                bg-purple-500/20 text-purple-700 border border-purple-500/30
                 hover:bg-purple-500/30 transition-all cursor-pointer"
             >
               Route to nearest
@@ -256,7 +256,7 @@ export default function ResourceSidebar({
                 onIsochrone(lng, lat)
               }}
               className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider rounded
-                bg-purple-500/20 text-purple-300 border border-purple-500/30
+                bg-purple-500/20 text-purple-700 border border-purple-500/30
                 hover:bg-purple-500/30 transition-all cursor-pointer"
             >
               Coverage area

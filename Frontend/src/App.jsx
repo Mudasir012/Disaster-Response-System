@@ -14,10 +14,10 @@ const AlertManage = lazy(() => import('./Dashboard/AlertManage'))
 
 function PageFallback() {
   return (
-    <div className="min-h-[100dvh] bg-[#05080f] flex items-center justify-center">
+    <div className="min-h-[100dvh] bg-landing-bg flex items-center justify-center">
       <div className="flex flex-col items-center gap-3">
         <div className="w-6 h-6 rounded-full border-2 border-white/10 border-t-crisis-red animate-spin" />
-        <span className="text-xs text-cool-gray/50 font-mono uppercase tracking-widest">Loading</span>
+        <span className="text-xs text-cool-gray/75 font-mono uppercase tracking-widest">Loading</span>
       </div>
     </div>
   )

@@ -19,11 +19,11 @@ function buildIcon(svg, color, size, selected, resolved) {
   return L.divIcon({
     html: `<div style="
       width:${s}px;height:${s}px;display:flex;align-items:center;justify-content:center;
-      background:rgba(15,23,42,0.55);border-radius:50%;backdrop-filter:blur(3px);
+      background:#ffffff;border-radius:50%;
       color:${color};opacity:${resolved ? 0.4 : 1};
-      border:${selected ? '2px solid #f8fafc' : '2px solid rgba(248,250,252,0.2)'};
-      box-shadow:0 0 10px ${color};
-      transition:all 0.15s ease;
+      border:${selected ? `3px solid ${color}` : `2px solid ${color}80`};
+      box-shadow:${selected ? `0 0 0 4px rgba(15,23,42,0.08),0 0 14px ${color}40` : `0 2px 8px rgba(15,23,42,0.15)`};
+      transition:all 0.2s ease;
     ">${svg}</div>`,
     className: '',
     iconSize: [s, s],
@@ -54,7 +54,7 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
       zoomControl: false,
     })
 
-    L.tileLayer('https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+    L.tileLayer('https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
       tileSize: 256,
       attribution: '&copy; CARTO',
       maxZoom: 19,
@@ -112,11 +112,11 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
   return (
     <div className="absolute inset-0">
       <div ref={containerRef} className="absolute inset-0">
-        <div className="absolute bottom-4 left-4 z-1000 flex flex-wrap gap-1.5">
+          <div className="absolute bottom-4 left-4 z-1000 flex flex-wrap gap-1.5">
           {Object.entries(DISASTER_TYPES).map(([type, spec]) => (
             <div
               key={type}
-              className="flex items-center gap-1.5 bg-black/70 px-2.5 py-1.5 rounded-md"
+              className="flex items-center gap-1.5 rounded-md border border-[oklch(0.26_0.022_255/0.08)] bg-surface/90 px-2.5 py-1.5 backdrop-blur"
             >
               <span
                 className="shrink-0 flex items-center justify-center"
@@ -126,7 +126,7 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
                     .replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" width="12" height="12"'),
                 }}
               />
-              <span className="text-[10px] text-white/70 font-medium whitespace-nowrap">{type}</span>
+              <span className="text-[10px] font-medium whitespace-nowrap text-cool-gray/80">{type}</span>
             </div>
           ))}
         </div>

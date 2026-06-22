@@ -42,17 +42,17 @@ export default function AddResourceModal({ position, onClose, onSave }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="w-full max-w-sm mx-4 rounded-xl border border-white/10 bg-[#0d1117] shadow-2xl">
+      <div className="w-full max-w-sm mx-4 rounded-xl border border-white/10 bg-deep-slate shadow-2xl">
         <div className="px-5 py-4 border-b border-white/5 flex items-center justify-between">
           <h3 className="text-sm font-bold text-white font-mono tracking-wide">Add Resource</h3>
-          <span className="text-[10px] text-cool-gray/40 font-mono">
+          <span className="text-[10px] text-cool-gray/70 font-mono">
             {position.lat.toFixed(4)}, {position.lng.toFixed(4)}
           </span>
         </div>
 
         <form onSubmit={handleSubmit} className="p-5 space-y-4">
           <div>
-            <label className="text-[10px] font-mono text-cool-gray/40 uppercase tracking-wider mb-1.5 block">
+            <label className="text-[10px] font-mono text-cool-gray/70 uppercase tracking-wider mb-1.5 block">
               Type
             </label>
             <div className="grid grid-cols-2 gap-1.5">
@@ -64,7 +64,7 @@ export default function AddResourceModal({ position, onClose, onSave }) {
                   className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-[11px] font-mono transition-all cursor-pointer ${
                     type === opt.value
                       ? 'text-white border-white/20'
-                      : 'text-cool-gray/40 border-white/5 hover:text-white hover:border-white/10'
+                      : 'text-cool-gray/70 border-white/5 hover:text-white hover:border-white/10'
                   }`}
                   style={{
                     background: type === opt.value ? `${opt.color}20` : 'rgba(255,255,255,0.02)',
@@ -79,7 +79,7 @@ export default function AddResourceModal({ position, onClose, onSave }) {
           </div>
 
           <div>
-            <label className="text-[10px] font-mono text-cool-gray/40 uppercase tracking-wider mb-1.5 block">
+            <label className="text-[10px] font-mono text-cool-gray/70 uppercase tracking-wider mb-1.5 block">
               Name
             </label>
             <input
@@ -87,14 +87,14 @@ export default function AddResourceModal({ position, onClose, onSave }) {
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Ambulance Alpha-7"
               className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-white text-xs font-mono
-                placeholder:text-cool-gray/30 focus:outline-none focus:border-purple-500/50 transition-all"
+                placeholder:text-cool-gray/65 focus:outline-none focus:border-purple-500/50 transition-all"
               autoFocus
             />
           </div>
 
           <div className="flex gap-3">
             <div className="flex-1">
-              <label className="text-[10px] font-mono text-cool-gray/40 uppercase tracking-wider mb-1.5 block">
+              <label className="text-[10px] font-mono text-cool-gray/70 uppercase tracking-wider mb-1.5 block">
                 Status
               </label>
               <select
@@ -103,13 +103,13 @@ export default function AddResourceModal({ position, onClose, onSave }) {
                 className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-white text-xs font-mono
                   focus:outline-none focus:border-purple-500/50 transition-all appearance-none cursor-pointer"
               >
-                <option value="available" className="bg-[#0d1117]">Available</option>
-                <option value="busy" className="bg-[#0d1117]">Busy</option>
-                <option value="critical" className="bg-[#0d1117]">Critical</option>
+                <option value="available" className="bg-deep-slate">Available</option>
+                <option value="busy" className="bg-deep-slate">Busy</option>
+                <option value="critical" className="bg-deep-slate">Critical</option>
               </select>
             </div>
             <div className="w-24">
-              <label className="text-[10px] font-mono text-cool-gray/40 uppercase tracking-wider mb-1.5 block">
+              <label className="text-[10px] font-mono text-cool-gray/70 uppercase tracking-wider mb-1.5 block">
                 Capacity
               </label>
               <input
@@ -117,13 +117,13 @@ export default function AddResourceModal({ position, onClose, onSave }) {
                 onChange={(e) => setCapacity(e.target.value.replace(/\D/g, ''))}
                 placeholder="—"
                 className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-white text-xs font-mono
-                  placeholder:text-cool-gray/30 focus:outline-none focus:border-purple-500/50 transition-all"
+                  placeholder:text-cool-gray/65 focus:outline-none focus:border-purple-500/50 transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-[10px] font-mono text-cool-gray/40 uppercase tracking-wider mb-1.5 block">
+            <label className="text-[10px] font-mono text-cool-gray/70 uppercase tracking-wider mb-1.5 block">
               Notes
             </label>
             <textarea
@@ -131,7 +131,7 @@ export default function AddResourceModal({ position, onClose, onSave }) {
               onChange={(e) => setNotes(e.target.value)}
               rows={2}
               className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/10 text-white text-xs font-mono
-                placeholder:text-cool-gray/30 focus:outline-none focus:border-purple-500/50 transition-all resize-none"
+                placeholder:text-cool-gray/65 focus:outline-none focus:border-purple-500/50 transition-all resize-none"
             />
           </div>
 
@@ -139,7 +139,7 @@ export default function AddResourceModal({ position, onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-3 py-2 rounded-lg text-[11px] font-mono text-cool-gray/40 border border-white/5
+              className="flex-1 px-3 py-2 rounded-lg text-[11px] font-mono text-cool-gray/70 border border-white/5
                 hover:text-white hover:bg-white/5 transition-all cursor-pointer"
             >
               Cancel
@@ -147,7 +147,7 @@ export default function AddResourceModal({ position, onClose, onSave }) {
             <button
               type="submit"
               disabled={!name.trim() || saving}
-              className="flex-1 px-3 py-2 rounded-lg text-[11px] font-mono font-semibold text-white
+              className="flex-1 px-3 py-2 rounded-lg text-[11px] font-mono font-semibold text-on-accent
                 bg-purple-500/80 hover:bg-purple-500 transition-all
                 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
             >

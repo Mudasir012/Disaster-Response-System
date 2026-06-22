@@ -30,7 +30,7 @@ export default function OAuthButtons() {
           <div className="w-full border-t border-white/[0.06]" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-deep-slate px-3 text-[11px] font-medium tracking-wide text-cool-gray/40 uppercase">
+          <span className="bg-deep-slate px-3 text-[11px] font-medium tracking-wide text-cool-gray/70 uppercase">
             or continue with
           </span>
         </div>

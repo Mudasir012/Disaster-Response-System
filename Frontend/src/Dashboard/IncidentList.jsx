@@ -98,7 +98,7 @@ export default function IncidentList() {
           </div>
           <div className="flex items-center gap-4">
             <div className="relative flex-1 max-w-xs">
-              <svg aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-cool-gray/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-cool-gray/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
               <input
@@ -107,7 +107,7 @@ export default function IncidentList() {
                 aria-label="Search incidents"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-lg border border-white/[0.06] bg-surface/50 pl-9 pr-3 py-2 text-xs text-glacier-white placeholder:text-cool-gray/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/40"
+                className="w-full rounded-lg border border-white/[0.06] bg-surface/50 pl-9 pr-3 py-2 text-xs text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/40"
               />
             </div>
             <FilterBar activeFilter={filter} onFilterChange={setFilter} />
@@ -130,7 +130,7 @@ export default function IncidentList() {
                   <th
                     key={col.key}
                     onClick={() => col.sortable && toggleSort(col.key)}
-                    className={`px-4 py-3 text-[10px] font-semibold uppercase tracking-wider text-cool-gray/50 ${
+                    className={`px-4 py-3 text-[10px] font-semibold uppercase tracking-wider text-cool-gray/75 ${
                       col.sortable ? 'cursor-pointer hover:text-glacier-white transition-colors duration-200' : ''
                     } text-left`}
                   >
@@ -152,14 +152,14 @@ export default function IncidentList() {
                   <td colSpan={7} className="px-4 py-16 text-center">
                     <div className="flex items-center justify-center gap-2">
                       <div className="w-4 h-4 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
-                      <span className="text-xs text-cool-gray/50">Loading incidents...</span>
+                      <span className="text-xs text-cool-gray/75">Loading incidents...</span>
                     </div>
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-16 text-center">
-                    <p className="text-sm text-cool-gray/40 font-medium">No incidents match your filters</p>
+                    <p className="text-sm text-cool-gray/70 font-medium">No incidents match your filters</p>
                   </td>
                 </tr>
               ) : (
@@ -172,7 +172,7 @@ export default function IncidentList() {
                       className="border-b border-white/[0.02] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] hover:bg-white/[0.04] cursor-pointer group"
                     >
                       <td className="px-4 py-3.5">
-                        <span className="font-mono text-xs text-cool-gray/50">{inc.id}</span>
+                        <span className="font-mono text-xs text-cool-gray/75">{inc.id}</span>
                       </td>
                       <td className="px-4 py-3.5">
                         <span
@@ -189,7 +189,7 @@ export default function IncidentList() {
                         <span className="text-xs text-cool-gray/70">{inc.location}</span>
                       </td>
                       <td className="px-4 py-3.5">
-                        <span className="font-mono text-[11px] text-cool-gray/50">{timeAgo(inc.timestamp)} ago</span>
+                        <span className="font-mono text-[11px] text-cool-gray/75">{timeAgo(inc.timestamp)} ago</span>
                       </td>
                       <td className="px-4 py-3.5">
                         <span
@@ -198,14 +198,14 @@ export default function IncidentList() {
                               ? 'text-status-teal bg-status-teal/10'
                               : inc.status === 'monitoring'
                               ? 'text-amber bg-amber/10'
-                              : 'text-cool-gray/40 bg-white/[0.04]'
+                              : 'text-cool-gray/70 bg-white/[0.04]'
                           }`}
                         >
                           {inc.status}
                         </span>
                       </td>
                       <td className="px-4 py-3.5">
-                        <span className="text-[11px] text-cool-gray/40 font-mono">{inc.source}</span>
+                        <span className="text-[11px] text-cool-gray/70 font-mono">{inc.source}</span>
                       </td>
                     </tr>
                   )

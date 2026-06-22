@@ -50,7 +50,7 @@ export default function VerifyEmail({ email, onBack }) {
 
       <button
         onClick={onBack}
-        className="text-sm font-medium text-cool-gray/60 hover:text-glacier-white transition-colors duration-200"
+        className="text-sm font-medium text-cool-gray/70 hover:text-glacier-white transition-colors duration-200"
       >
         Back to sign in
       </button>

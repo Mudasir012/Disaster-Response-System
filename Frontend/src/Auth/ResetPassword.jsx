@@ -75,14 +75,14 @@ export default function ResetPassword({ email: initialEmail, onBack }) {
           value={email}
           onChange={(e) => { setEmail(e.target.value); setError('') }}
           disabled={loading}
-          className="w-full rounded-xl border border-white/[0.07] bg-surface px-4 py-3 text-sm text-glacier-white placeholder:text-cool-gray/40 transition-all duration-200 focus:outline-none focus:ring-[2.5px] focus:ring-signal-blue/60 disabled:opacity-50"
+          className="w-full rounded-xl border border-white/[0.07] bg-surface px-4 py-3 text-sm text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-[2.5px] focus:ring-signal-blue/60 disabled:opacity-50"
         />
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-crisis-red py-3.5 text-sm font-bold text-white tracking-wide transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_8px_25px_-5px_rgba(233,69,96,0.3)] active:scale-[0.97] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none flex items-center justify-center gap-2"
+        className="w-full rounded-xl bg-crisis-red py-3.5 text-sm font-bold text-on-accent tracking-wide transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_8px_25px_-5px_rgba(233,69,96,0.3)] active:scale-[0.97] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
@@ -100,7 +100,7 @@ export default function ResetPassword({ email: initialEmail, onBack }) {
       <button
         type="button"
         onClick={onBack}
-        className="text-sm font-medium text-cool-gray/60 hover:text-glacier-white transition-colors duration-200 text-center"
+        className="text-sm font-medium text-cool-gray/70 hover:text-glacier-white transition-colors duration-200 text-center"
       >
         Back to sign in
       </button>

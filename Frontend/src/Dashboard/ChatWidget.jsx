@@ -120,7 +120,7 @@ export default function ChatWidget({ onClose }) {
           </div>
           <div>
             <p className="text-sm font-semibold text-glacier-white">AI Assistant</p>
-            <p className="text-[10px] text-cool-gray/40">Groq-powered</p>
+            <p className="text-[10px] text-cool-gray/70">Groq-powered</p>
           </div>
         </div>
         <button
@@ -128,7 +128,7 @@ export default function ChatWidget({ onClose }) {
           className="w-7 h-7 rounded-lg hover:bg-white/[0.06] flex items-center justify-center transition-colors duration-200"
           aria-label="Close AI assistant"
         >
-          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-cool-gray/50">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-cool-gray/75">
             <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
           </svg>
         </button>
@@ -144,13 +144,13 @@ export default function ChatWidget({ onClose }) {
               </svg>
             </div>
             <p className="text-sm text-glacier-white font-medium mb-1">How can I help?</p>
-            <p className="text-xs text-cool-gray/40 mb-4">Ask about emergencies or safety guidance</p>
+            <p className="text-xs text-cool-gray/70 mb-4">Ask about emergencies or safety guidance</p>
             <div className="w-full space-y-2">
               {suggestedQuestions.map((q) => (
                 <button
                   key={q}
                   onClick={() => handleSend(q)}
-                  className="w-full text-left px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-cool-gray/60 hover:text-glacier-white hover:bg-white/[0.06] transition-all duration-200 cursor-pointer"
+                  className="w-full text-left px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-cool-gray/70 hover:text-glacier-white hover:bg-white/[0.06] transition-all duration-200 cursor-pointer"
                 >
                   {q}
                 </button>
@@ -188,7 +188,7 @@ export default function ChatWidget({ onClose }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            className="flex-1 rounded-xl border border-white/[0.07] bg-surface px-4 py-2.5 text-sm text-glacier-white placeholder:text-cool-gray/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/40"
+            className="flex-1 rounded-xl border border-white/[0.07] bg-surface px-4 py-2.5 text-sm text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/40"
           />
           <button
             onClick={() => handleSend()}

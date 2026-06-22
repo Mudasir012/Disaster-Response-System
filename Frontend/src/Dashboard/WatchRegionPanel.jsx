@@ -83,7 +83,7 @@ export default function WatchRegionPanel({ open, onClose, selectedCountry, onCou
             </svg>
             <h2 className="font-sora text-base font-bold text-glacier-white">Filter by Country</h2>
           </div>
-          <button onClick={onClose} className="text-cool-gray/50 hover:text-glacier-white transition-colors duration-200" aria-label="Close panel">
+          <button onClick={onClose} className="text-cool-gray/75 hover:text-glacier-white transition-colors duration-200" aria-label="Close panel">
             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
             </svg>
@@ -92,7 +92,7 @@ export default function WatchRegionPanel({ open, onClose, selectedCountry, onCou
 
         <div className="px-5 py-4 border-b border-white/[0.04]">
           <div className="relative">
-            <svg aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-cool-gray/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-cool-gray/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <input
@@ -105,7 +105,7 @@ export default function WatchRegionPanel({ open, onClose, selectedCountry, onCou
               onKeyDown={handleKeyDown}
               onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-              className="w-full rounded-xl border border-white/[0.07] bg-surface px-4 py-3 pl-10 text-sm text-glacier-white placeholder:text-cool-gray/40 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/50"
+              className="w-full rounded-xl border border-white/[0.07] bg-surface px-4 py-3 pl-10 text-sm text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/50"
             />
             <AnimatePresence>
               {showSuggestions && suggestions.length > 0 && (
@@ -113,7 +113,7 @@ export default function WatchRegionPanel({ open, onClose, selectedCountry, onCou
                   initial={{ opacity: 0, y: -4 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
-                  className="absolute top-full left-0 right-0 mt-1 bg-deep-slate/95 backdrop-blur-xl border border-white/[0.06] rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.5)] overflow-hidden z-50"
+                  className="absolute top-full left-0 right-0 mt-1 bg-surface/95 backdrop-blur-xl border border-[oklch(0.26_0.022_255/0.08)] rounded-xl shadow-[0_12px_40px_-12px_rgba(15,23,42,0.25)] overflow-hidden z-50"
                 >
                   {suggestions.map((c, i) => (
                     <button
@@ -124,7 +124,7 @@ export default function WatchRegionPanel({ open, onClose, selectedCountry, onCou
                         i === selectedIndex ? 'bg-white/[0.08] text-glacier-white' : 'text-cool-gray/70 hover:bg-white/[0.04] hover:text-glacier-white'
                       }`}
                     >
-                      <span className={`w-5 h-3.5 rounded inline-flex items-center justify-center text-[8px] font-bold uppercase ${i === selectedIndex ? 'text-glacier-white/60' : 'text-cool-gray/40'}`}>
+                      <span className={`w-5 h-3.5 rounded inline-flex items-center justify-center text-[8px] font-bold uppercase ${i === selectedIndex ? 'text-glacier-white/60' : 'text-cool-gray/70'}`}>
                         {c.code}
                       </span>
                       <span className="text-sm">{c.name}</span>
@@ -159,14 +159,14 @@ export default function WatchRegionPanel({ open, onClose, selectedCountry, onCou
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center py-12 text-center">
-              <svg aria-hidden="true" className="w-10 h-10 text-cool-gray/20 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg aria-hidden="true" className="w-10 h-10 text-glacier-white/[0.12] mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M2 12h20" />
                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
               </svg>
-              <p className="text-sm text-cool-gray/40 font-medium">No country selected</p>
-              <p className="text-xs text-cool-gray/30 mt-1">Search for a country above to see its disasters</p>
-              <p className="text-xs text-cool-gray/30 mt-4">Currently showing: <span className="text-glacier-white/60 font-medium">Worldwide</span></p>
+              <p className="text-sm text-cool-gray/70 font-medium">No country selected</p>
+              <p className="text-xs text-cool-gray/65 mt-1">Search for a country above to see its disasters</p>
+              <p className="text-xs text-cool-gray/65 mt-4">Currently showing: <span className="text-glacier-white/60 font-medium">Worldwide</span></p>
             </div>
           )}
         </div>

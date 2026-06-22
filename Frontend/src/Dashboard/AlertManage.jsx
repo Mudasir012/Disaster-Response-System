@@ -92,10 +92,10 @@ export default function AlertManage() {
 
   if (!token) {
     return (
-      <div className="min-h-[100dvh] bg-[#05080f] flex items-center justify-center p-6">
+      <div className="min-h-[100dvh] bg-landing-bg flex items-center justify-center p-6">
         <div className="text-center">
-          <p className="text-sm text-cool-gray/40 font-mono mb-4">No subscription token provided</p>
-          <Link to="/subscribe" className="px-4 py-2 text-xs font-mono rounded-lg bg-purple-500/30 text-purple-300 border border-purple-500/30 hover:bg-purple-500/40 transition-all">
+          <p className="text-sm text-cool-gray/70 font-mono mb-4">No subscription token provided</p>
+          <Link to="/subscribe" className="px-4 py-2 text-xs font-mono rounded-lg bg-purple-500/30 text-purple-700 border border-purple-500/30 hover:bg-purple-500/40 transition-all">
             Subscribe to Alerts
           </Link>
         </div>
@@ -105,10 +105,10 @@ export default function AlertManage() {
 
   if (loading) {
     return (
-      <div className="min-h-[100dvh] bg-[#05080f] flex items-center justify-center">
+      <div className="min-h-[100dvh] bg-landing-bg flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-5 h-5 rounded-full border-2 border-white/10 border-t-purple-500 animate-spin" />
-          <span className="text-[10px] text-cool-gray/40 font-mono uppercase tracking-widest">Loading subscription...</span>
+          <span className="text-[10px] text-cool-gray/70 font-mono uppercase tracking-widest">Loading subscription...</span>
         </div>
       </div>
     )
@@ -116,14 +116,14 @@ export default function AlertManage() {
 
   if (error && !sub) {
     return (
-      <div className="min-h-[100dvh] bg-[#05080f] flex items-center justify-center p-6">
+      <div className="min-h-[100dvh] bg-landing-bg flex items-center justify-center p-6">
         <div className="text-center max-w-sm">
           <div className="w-12 h-12 rounded-full bg-crisis-red/10 flex items-center justify-center mx-auto mb-4">
             <span className="text-crisis-red text-lg font-bold">!</span>
           </div>
           <p className="text-sm text-crisis-red font-mono mb-2">Invalid Link</p>
-          <p className="text-[11px] text-cool-gray/40 font-mono mb-6">{error}</p>
-          <Link to="/subscribe" className="px-4 py-2 text-xs font-mono rounded-lg bg-purple-500/30 text-purple-300 border border-purple-500/30 hover:bg-purple-500/40 transition-all">
+          <p className="text-[11px] text-cool-gray/70 font-mono mb-6">{error}</p>
+          <Link to="/subscribe" className="px-4 py-2 text-xs font-mono rounded-lg bg-purple-500/30 text-purple-700 border border-purple-500/30 hover:bg-purple-500/40 transition-all">
             Subscribe to Alerts
           </Link>
         </div>
@@ -132,16 +132,16 @@ export default function AlertManage() {
   }
 
   return (
-    <div className="min-h-[100dvh] bg-[#05080f] flex items-center justify-center p-6">
+    <div className="min-h-[100dvh] bg-landing-bg flex items-center justify-center p-6">
       <div className="w-full max-w-lg">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-base font-bold text-white font-mono tracking-wide">
               {isConfirm && !confirming ? 'Confirming...' : 'Manage Alerts'}
             </h1>
-            <p className="text-[11px] text-cool-gray/40 font-mono mt-0.5">{sub?.email}</p>
+            <p className="text-[11px] text-cool-gray/70 font-mono mt-0.5">{sub?.email}</p>
           </div>
-          <Link to="/" className="text-[10px] text-cool-gray/40 font-mono hover:text-white transition-all">
+          <Link to="/" className="text-[10px] text-cool-gray/70 font-mono hover:text-white transition-all">
             ← Home
           </Link>
         </div>
@@ -152,8 +152,8 @@ export default function AlertManage() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
             <div>
-              <p className="text-xs font-semibold text-green-400 font-mono">Subscription confirmed!</p>
-              <p className="text-[10px] text-green-400/60 font-mono">You'll now receive alerts for your selected area.</p>
+              <p className="text-xs font-semibold text-green-700 font-mono">Subscription confirmed!</p>
+              <p className="text-[10px] text-green-700/60 font-mono">You'll now receive alerts for your selected area.</p>
             </div>
           </div>
         )}
@@ -177,7 +177,7 @@ export default function AlertManage() {
 
             <div className="space-y-3">
               <div>
-                <label className="text-[9px] font-mono text-cool-gray/40 uppercase tracking-wider mb-1.5 block">Region</label>
+                <label className="text-[9px] font-mono text-cool-gray/70 uppercase tracking-wider mb-1.5 block">Region</label>
                 <input
                   value={rule.region || ''}
                   onChange={(e) => updateRule(i, 'region', e.target.value)}
@@ -187,8 +187,8 @@ export default function AlertManage() {
               </div>
 
               <div>
-                <label className="text-[9px] font-mono text-cool-gray/40 uppercase tracking-wider mb-1.5 block">
-                  Types <span className="text-cool-gray/30">(empty = all)</span>
+                <label className="text-[9px] font-mono text-cool-gray/70 uppercase tracking-wider mb-1.5 block">
+                  Types <span className="text-cool-gray/65">(empty = all)</span>
                 </label>
                 <div className="flex flex-wrap gap-1">
                   {EVENT_TYPES.map((t) => {
@@ -203,7 +203,7 @@ export default function AlertManage() {
                           updateRule(i, 'event_types', next)
                         }}
                         className={`px-2 py-1 rounded text-[9px] font-mono border transition-all cursor-pointer ${
-                          active ? 'text-white' : 'text-cool-gray/40 border-white/5 hover:text-white'
+                          active ? 'text-white' : 'text-cool-gray/70 border-white/5 hover:text-white'
                         }`}
                         style={{
                           background: active ? `${t.color}20` : 'transparent',
@@ -218,7 +218,7 @@ export default function AlertManage() {
               </div>
 
               <div>
-                <label className="text-[9px] font-mono text-cool-gray/40 uppercase tracking-wider mb-1.5 block">
+                <label className="text-[9px] font-mono text-cool-gray/70 uppercase tracking-wider mb-1.5 block">
                   Min Severity: <span className="text-glacier-white">{rule.min_severity || 1}+</span>
                 </label>
                 <div className="flex gap-1">
@@ -230,7 +230,7 @@ export default function AlertManage() {
                       className={`flex-1 px-1 py-1.5 rounded text-[9px] font-mono border transition-all cursor-pointer ${
                         (rule.min_severity || 1) === s
                           ? 'bg-white/10 text-white border-white/20'
-                          : 'text-cool-gray/40 border-white/5 hover:text-white'
+                          : 'text-cool-gray/70 border-white/5 hover:text-white'
                       }`}
                     >
                       {s}
@@ -252,7 +252,7 @@ export default function AlertManage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex-1 py-2.5 rounded-xl text-xs font-mono font-semibold text-white bg-purple-500/80 hover:bg-purple-500
+            className="flex-1 py-2.5 rounded-xl text-xs font-mono font-semibold text-on-accent bg-purple-500/80 hover:bg-purple-500
               transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
           >
             {saving ? 'Saving...' : 'Save Changes'}
@@ -277,7 +277,7 @@ export default function AlertManage() {
                 alert('Failed to send test alert.')
               }
             }}
-            className="text-[10px] text-cool-gray/30 font-mono underline underline-offset-2 hover:text-cool-gray/50 transition-all cursor-pointer"
+            className="text-[10px] text-cool-gray/65 font-mono underline underline-offset-2 hover:text-cool-gray/75 transition-all cursor-pointer"
           >
             Send test alert
           </button>

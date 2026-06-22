@@ -51,7 +51,7 @@ export default function IncidentDetail() {
       <DashboardLayout>
         <div className="flex-1 flex flex-col items-center justify-center gap-2">
           <div className="w-6 h-6 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
-          <span className="text-xs text-cool-gray/50">Loading incident details...</span>
+          <span className="text-xs text-cool-gray/75">Loading incident details...</span>
         </div>
       </DashboardLayout>
     )
@@ -66,7 +66,7 @@ export default function IncidentDetail() {
               <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
           </div>
-          <p className="text-sm text-cool-gray/50">{error}</p>
+          <p className="text-sm text-cool-gray/75">{error}</p>
           <button
             onClick={() => navigate('/incidents')}
             className="text-sm text-signal-blue hover:text-glacier-white transition-colors duration-200"
@@ -82,7 +82,7 @@ export default function IncidentDetail() {
     return (
       <DashboardLayout>
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
-          <p className="text-lg font-semibold text-cool-gray/40">Incident not found</p>
+          <p className="text-lg font-semibold text-cool-gray/70">Incident not found</p>
           <button
             onClick={() => navigate('/incidents')}
             className="text-sm text-signal-blue hover:text-glacier-white transition-colors duration-200"
@@ -110,7 +110,7 @@ export default function IncidentDetail() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, ease: easeLusion }}
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-sm text-cool-gray/50 hover:text-glacier-white transition-colors duration-200 group"
+            className="flex items-center gap-2 text-sm text-cool-gray/75 hover:text-glacier-white transition-colors duration-200 group"
           >
             <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:-translate-x-0.5">
               <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
@@ -142,20 +142,20 @@ export default function IncidentDetail() {
                       ? 'text-status-teal bg-status-teal/10'
                       : incident.status === 'monitoring'
                       ? 'text-amber bg-amber/10'
-                      : 'text-cool-gray/40 bg-white/[0.04]'
+                      : 'text-cool-gray/70 bg-white/[0.04]'
                   }`}
                 >
                   {incident.status}
                 </span>
               </div>
               <p className="mt-1.5 text-sm text-cool-gray/70">{incident.location}</p>
-              <p className="mt-0.5 font-mono text-xs text-cool-gray/40">{incident.id} &middot; {timeAgo(incident.timestamp)} &middot; {incident.source}</p>
+              <p className="mt-0.5 font-mono text-xs text-cool-gray/70">{incident.id} &middot; {timeAgo(incident.timestamp)} &middot; {incident.source}</p>
             </div>
             <div className="flex gap-3 shrink-0">
               <button className="rounded-lg border border-white/10 px-4 py-2 text-xs font-medium text-glacier-white/70 hover:border-white/20 hover:text-glacier-white transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)]">
                 Share
               </button>
-              <button className="rounded-lg bg-crisis-red px-5 py-2 text-xs font-semibold text-white transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_4px_20px_-3px_rgba(233,69,96,0.3)] active:scale-[0.98]">
+              <button className="rounded-lg bg-crisis-red px-5 py-2 text-xs font-semibold text-on-accent transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_4px_20px_-3px_rgba(233,69,96,0.3)] active:scale-[0.98]">
                 Subscribe to updates
               </button>
             </div>
@@ -177,12 +177,12 @@ export default function IncidentDetail() {
                 transition={{ duration: 0.4, ease: easeLusion }}
                 className="bg-surface rounded-xl border border-white/[0.04] p-5"
               >
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-3">Summary</h2>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-3">Summary</h2>
                 <p className="text-sm text-glacier-white/80 leading-relaxed">{incident.summary}</p>
               </motion.div>
 
               <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-4">Impact</h2>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-4">Impact</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {[
                     { label: 'Casualties', value: incident.casualties, color: '#e94560' },
@@ -190,17 +190,17 @@ export default function IncidentDetail() {
                     { label: 'Magnitude', value: incident.magnitude > 0 ? `M ${incident.magnitude}` : 'N/A', color: '#0f7ddb' },
                     { label: 'Status Duration', value: timeAgo(incident.timestamp), color: '#94a3b8' },
                   ].map((stat) => (
-                    <div key={stat.label} className="bg-deep-slate rounded-lg p-4">
+                    <div key={stat.label} className="rounded-lg bg-[oklch(0.985_0.004_255)] p-4">
                       <p className="text-2xl font-bold text-glacier-white" style={{ color: stat.color }}>{stat.value}</p>
-                      <p className="text-[11px] text-cool-gray/50 mt-1">{stat.label}</p>
+                      <p className="text-[11px] text-cool-gray/75 mt-1">{stat.label}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-4">AI Analysis</h2>
-                <div className="bg-gradient-to-br from-[#1a1040] to-[#110a2e] rounded-lg border border-[#7c3aed]/20 p-5">
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-4">AI Analysis</h2>
+                <div className="rounded-lg border border-ai-purple/20 bg-ai-purple/[0.05] p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
@@ -216,7 +216,7 @@ export default function IncidentDetail() {
                   </p>
                   <div className="flex items-center gap-2 mt-4">
                     <span className="text-[10px] text-[#7c3aed]/60">Confidence</span>
-                    <div className="flex-1 h-1 bg-deep-slate rounded-full overflow-hidden">
+                      <div className="flex-1 h-1 rounded-full overflow-hidden bg-[oklch(0.26_0.022_255/0.08)]">
                       <div className="h-full rounded-full bg-[#7c3aed]" style={{ width: '87%' }} />
                     </div>
                     <span className="text-[10px] font-mono text-[#7c3aed]/60">87%</span>
@@ -231,17 +231,17 @@ export default function IncidentDetail() {
               className="space-y-6"
             >
               <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-3">Location</h2>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-3">Location</h2>
                 <div className="aspect-square bg-deep-slate rounded-lg flex items-center justify-center">
                   <div className="text-center">
-                    <p className="font-mono text-xs text-cool-gray/40">{incident.lat.toFixed(2)}, {incident.lng.toFixed(2)}</p>
-                    <p className="text-[10px] text-cool-gray/30 mt-1">{incident.region}</p>
+                    <p className="font-mono text-xs text-cool-gray/70">{incident.lat.toFixed(2)}, {incident.lng.toFixed(2)}</p>
+                    <p className="text-[10px] text-cool-gray/65 mt-1">{incident.region}</p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-3">Source Feed</h2>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-3">Source Feed</h2>
                 <div className="space-y-3">
                   {[
                     { source: incident.source, time: '2 min ago', label: 'Initial alert' },
@@ -252,7 +252,7 @@ export default function IncidentDetail() {
                       <div className="w-1.5 h-1.5 rounded-full bg-signal-blue/50 mt-1.5 shrink-0" />
                       <div className="min-w-0">
                         <p className="text-xs text-glacier-white/80">{item.label}</p>
-                        <p className="text-[10px] text-cool-gray/40 mt-0.5">{item.source} &middot; {item.time}</p>
+                        <p className="text-[10px] text-cool-gray/70 mt-0.5">{item.source} &middot; {item.time}</p>
                       </div>
                     </div>
                   ))}
@@ -260,7 +260,7 @@ export default function IncidentDetail() {
               </div>
 
               <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/50 mb-3">Quick Actions</h2>
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-3">Quick Actions</h2>
                 <div className="space-y-2">
                   <button className="w-full rounded-lg border border-white/10 px-4 py-2.5 text-xs font-medium text-glacier-white/70 hover:border-white/20 hover:text-glacier-white transition-all duration-200 text-left">
                     Deploy response team

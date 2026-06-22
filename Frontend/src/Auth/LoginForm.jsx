@@ -70,7 +70,7 @@ export default function LoginForm({ onForgotPassword }) {
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? 'login-email-error' : undefined}
           disabled={loading}
-          className={`w-full rounded-xl border bg-surface px-4 py-3 text-sm text-glacier-white placeholder:text-cool-gray/40 transition-all duration-200 focus:outline-none focus:ring-[2.5px] focus:ring-signal-blue/60 disabled:opacity-50 ${
+          className={`w-full rounded-xl border bg-surface px-4 py-3 text-sm text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-[2.5px] focus:ring-signal-blue/60 disabled:opacity-50 ${
             errors.email ? 'border-crisis-red/30' : 'border-white/[0.07]'
           }`}
         />
@@ -106,14 +106,14 @@ export default function LoginForm({ onForgotPassword }) {
             aria-invalid={!!errors.password}
             aria-describedby={errors.password ? 'login-password-error' : undefined}
             disabled={loading}
-            className={`w-full rounded-xl border bg-surface px-4 py-3 pr-11 text-sm text-glacier-white placeholder:text-cool-gray/40 transition-all duration-200 focus:outline-none focus:ring-[2.5px] focus:ring-signal-blue/60 disabled:opacity-50 ${
+            className={`w-full rounded-xl border bg-surface px-4 py-3 pr-11 text-sm text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-[2.5px] focus:ring-signal-blue/60 disabled:opacity-50 ${
               errors.password ? 'border-crisis-red/30' : 'border-white/[0.07]'
             }`}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-cool-gray/60 hover:text-glacier-white transition-colors duration-200 p-1"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-cool-gray/70 hover:text-glacier-white transition-colors duration-200 p-1"
             aria-label={showPassword ? 'Hide password' : 'Show password'}
             tabIndex={-1}
           >
@@ -141,7 +141,7 @@ export default function LoginForm({ onForgotPassword }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-crisis-red py-3.5 text-sm font-bold text-white tracking-wide transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_8px_25px_-5px_rgba(233,69,96,0.3)] active:scale-[0.97] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none flex items-center justify-center gap-2"
+        className="w-full rounded-xl bg-crisis-red py-3.5 text-sm font-bold text-on-accent tracking-wide transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_8px_25px_-5px_rgba(233,69,96,0.3)] active:scale-[0.97] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none flex items-center justify-center gap-2"
       >
         {loading ? (
           <>

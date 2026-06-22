@@ -28,29 +28,29 @@ const IncidentCard = memo(function IncidentCard({ incident, selected, onSelect }
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-glacier-white truncate">{incident.type}</span>
-                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${incident.status === 'active' ? 'text-status-teal' : incident.status === 'monitoring' ? 'text-amber' : 'text-cool-gray/50'}`}
+                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${incident.status === 'active' ? 'text-status-teal' : incident.status === 'monitoring' ? 'text-amber' : 'text-cool-gray/75'}`}
                   style={{ background: incident.status === 'active' ? 'rgba(13,148,136,0.1)' : incident.status === 'monitoring' ? 'rgba(217,119,6,0.1)' : 'rgba(148,163,184,0.1)' }}
                 >
                   {incident.status}
                 </span>
               </div>
-              <p className="text-xs text-cool-gray/60 mt-0.5 truncate">{incident.location}</p>
+              <p className="text-xs text-cool-gray/70 mt-0.5 truncate">{incident.location}</p>
             </div>
           </div>
           <div className="text-right shrink-0">
-            <span className="font-mono text-[10px] font-semibold text-cool-gray/50">{timeAgo(incident.timestamp)}</span>
+            <span className="font-mono text-[10px] font-semibold text-cool-gray/75">{timeAgo(incident.timestamp)}</span>
             {incident.magnitude > 0 && (
-              <p className="font-mono text-[11px] text-cool-gray/60 mt-0.5">M {incident.magnitude}</p>
+              <p className="font-mono text-[11px] text-cool-gray/70 mt-0.5">M {incident.magnitude}</p>
             )}
           </div>
         </div>
-        <p className="text-xs text-cool-gray/50 mt-2 leading-relaxed line-clamp-2">{incident.summary}</p>
+        <p className="text-xs text-cool-gray/75 mt-2 leading-relaxed line-clamp-2">{incident.summary}</p>
         <div className="flex items-center gap-3 mt-2.5">
           {incident.casualties > 0 && (
             <span className="text-[10px] text-crisis-red/70 font-medium">{incident.casualties} casualties</span>
           )}
-          <span className="text-[10px] text-cool-gray/40">{incident.affected.toLocaleString()} affected</span>
-          <span className="text-[10px] text-cool-gray/30 font-mono">{incident.source}</span>
+          <span className="text-[10px] text-cool-gray/70">{incident.affected.toLocaleString()} affected</span>
+          <span className="text-[10px] text-cool-gray/65 font-mono">{incident.source}</span>
         </div>
       </div>
     </button>
