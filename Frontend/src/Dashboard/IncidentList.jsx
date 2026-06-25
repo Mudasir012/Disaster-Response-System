@@ -86,14 +86,14 @@ export default function IncidentList() {
         <div className="pointer-events-none absolute top-4 right-4 text-cool-gray/[0.04]"><span className="cross" /></div>
 
         {error && (
-          <div className="mb-4 bg-amber/10 border border-amber/20 rounded-lg px-4 py-3">
+          <div className="mb-4 bg-amber/10 border border-amber/20 rounded-[2px] px-4 py-3">
             <p className="text-xs text-amber/80 text-center">{error}</p>
           </div>
         )}
 
         <div className="flex flex-col gap-4 mb-5">
           <div className="flex items-center justify-between">
-            <h1 className="font-sora text-xl font-bold text-glacier-white">Incidents</h1>
+            <h1 className="font-display text-xl font-bold text-glacier-white">Incidents</h1>
             <StatsBar incidents={incidents} />
           </div>
           <div className="flex items-center gap-4">
@@ -107,17 +107,17 @@ export default function IncidentList() {
                 aria-label="Search incidents"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-lg border border-white/[0.06] bg-surface/50 pl-9 pr-3 py-2 text-xs text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/40"
+                className="w-full rounded-[2px] border border-ink/[0.06] bg-surface/50 pl-9 pr-3 py-2 text-xs text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-acid/50"
               />
             </div>
             <FilterBar activeFilter={filter} onFilterChange={setFilter} />
           </div>
         </div>
 
-        <div className="flex-1 overflow-auto rounded-xl border border-white/[0.04] min-h-0">
+        <div className="flex-1 overflow-auto rounded-[2px] border border-ink/[0.04] min-h-0">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-white/[0.04]">
+              <tr className="border-b border-ink/[0.04]">
                 {[
                   { key: 'id', label: 'ID', sortable: false },
                   { key: 'severity', label: 'Severity', sortable: true },
@@ -151,7 +151,7 @@ export default function IncidentList() {
                 <tr>
                   <td colSpan={7} className="px-4 py-16 text-center">
                     <div className="flex items-center justify-center gap-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
+                      <div className="w-4 h-4 rounded-[2px] border-2 border-ink/10 border-t-signal-blue animate-spin" />
                       <span className="text-xs text-cool-gray/75">Loading incidents...</span>
                     </div>
                   </td>
@@ -169,14 +169,14 @@ export default function IncidentList() {
                     <tr
                       key={inc.id}
                       onClick={() => navigate(`/incidents/${inc.id}`)}
-                      className="border-b border-white/[0.02] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] hover:bg-white/[0.04] cursor-pointer group"
+                      className="border-b border-ink/[0.02] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)] hover:bg-ink/[0.04] cursor-pointer group"
                     >
                       <td className="px-4 py-3.5">
                         <span className="font-mono text-xs text-cool-gray/75">{inc.id}</span>
                       </td>
                       <td className="px-4 py-3.5">
                         <span
-                          className="text-[11px] font-semibold px-2 py-0.5 rounded-full"
+                          className="text-[11px] font-semibold px-2 py-0.5 rounded-[2px]"
                           style={{ background: sev.bg, color: sev.color }}
                         >
                           {sev.label}
@@ -193,12 +193,12 @@ export default function IncidentList() {
                       </td>
                       <td className="px-4 py-3.5">
                         <span
-                          className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${
+                          className={`text-[10px] font-medium px-2 py-0.5 rounded-[2px] ${
                             inc.status === 'active'
                               ? 'text-status-teal bg-status-teal/10'
                               : inc.status === 'monitoring'
                               ? 'text-amber bg-amber/10'
-                              : 'text-cool-gray/70 bg-white/[0.04]'
+                              : 'text-cool-gray/70 bg-ink/[0.04]'
                           }`}
                         >
                           {inc.status}

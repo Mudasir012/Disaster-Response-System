@@ -164,9 +164,8 @@ export default function ResourceTracking() {
         {!placing && (
           <button
             onClick={() => setPlacing(true)}
-            className="absolute bottom-6 left-6 z-30 w-11 h-11 rounded-full bg-purple-500/80 hover:bg-purple-500
-              text-on-accent flex items-center justify-center shadow-lg
-              transition-all hover:scale-105 active:scale-95 cursor-pointer"
+            className="absolute bottom-6 left-6 z-30 w-11 h-11 rounded-[2px] bg-ink text-cream flex items-center justify-center
+              transition-all hover:bg-acid hover:text-ink active:scale-95 cursor-pointer"
             title="Add resource — click on map to place"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">

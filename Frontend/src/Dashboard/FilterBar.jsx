@@ -5,10 +5,10 @@ export default function FilterBar({ activeFilter, onFilterChange }) {
     <div className="flex items-center gap-1.5">
       <button
         onClick={() => onFilterChange(null)}
-        className={`px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 ${
+        className={`px-3 py-1.5 text-[11px] font-medium rounded-[2px] transition-all duration-200 ${
           !activeFilter
-            ? 'bg-white/[0.08] text-glacier-white'
-            : 'text-cool-gray/70 hover:text-glacier-white hover:bg-white/[0.04]'
+            ? 'bg-ink/[0.08] text-glacier-white'
+            : 'text-cool-gray/70 hover:text-glacier-white hover:bg-ink/[0.04]'
         }`}
       >
         All
@@ -19,7 +19,7 @@ export default function FilterBar({ activeFilter, onFilterChange }) {
           <button
             key={key}
             onClick={() => onFilterChange(key)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-200 ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium rounded-[2px] transition-all duration-200 ${
               activeFilter === key
                 ? 'text-glacier-white'
                 : 'text-cool-gray/70 hover:text-glacier-white'

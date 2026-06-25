@@ -31,14 +31,14 @@ export default function SidebarPanel({ incidents, selectedId, onSelect, loading 
 
   if (loading) {
     return (
-      <div className="w-full h-full flex flex-col bg-deep-slate border-l border-white/[0.04]" style={{ contain: 'layout style paint' }}>
+      <div className="w-full h-full flex flex-col bg-deep-slate border-l border-ink/[0.04]" style={{ contain: 'layout style paint' }}>
         <SidebarSkeleton />
       </div>
     )
   }
 
   return (
-    <div className="w-full h-full flex flex-col bg-deep-slate border-l border-white/[0.04]" style={{ contain: 'layout style paint' }}>
+    <div className="w-full h-full flex flex-col bg-deep-slate border-l border-ink/[0.04]" style={{ contain: 'layout style paint' }}>
       <div className="shrink-0 px-4 pt-4 pb-3 space-y-3">
         <StatsBar incidents={incidents} />
         <div className="relative">
@@ -51,7 +51,7 @@ export default function SidebarPanel({ incidents, selectedId, onSelect, loading 
             aria-label="Search incidents"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-white/[0.06] bg-surface/50 pl-9 pr-3 py-2 text-xs text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/40"
+            className="w-full border border-ink/[0.06] bg-ink/[0.03] pl-9 pr-3 py-2 text-xs text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-acid/50"
           />
         </div>
         <FilterBar activeFilter={filter} onFilterChange={setFilter} />

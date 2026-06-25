@@ -20,7 +20,7 @@ export default function StatsBar({ incidents, loading }) {
             <Skeleton className="w-9 h-2.5" />
           </div>
         ))}
-        <div className="w-px h-6 bg-white/[0.06]" />
+        <div className="w-px h-6 bg-ink/[0.06]" />
         {[1, 2, 3].map((i) => (
           <div key={i} className="flex items-center gap-1.5">
             <Skeleton className="w-1.5 h-1.5 !rounded-full" />
@@ -43,7 +43,7 @@ export default function StatsBar({ incidents, loading }) {
         <span className="text-sm font-semibold text-glacier-white">{monitoring}</span>
         <span className="text-[11px] text-cool-gray/70">Monitoring</span>
       </div>
-      <div className="w-px h-6 bg-white/[0.06]" />
+      <div className="w-px h-6 bg-ink/[0.06]" />
       {SEVERITY_ORDER.map((key) => {
         const count = severityCounts[key] || 0
         if (count === 0) return null

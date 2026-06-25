@@ -31,23 +31,23 @@ export default function ResetPassword({ email: initialEmail, onBack }) {
   if (sent) {
     return (
       <div className="flex flex-col items-center text-center gap-5">
-        <div className="w-14 h-14 rounded-full bg-status-teal/10 flex items-center justify-center">
+        <div className="w-14 h-14 bg-ink/[0.06] flex items-center justify-center">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d9488" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 2L11 13" /><path d="M22 2L15 22L11 13L2 9L22 2Z" />
           </svg>
         </div>
         <div>
-          <p className="text-base text-glacier-white font-semibold">
+          <p className="text-base text-ink font-semibold">
             Reset link sent
           </p>
-          <p className="mt-2 text-sm text-cool-gray/70 leading-relaxed">
-            If an account exists for <span className="text-glacier-white font-medium">{email}</span>,
+          <p className="mt-2 text-sm text-ink/70 leading-relaxed">
+            If an account exists for <span className="text-ink font-medium">{email}</span>,
             you'll receive a password reset link shortly.
           </p>
         </div>
         <button
           onClick={onBack}
-          className="text-sm font-medium text-signal-blue hover:text-glacier-white transition-colors duration-200"
+          className="text-sm font-mono text-ink/50 hover:text-ink transition-colors duration-200"
         >
           Back to sign in
         </button>
@@ -58,13 +58,13 @@ export default function ResetPassword({ email: initialEmail, onBack }) {
   return (
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
       {error && (
-        <div role="alert" className="rounded-lg bg-crisis-red/10 border border-crisis-red/20 px-4 py-3 text-sm text-crisis-red">
+        <div role="alert" className="rounded-[2px] bg-crisis-red/10 border border-crisis-red/20 px-4 py-3 text-sm text-crisis-red">
           {error}
         </div>
       )}
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="reset-email" className="text-xs font-semibold tracking-wide text-cool-gray/80">
+        <label htmlFor="reset-email" className="text-xs font-mono uppercase tracking-[0.06em] text-ink/60">
           Email address
         </label>
         <input
@@ -75,14 +75,14 @@ export default function ResetPassword({ email: initialEmail, onBack }) {
           value={email}
           onChange={(e) => { setEmail(e.target.value); setError('') }}
           disabled={loading}
-          className="w-full rounded-xl border border-white/[0.07] bg-surface px-4 py-3 text-sm text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-[2.5px] focus:ring-signal-blue/60 disabled:opacity-50"
+          className="w-full rounded-[2px] border border-ink/[0.07] bg-ink/[0.03] px-4 py-3 text-sm text-ink placeholder:text-ink/70 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-acid/50 disabled:opacity-50"
         />
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-crisis-red py-3.5 text-sm font-bold text-on-accent tracking-wide transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_8px_25px_-5px_rgba(233,69,96,0.3)] active:scale-[0.97] disabled:opacity-50 disabled:hover:scale-100 disabled:hover:shadow-none flex items-center justify-center gap-2"
+        className="w-full py-3.5 text-sm font-bold font-mono uppercase tracking-[0.08em] text-cream bg-ink hover:bg-acid hover:text-ink transition-all disabled:opacity-50 flex items-center justify-center gap-2"
       >
         {loading ? (
           <>
@@ -100,7 +100,7 @@ export default function ResetPassword({ email: initialEmail, onBack }) {
       <button
         type="button"
         onClick={onBack}
-        className="text-sm font-medium text-cool-gray/70 hover:text-glacier-white transition-colors duration-200 text-center"
+        className="text-sm font-mono text-ink/50 hover:text-ink transition-colors duration-200 text-center"
       >
         Back to sign in
       </button>

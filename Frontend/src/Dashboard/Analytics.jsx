@@ -13,7 +13,7 @@ const easeLusion = [0.4, 0, 0.1, 1]
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload) return null
   return (
-    <div className="rounded-lg border border-[oklch(0.26_0.022_255/0.1)] bg-surface/95 px-3 py-2 shadow-[0_4px_16px_-4px_rgba(15,23,42,0.15)] backdrop-blur-sm">
+    <div className="rounded-[2px] border border-ink/10 bg-cream/95 px-3 py-2 shadow-[0_4px_16px_-4px_#16150F/0.15] backdrop-blur-sm">
       <p className="font-mono text-xs font-medium text-glacier-white">{label || payload[0]?.name}</p>
       {payload.map((p, i) => (
         <p key={i} className="font-mono text-xs tabular-nums" style={{ color: p.color || p.fill }}>
@@ -31,10 +31,10 @@ function ChartCard({ title, subtitle, children, delay = 0 }) {
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.6, delay, ease: easeLusion }}
-      className="flex flex-col rounded-xl border border-[oklch(0.26_0.022_255/0.08)] bg-surface p-5"
+      className="flex flex-col rounded-[2px] border border-[oklch(0.26_0.022_255/0.08)] bg-surface p-5"
     >
       <div className="mb-4 flex items-baseline justify-between">
-        <h3 className="font-sora text-sm font-semibold text-glacier-white">{title}</h3>
+        <h3 className="font-display text-sm font-semibold text-glacier-white">{title}</h3>
         {subtitle && (
           <span className="font-mono text-[10px] text-cool-gray/70">{subtitle}</span>
         )}
@@ -59,7 +59,7 @@ function KpiTile({ label, value, delta, deltaKind = 'neutral', delay = 0 }) {
       initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       transition={{ duration: 0.5, delay, ease: easeLusion }}
-      className="rounded-xl border border-[oklch(0.26_0.022_255/0.08)] bg-surface p-4"
+      className="rounded-[2px] border border-ink/10 bg-surface p-4"
     >
       <p className="font-mono text-2xl font-bold tabular-nums text-glacier-white">{value}</p>
       <p className="mt-1 text-xs text-cool-gray/80">{label}</p>
@@ -77,22 +77,22 @@ function Skeleton() {
     <div className="flex-1 space-y-4 p-6" aria-label="Loading analytics">
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-xl border border-[oklch(0.26_0.022_255/0.08)] bg-surface p-4">
-            <div className="mb-1 h-7 w-14 rounded bg-[oklch(0.26_0.022_255/0.06)] animate-pulse" style={{ animationDelay: `${i * 80}ms` }} />
-            <div className="h-3 w-20 rounded bg-[oklch(0.26_0.022_255/0.04)] animate-pulse" style={{ animationDelay: `${i * 80}ms` }} />
-            <div className="mt-1.5 h-2.5 w-16 rounded bg-[oklch(0.26_0.022_255/0.03)] animate-pulse" style={{ animationDelay: `${i * 80}ms` }} />
+          <div key={i} className="rounded-[2px] border border-ink/10 bg-surface p-4">
+            <div className="mb-1 h-7 w-14 rounded bg-ink/[0.04] animate-pulse" style={{ animationDelay: `${i * 80}ms` }} />
+            <div className="h-3 w-20 rounded bg-ink/[0.03] animate-pulse" style={{ animationDelay: `${i * 80}ms` }} />
+            <div className="mt-1.5 h-2.5 w-16 rounded bg-ink/[0.02] animate-pulse" style={{ animationDelay: `${i * 80}ms` }} />
           </div>
         ))}
       </div>
-      <div className="h-[260px] rounded-xl border border-[oklch(0.26_0.022_255/0.08)] bg-surface p-5">
-        <div className="mb-4 h-4 w-32 rounded bg-[oklch(0.26_0.022_255/0.06)] animate-pulse" />
-        <div className="h-44 rounded bg-[oklch(0.26_0.022_255/0.03)] animate-pulse" />
+      <div className="h-[260px] rounded-[2px] border border-[oklch(0.26_0.022_255/0.08)] bg-surface p-5">
+        <div className="mb-4 h-4 w-32 rounded bg-ink/[0.04] animate-pulse" />
+        <div className="h-44 rounded bg-ink/[0.02] animate-pulse" />
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {Array.from({ length: 2 }).map((_, i) => (
-          <div key={i} className="h-[260px] rounded-xl border border-[oklch(0.26_0.022_255/0.08)] bg-surface p-5">
-            <div className="mb-4 h-4 w-24 rounded bg-[oklch(0.26_0.022_255/0.06)] animate-pulse" style={{ animationDelay: `${i * 60}ms` }} />
-            <div className="h-44 rounded bg-[oklch(0.26_0.022_255/0.03)] animate-pulse" style={{ animationDelay: `${i * 60}ms` }} />
+          <div key={i} className="h-[260px] rounded-[2px] border border-[oklch(0.26_0.022_255/0.08)] bg-surface p-5">
+            <div className="mb-4 h-4 w-24 rounded bg-ink/[0.04] animate-pulse" style={{ animationDelay: `${i * 60}ms` }} />
+            <div className="h-44 rounded bg-ink/[0.02] animate-pulse" style={{ animationDelay: `${i * 60}ms` }} />
           </div>
         ))}
       </div>
@@ -196,7 +196,7 @@ export default function Analytics() {
     return (
       <DashboardLayout>
         <div className="flex flex-1 flex-col items-center justify-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber/10">
+          <div className="flex h-12 w-12 items-center justify-center rounded-[2px] bg-amber/10">
             <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
@@ -215,7 +215,7 @@ export default function Analytics() {
             initial={{ opacity: 0, y: 12, filter: 'blur(4px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 0.5, ease: easeLusion }}
-            className="font-sora text-xl font-bold text-glacier-white"
+            className="font-display text-xl font-bold text-glacier-white"
           >
             Analytics
           </motion.h1>
@@ -305,7 +305,7 @@ export default function Analytics() {
             <div className="flex flex-wrap justify-center gap-4 mt-2">
               {severityDist.map((entry) => (
                 <div key={entry.name} className="flex items-center gap-1.5">
-                  <span className="h-2 w-2 rounded-full" style={{ background: entry.color }} />
+                  <span className="h-2 w-2 rounded-[2px]" style={{ background: entry.color }} />
                   <span className="font-mono text-[10px] text-cool-gray/80">{entry.name}</span>
                   <span className="font-mono text-[10px] font-semibold text-glacier-white/70">{entry.value}</span>
                 </div>

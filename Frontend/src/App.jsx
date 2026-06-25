@@ -1,7 +1,10 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-const Landing = lazy(() => import('./Landing/Landing'))
+const LandingPage = lazy(() => import('./Landing/pages/Landing'))
+const Platform = lazy(() => import('./Landing/pages/Platform'))
+const Demo = lazy(() => import('./Landing/pages/Demo'))
+const Contact = lazy(() => import('./Landing/pages/Contact'))
 const AuthPage = lazy(() => import('./Auth/AuthPage'))
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'))
 const IncidentList = lazy(() => import('./Dashboard/IncidentList'))
@@ -27,7 +30,10 @@ export default function App() {
   return (
     <Suspense fallback={<PageFallback />}>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/platform" element={<Platform />} />
+        <Route path="/demo" element={<Demo />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/incidents" element={<IncidentList />} />

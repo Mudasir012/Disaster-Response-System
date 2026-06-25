@@ -8,16 +8,16 @@
 }
 
 @theme {
-  /* ── Existing dashboard tokens (unchanged) ── */
-  --color-deep-slate: oklch(0.985 0.004 255);
-  --color-landing-bg: oklch(0.985 0.004 255);
-  --color-section-alt: oklch(0.965 0.006 255);
-  --color-surface: oklch(0.995 0.003 255);
-  --color-card-bg: oklch(0.99 0.003 255);
-  --color-glacier-white: oklch(0.26 0.022 255);
-  --color-cool-gray: oklch(0.46 0.018 255);
-  --color-white: oklch(0.26 0.022 255);
-  --color-on-accent: #ffffff;
+  /* ── Editorial-brutalist design tokens (replacing old cool-light palette) ── */
+  --color-deep-slate: #EBE5D4;            /* cream base */
+  --color-landing-bg: #EBE5D4;            /* same cream */
+  --color-section-alt: oklch(0.90 0.01 80); /* slightly deeper cream */
+  --color-surface: #F0EBDC;               /* lighter cream (card bg) */
+  --color-card-bg: #F5F1E5;              /* lightest cream */
+  --color-glacier-white: #16150F;          /* ink (main text) */
+  --color-cool-gray: oklch(0.4 0.02 70);  /* ink muted */
+  --color-white: #ffffff;
+  --color-on-accent: #EBE5D4;             /* cream text on colored bg */
   --color-crisis-red: #e94560;
   --color-signal-blue: #0f7ddb;
   --color-status-teal: #0d9488;
@@ -35,19 +35,19 @@
   --color-primary-foreground: var(--color-on-accent);
   --color-secondary: var(--color-surface);
   --color-secondary-foreground: var(--color-glacier-white);
-  --color-muted: oklch(0.965 0.006 255);
+  --color-muted: oklch(0.90 0.01 80);
   --color-muted-foreground: var(--color-cool-gray);
-  --color-accent: var(--color-signal-blue);
-  --color-accent-foreground: var(--color-on-accent);
+  --color-accent: var(--color-acid);
+  --color-accent-foreground: var(--color-ink);
   --color-destructive: var(--color-crisis-red);
   --color-destructive-foreground: var(--color-on-accent);
-  --color-border: oklch(0.26 0.022 255 / 0.10);
-  --color-input: oklch(0.26 0.022 255 / 0.12);
-  --color-ring: var(--color-signal-blue);
+  --color-border: #16150F / 0.10;
+  --color-input: #16150F / 0.12;
+  --color-ring: var(--color-acid);
 
-  /* ── New editorial-brutalist palette ── */
+  /* ── Editorial-brutalist palette ── */
   --color-ink: #16150F;
-  --color-cream: #F3EDDE;
+  --color-cream: #EBE5D4;
   --color-acid: #DCFF34;
   --color-moss-deep: #1E3A2A;
   --color-moss: #2E6B43;
@@ -83,21 +83,21 @@ html {
 }
 
 body {
-  background: var(--color-landing-bg);
+  background: var(--color-deep-slate);
   color: var(--color-glacier-white);
-  font-family: var(--font-geist);
+  font-family: var(--font-mono);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: oklch(0.26 0.022 255 / 0.18) transparent;
+  scrollbar-color: #16150F / 0.18 transparent;
 }
 
 ::selection {
-  background: oklch(0.58 0.21 15 / 0.18);
-  color: var(--color-glacier-white);
+  background: var(--color-acid);
+  color: var(--color-ink);
 }
 
 .landing ::selection {
@@ -143,7 +143,7 @@ body {
 .scroll-progress-track {
   position: absolute;
   inset: 0;
-  background: oklch(0.26 0.022 255 / 0.06);
+  background: #16150F / 0.06;
 }
 .scroll-progress-bar {
   position: absolute;
@@ -162,8 +162,8 @@ body {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(oklch(0.26 0.022 255 / 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, oklch(0.26 0.022 255 / 0.04) 1px, transparent 1px);
+    linear-gradient(#16150F / 0.04 1px, transparent 1px),
+    linear-gradient(90deg, #16150F / 0.04 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
@@ -199,21 +199,6 @@ body {
 .acid-star-lg {
   width: 36px;
   height: 36px;
-}
-
-/* ── Plus/dot logomark ── */
-.plus-logomark {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
-  width: 18px;
-  height: 18px;
-}
-.plus-logomark span {
-  width: 7px;
-  height: 7px;
-  border-radius: 1px;
-  background: var(--color-ink);
 }
 
 /* ── Marquee ticker ── */
@@ -269,7 +254,6 @@ body {
   text-transform: uppercase;
   letter-spacing: -0.02em;
   line-height: 0.92;
-  white-space: nowrap;
   user-select: none;
 }
 
@@ -286,13 +270,13 @@ body {
     from 0deg,
     #06b6d4, #d946ef, #a3e635, #f59e0b, #06b6d4
   );
-  animation: iridesce 12s linear infinite;
-  filter: blur(60px);
-  opacity: 0.85;
+  animation: iridesce 20s linear infinite;
+  filter: blur(30px);
+  opacity: 0.6;
 }
 @keyframes iridesce {
-  0%   { transform: rotate(0deg) scale(1.2); }
-  100% { transform: rotate(360deg) scale(1.2); }
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* ── Grainy / pointillist render (CSS noise) ── */
@@ -334,18 +318,17 @@ body {
   opacity: 0.12;
 }
 
-/* ── Bento tile (keep for dashboard) ── */
+/* ── Bento tile (editorial-brutalist dashboard) ── */
 .bento-tile {
   background: var(--color-surface);
-  border: 1px solid oklch(0.26 0.022 255 / 0.08);
-  border-radius: 16px;
+  border: 1px solid #16150F / 0.08;
+  border-radius: 2px;
   transition: border-color 0.4s var(--ease-lusion),
-              box-shadow 0.4s var(--ease-lusion),
               transform 0.4s var(--ease-premium);
 }
 .bento-tile:hover {
-  border-color: oklch(0.26 0.022 255 / 0.16);
-  box-shadow: 0 12px 40px -16px oklch(0.26 0.022 255 / 0.18);
+  border-color: var(--color-acid);
+  transform: translateY(-2px);
 }
 
 /* ── CTA pill animation ── */
@@ -406,6 +389,26 @@ body {
   width: 100%;
 }
 
+/* ── Skip to content ── */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 16px;
+  z-index: 999;
+  padding: 8px 16px;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 16px;
+}
+
 /* ── Landing scroll-reveal base ── */
 .reveal-hidden {
   opacity: 0;
@@ -416,22 +419,22 @@ body {
   transform: translateY(0);
 }
 
-/* ── MapLibre overrides (light controls) ── */
+/* ── MapLibre overrides (editorial-brutalist) ── */
 .maplibregl-map { font: inherit; }
 .maplibregl-ctrl-attrib { display: none !important; }
 .maplibregl-ctrl-bottom-right { bottom: 12px; right: 12px; }
 .maplibregl-ctrl-group {
   background: transparent !important;
-  border-radius: 8px !important;
+  border-radius: 2px !important;
   overflow: hidden;
   box-shadow: none !important;
 }
 .maplibregl-ctrl-group button {
   width: 32px !important;
   height: 32px !important;
-  background: oklch(0.995 0.003 255 / 0.9) !important;
-  border: 1px solid oklch(0.26 0.022 255 / 0.08) !important;
-  border-radius: 8px !important;
+  background: #F0EBDC / 0.9 !important;
+  border: 1px solid #16150F / 0.08 !important;
+  border-radius: 2px !important;
   backdrop-filter: blur(8px);
   display: flex !important;
   align-items: center !important;
@@ -439,18 +442,18 @@ body {
 }
 .maplibregl-ctrl-group button + button { margin-top: 4px !important; }
 
-/* ── Resource tracking popup (light) ── */
+/* ── Resource tracking popup (editorial-brutalist) ── */
 .resource-popup .leaflet-popup-content-wrapper {
   background: var(--color-surface);
   color: var(--color-glacier-white);
-  border-radius: 8px;
-  border: 1px solid oklch(0.26 0.022 255 / 0.08);
-  box-shadow: 0 8px 32px oklch(0.26 0.022 255 / 0.14);
+  border-radius: 2px;
+  border: 1px solid #16150F / 0.08;
+  box-shadow: 0 8px 32px #16150F / 0.14;
   font-family: var(--font-mono);
 }
 .resource-popup .leaflet-popup-tip {
   background: var(--color-surface);
-  border: 1px solid oklch(0.26 0.022 255 / 0.08);
+  border: 1px solid #16150F / 0.08;
 }
 .resource-popup .leaflet-popup-close-button {
   color: var(--color-cool-gray) !important;
@@ -459,30 +462,30 @@ body {
   right: 6px !important;
 }
 
-/* ── Leaflet zoom control overrides (light) ── */
+/* ── Leaflet zoom control overrides (editorial-brutalist) ── */
 .leaflet-control-zoom { border: none !important; }
 .leaflet-control-zoom a {
   width: 32px !important;
   height: 32px !important;
-  background: oklch(0.995 0.003 255 / 0.9) !important;
-  border: 1px solid oklch(0.26 0.022 255 / 0.08) !important;
-  color: oklch(0.4 0.018 255) !important;
+  background: #F0EBDC / 0.9 !important;
+  border: 1px solid #16150F / 0.08 !important;
+  color: #16150F / 0.6 !important;
   font-size: 18px !important;
   line-height: 32px !important;
-  border-radius: 8px !important;
+  border-radius: 2px !important;
   margin-top: 4px;
   backdrop-filter: blur(8px);
 }
 .leaflet-control-zoom a:hover { background: var(--color-surface) !important; }
 .leaflet-control-attribution {
-  background: oklch(0.995 0.003 255 / 0.7) !important;
-  color: oklch(0.46 0.018 255 / 0.7) !important;
+  background: #F0EBDC / 0.7 !important;
+  color: #16150F / 0.6 !important;
   font-size: 9px !important;
   padding: 2px 6px !important;
-  border-radius: 4px !important;
+  border-radius: 2px !important;
   backdrop-filter: blur(4px);
 }
-.leaflet-control-attribution a { color: oklch(0.4 0.018 255 / 0.7) !important; }
+.leaflet-control-attribution a { color: #16150F / 0.6 !important; }
 .leaflet-default-icon-path {
   background-image: url(https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png);
 }
@@ -507,7 +510,7 @@ body {
   html { scroll-behavior: auto; }
 
   .marquee-track { animation: none !important; }
-  .iridescent-render::before { animation: none !important; }
+  .iridescent-render::before { animation: none !important; filter: blur(0); opacity: 0.3; }
   .acid-link::after { transition: none !important; }
   .specimen-tile { transition: none !important; }
   * { animation-duration: 0.01ms !important; }

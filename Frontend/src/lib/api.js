@@ -137,6 +137,10 @@ export const api = {
     return request(`/traccar/positions${q}`)
   },
 
+  // Contact
+  contact: (data) =>
+    request('/contact', { method: 'POST', body: JSON.stringify(data) }),
+
   // Health
   health: () => request('/health'),
 }

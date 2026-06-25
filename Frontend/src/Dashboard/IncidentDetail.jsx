@@ -50,7 +50,7 @@ export default function IncidentDetail() {
     return (
       <DashboardLayout>
         <div className="flex-1 flex flex-col items-center justify-center gap-2">
-          <div className="w-6 h-6 rounded-full border-2 border-white/10 border-t-signal-blue animate-spin" />
+          <div className="w-6 h-6 rounded-[2px] border-2 border-ink/10 border-t-signal-blue animate-spin" />
           <span className="text-xs text-cool-gray/75">Loading incident details...</span>
         </div>
       </DashboardLayout>
@@ -61,7 +61,7 @@ export default function IncidentDetail() {
     return (
       <DashboardLayout>
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-amber/10 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-[2px] bg-amber/10 flex items-center justify-center">
             <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
@@ -126,23 +126,23 @@ export default function IncidentDetail() {
           >
             <div className="min-w-0">
               <div className="flex items-center gap-3">
-                <span className="w-3 h-3 rounded-full" style={{ background: sev.color }} />
-                <h1 className="font-sora text-2xl font-bold text-glacier-white">
+                <span className="w-3 h-3 rounded-[2px]" style={{ background: sev.color }} />
+                <h1 className="font-display text-2xl font-bold text-glacier-white">
                   {incident.type}
                 </h1>
                 <span
-                  className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full"
+                  className="text-[11px] font-semibold px-2.5 py-0.5 rounded-[2px]"
                   style={{ background: sev.bg, color: sev.color }}
                 >
                   {sev.label}
                 </span>
                 <span
-                  className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full ${
+                  className={`text-[11px] font-medium px-2.5 py-0.5 rounded-[2px] ${
                     incident.status === 'active'
                       ? 'text-status-teal bg-status-teal/10'
                       : incident.status === 'monitoring'
                       ? 'text-amber bg-amber/10'
-                      : 'text-cool-gray/70 bg-white/[0.04]'
+                      : 'text-cool-gray/70 bg-ink/[0.04]'
                   }`}
                 >
                   {incident.status}
@@ -152,10 +152,10 @@ export default function IncidentDetail() {
               <p className="mt-0.5 font-mono text-xs text-cool-gray/70">{incident.id} &middot; {timeAgo(incident.timestamp)} &middot; {incident.source}</p>
             </div>
             <div className="flex gap-3 shrink-0">
-              <button className="rounded-lg border border-white/10 px-4 py-2 text-xs font-medium text-glacier-white/70 hover:border-white/20 hover:text-glacier-white transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)]">
+              <button className="rounded-[2px] border border-ink/10 px-4 py-2 text-xs font-medium text-glacier-white/70 hover:border-ink/20 hover:text-glacier-white transition-all duration-300 ease-[cubic-bezier(0.4,0,0.1,1)]">
                 Share
               </button>
-              <button className="rounded-lg bg-crisis-red px-5 py-2 text-xs font-semibold text-on-accent transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_4px_20px_-3px_rgba(233,69,96,0.3)] active:scale-[0.98]">
+              <button className="rounded-[2px] bg-crisis-red px-5 py-2 text-xs font-semibold text-on-accent transition-all duration-500 ease-[cubic-bezier(0.35,0,0,1)] hover:scale-[1.02] hover:shadow-[0_4px_20px_-3px_rgba(233,69,96,0.3)] active:scale-[0.98]">
                 Subscribe to updates
               </button>
             </div>
@@ -175,13 +175,13 @@ export default function IncidentDetail() {
               <motion.div
                 variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}
                 transition={{ duration: 0.4, ease: easeLusion }}
-                className="bg-surface rounded-xl border border-white/[0.04] p-5"
+                className="bg-surface rounded-[2px] border border-ink/[0.04] p-5"
               >
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-3">Summary</h2>
                 <p className="text-sm text-glacier-white/80 leading-relaxed">{incident.summary}</p>
               </motion.div>
 
-              <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
+              <div className="bg-surface rounded-[2px] border border-ink/[0.04] p-5">
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-4">Impact</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {[
@@ -190,7 +190,7 @@ export default function IncidentDetail() {
                     { label: 'Magnitude', value: incident.magnitude > 0 ? `M ${incident.magnitude}` : 'N/A', color: '#0f7ddb' },
                     { label: 'Status Duration', value: timeAgo(incident.timestamp), color: '#94a3b8' },
                   ].map((stat) => (
-                    <div key={stat.label} className="rounded-lg bg-[oklch(0.985_0.004_255)] p-4">
+                    <div key={stat.label} className="bg-ink/[0.03] p-4">
                       <p className="text-2xl font-bold text-glacier-white" style={{ color: stat.color }}>{stat.value}</p>
                       <p className="text-[11px] text-cool-gray/75 mt-1">{stat.label}</p>
                     </div>
@@ -198,9 +198,9 @@ export default function IncidentDetail() {
                 </div>
               </div>
 
-              <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
+              <div className="bg-surface rounded-[2px] border border-ink/[0.04] p-5">
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-4">AI Analysis</h2>
-                <div className="rounded-lg border border-ai-purple/20 bg-ai-purple/[0.05] p-5">
+                <div className="rounded-[2px] border border-ai-purple/20 bg-ink/[0.03] p-5">
                   <div className="flex items-center gap-2 mb-3">
                     <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
@@ -216,8 +216,8 @@ export default function IncidentDetail() {
                   </p>
                   <div className="flex items-center gap-2 mt-4">
                     <span className="text-[10px] text-[#7c3aed]/60">Confidence</span>
-                      <div className="flex-1 h-1 rounded-full overflow-hidden bg-[oklch(0.26_0.022_255/0.08)]">
-                      <div className="h-full rounded-full bg-[#7c3aed]" style={{ width: '87%' }} />
+                      <div className="flex-1 h-1 rounded-[2px] overflow-hidden bg-[oklch(0.26_0.022_255/0.08)]">
+                      <div className="h-full rounded-[2px] bg-[#7c3aed]" style={{ width: '87%' }} />
                     </div>
                     <span className="text-[10px] font-mono text-[#7c3aed]/60">87%</span>
                   </div>
@@ -230,9 +230,9 @@ export default function IncidentDetail() {
               transition={{ duration: 0.5, delay: 0.15, ease: easeLusion }}
               className="space-y-6"
             >
-              <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
+              <div className="bg-surface rounded-[2px] border border-ink/[0.04] p-5">
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-3">Location</h2>
-                <div className="aspect-square bg-deep-slate rounded-lg flex items-center justify-center">
+                <div className="aspect-square bg-ink/[0.03] rounded-[2px] flex items-center justify-center">
                   <div className="text-center">
                     <p className="font-mono text-xs text-cool-gray/70">{incident.lat.toFixed(2)}, {incident.lng.toFixed(2)}</p>
                     <p className="text-[10px] text-cool-gray/65 mt-1">{incident.region}</p>
@@ -240,7 +240,7 @@ export default function IncidentDetail() {
                 </div>
               </div>
 
-              <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
+              <div className="bg-surface rounded-[2px] border border-ink/[0.04] p-5">
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-3">Source Feed</h2>
                 <div className="space-y-3">
                   {[
@@ -249,7 +249,7 @@ export default function IncidentDetail() {
                     { source: 'ReliefWeb', time: '45 min ago', label: 'Situation report' },
                   ].map((item, i) => (
                     <div key={i} className="flex items-start gap-3">
-                      <div className="w-1.5 h-1.5 rounded-full bg-signal-blue/50 mt-1.5 shrink-0" />
+                      <div className="w-1.5 h-1.5 rounded-[2px] bg-signal-blue/50 mt-1.5 shrink-0" />
                       <div className="min-w-0">
                         <p className="text-xs text-glacier-white/80">{item.label}</p>
                         <p className="text-[10px] text-cool-gray/70 mt-0.5">{item.source} &middot; {item.time}</p>
@@ -259,16 +259,16 @@ export default function IncidentDetail() {
                 </div>
               </div>
 
-              <div className="bg-surface rounded-xl border border-white/[0.04] p-5">
+              <div className="bg-surface rounded-[2px] border border-ink/[0.04] p-5">
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-cool-gray/75 mb-3">Quick Actions</h2>
                 <div className="space-y-2">
-                  <button className="w-full rounded-lg border border-white/10 px-4 py-2.5 text-xs font-medium text-glacier-white/70 hover:border-white/20 hover:text-glacier-white transition-all duration-200 text-left">
+                  <button className="w-full rounded-[2px] border border-ink/10 px-4 py-2.5 text-xs font-medium text-glacier-white/70 hover:border-ink/20 hover:text-glacier-white transition-all duration-200 text-left">
                     Deploy response team
                   </button>
-                  <button className="w-full rounded-lg border border-white/10 px-4 py-2.5 text-xs font-medium text-glacier-white/70 hover:border-white/20 hover:text-glacier-white transition-all duration-200 text-left">
+                  <button className="w-full rounded-[2px] border border-ink/10 px-4 py-2.5 text-xs font-medium text-glacier-white/70 hover:border-ink/20 hover:text-glacier-white transition-all duration-200 text-left">
                     Open in map view
                   </button>
-                  <button className="w-full rounded-lg border border-crisis-red/20 text-crisis-red/80 hover:bg-crisis-red/10 hover:text-crisis-red transition-all duration-200 px-4 py-2.5 text-xs font-medium text-left">
+                  <button className="w-full rounded-[2px] border border-crisis-red/20 text-crisis-red/80 hover:bg-crisis-red/10 hover:text-crisis-red transition-all duration-200 px-4 py-2.5 text-xs font-medium text-left">
                     Escalate severity
                   </button>
                 </div>

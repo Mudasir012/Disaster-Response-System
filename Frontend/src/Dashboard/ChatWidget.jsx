@@ -12,7 +12,7 @@ function Message({ role, data }) {
   if (role === 'user') {
     return (
       <div className="flex justify-end">
-        <div className="bg-signal-blue/15 rounded-2xl rounded-br-md px-4 py-2.5 max-w-[85%]">
+        <div className="bg-signal-blue/15 rounded-[2px] rounded-br px-4 py-2.5 max-w-[85%]">
           <p className="text-sm text-glacier-white">{data}</p>
         </div>
       </div>
@@ -22,7 +22,7 @@ function Message({ role, data }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-ai-purple/20 flex items-center justify-center">
+          <div className="w-6 h-6 rounded-[2px] bg-ai-purple/20 flex items-center justify-center">
           <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
             <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
@@ -30,10 +30,10 @@ function Message({ role, data }) {
         </div>
         <span className="text-xs font-semibold text-ai-purple">Groq</span>
       </div>
-        <div className="bg-gradient-to-br from-ai-purple/10 to-ai-purple/5 rounded-2xl rounded-tl-md px-4 py-3 border border-ai-purple/10">
+        <div className="bg-gradient-to-br from-ai-purple/10 to-ai-purple/5 rounded-[2px] rounded-tl px-4 py-3 border border-ai-purple/10">
         <div className="flex items-center gap-2 mb-2">
           <span
-            className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+            className="text-[10px] font-semibold px-2 py-0.5 rounded-[2px]"
             style={{ background: `${data.badge}20`, color: data.badge }}
           >
             {data.severity}
@@ -45,7 +45,7 @@ function Message({ role, data }) {
             {data.steps.map((step, i) => (
               <div key={i} className="flex items-start gap-2">
                 <span
-                  className="w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold mt-0.5 shrink-0"
+                  className="w-4 h-4 rounded-[2px] flex items-center justify-center text-[9px] font-bold mt-0.5 shrink-0"
                   style={{ background: `${data.badge}20`, color: data.badge }}
                 >
                   {i + 1}
@@ -109,23 +109,23 @@ export default function ChatWidget({ onClose }) {
   }
 
   return (
-    <div className="h-full bg-deep-slate/95 backdrop-blur-xl border-r border-white/[0.06] flex flex-col overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-3.5 border-b border-white/[0.04]">
+    <div className="h-full bg-cream/95 backdrop-blur-xl border-r border-ink/10 flex flex-col overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-ink/10">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full bg-ai-purple/20 flex items-center justify-center">
+          <div className="w-7 h-7 bg-ink/[0.06] flex items-center justify-center">
             <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
               <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
             </svg>
           </div>
           <div>
-            <p className="text-sm font-semibold text-glacier-white">AI Assistant</p>
-            <p className="text-[10px] text-cool-gray/70">Groq-powered</p>
+            <p className="text-sm font-bold text-ink font-mono uppercase tracking-[0.06em]">AI Assistant</p>
+            <p className="text-[10px] text-ink/60 font-mono">Groq-powered</p>
           </div>
         </div>
         <button
           onClick={onClose}
-          className="w-7 h-7 rounded-lg hover:bg-white/[0.06] flex items-center justify-center transition-colors duration-200"
+          className="w-7 h-7 rounded-[2px] hover:bg-ink/[0.06] flex items-center justify-center transition-colors duration-200"
           aria-label="Close AI assistant"
         >
           <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-cool-gray/75">
@@ -137,7 +137,7 @@ export default function ChatWidget({ onClose }) {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center py-6 text-center">
-            <div className="w-10 h-10 rounded-full bg-ai-purple/10 flex items-center justify-center mb-3">
+            <div className="w-10 h-10 rounded-[2px] bg-ai-purple/10 flex items-center justify-center mb-3">
               <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
                 <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
@@ -150,7 +150,7 @@ export default function ChatWidget({ onClose }) {
                 <button
                   key={q}
                   onClick={() => handleSend(q)}
-                  className="w-full text-left px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-xs text-cool-gray/70 hover:text-glacier-white hover:bg-white/[0.06] transition-all duration-200 cursor-pointer"
+                  className="w-full text-left px-4 py-2.5 rounded-[2px] bg-ink/[0.03] border border-ink/[0.06] text-xs text-cool-gray/70 hover:text-glacier-white hover:bg-ink/[0.06] transition-all duration-200 cursor-pointer"
                 >
                   {q}
                 </button>
@@ -163,23 +163,23 @@ export default function ChatWidget({ onClose }) {
         ))}
         {loading && (
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-ai-purple/20 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-[2px] bg-ai-purple/20 flex items-center justify-center">
               <svg aria-hidden="true" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 2a4 4 0 0 1 4 4c0 2-2 4-4 4s-4-2-4-4a4 4 0 0 1 4-4z" />
                 <path d="M2 22v-2c0-4 4-6 10-6s10 2 10 6v2" />
               </svg>
             </div>
             <div className="flex gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-ai-purple/40 animate-pulse" style={{ animationDelay: '0ms' }} />
-              <span className="w-1.5 h-1.5 rounded-full bg-ai-purple/40 animate-pulse" style={{ animationDelay: '150ms' }} />
-              <span className="w-1.5 h-1.5 rounded-full bg-ai-purple/40 animate-pulse" style={{ animationDelay: '300ms' }} />
+              <span className="w-1.5 h-1.5 rounded-[2px] bg-ai-purple/40 animate-pulse" style={{ animationDelay: '0ms' }} />
+              <span className="w-1.5 h-1.5 rounded-[2px] bg-ai-purple/40 animate-pulse" style={{ animationDelay: '150ms' }} />
+              <span className="w-1.5 h-1.5 rounded-[2px] bg-ai-purple/40 animate-pulse" style={{ animationDelay: '300ms' }} />
             </div>
           </div>
         )}
         <div ref={bottomRef} />
       </div>
 
-      <div className="p-4 border-t border-white/[0.04]">
+      <div className="p-4 border-t border-ink/[0.04]">
         <div className="flex items-center gap-2">
           <input
             type="text"
@@ -188,13 +188,13 @@ export default function ChatWidget({ onClose }) {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            className="flex-1 rounded-xl border border-white/[0.07] bg-surface px-4 py-2.5 text-sm text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-signal-blue/40"
+            className="flex-1 rounded-[2px] border border-ink/[0.07] bg-surface px-4 py-2.5 text-sm text-glacier-white placeholder:text-cool-gray/70 transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-acid/50"
           />
           <button
             onClick={() => handleSend()}
             disabled={!input.trim() || loading}
             aria-label="Send message"
-            className="w-10 h-10 rounded-xl bg-ai-purple flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 cursor-pointer"
+            className="w-10 h-10 rounded-[2px] bg-ai-purple flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:hover:scale-100 cursor-pointer"
           >
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />

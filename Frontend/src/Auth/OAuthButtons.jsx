@@ -27,10 +27,10 @@ export default function OAuthButtons() {
     <div className="mt-8">
       <div className="relative mb-5">
         <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-white/[0.06]" />
+          <div className="w-full border-t border-ink/[0.06]" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-deep-slate px-3 text-[11px] font-medium tracking-wide text-cool-gray/70 uppercase">
+          <span className="bg-cream px-3 text-[11px] font-medium tracking-wide text-ink/70 uppercase">
             or continue with
           </span>
         </div>
@@ -41,7 +41,7 @@ export default function OAuthButtons() {
           <button
             key={provider.id}
             type="button"
-            className="w-full rounded-xl border border-white/[0.07] bg-transparent px-4 py-3 text-sm font-medium text-glacier-white/80 transition-all duration-300 hover:border-white/[0.15] hover:bg-white/[0.02] active:scale-[0.98] flex items-center justify-center gap-3"
+            className="w-full rounded-[2px] border border-ink/[0.07] bg-transparent px-4 py-3 text-sm font-medium text-ink/80 transition-all duration-300 hover:border-ink/[0.15] hover:bg-ink/[0.02] active:scale-[0.98] flex items-center justify-center gap-3"
           >
             {provider.icon}
             {provider.label}

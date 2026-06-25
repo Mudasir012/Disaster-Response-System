@@ -106,7 +106,7 @@ export default function Dashboard() {
 
       <button
         onClick={() => setChatOpen((prev) => !prev)}
-        className="fixed top-1/2 left-0 -translate-y-1/2 z-40 w-8 h-16 rounded-r-lg bg-ai-purple flex items-center justify-center transition-all duration-300 hover:w-9 hover:shadow-[0_4px_20px_rgba(124,58,237,0.4)] active:scale-95 cursor-pointer"
+        className="fixed top-1/2 left-0 -translate-y-1/2 z-40 w-8 h-16 rounded-r-[2px] bg-ink flex items-center justify-center transition-all duration-300 hover:w-9 hover:shadow-[0_4px_20px_rgba(124,58,237,0.4)] active:scale-95 cursor-pointer"
         style={{ left: chatOpen ? '380px' : '0px' }}
         aria-label={chatOpen ? 'Close AI assistant' : 'Open AI assistant'}
       >
@@ -128,7 +128,7 @@ export default function Dashboard() {
       </button>
 
       {error && (
-        <div className="absolute bottom-4 left-4 right-4 z-40 max-w-md mx-auto bg-amber/15 border border-amber/20 rounded-lg px-4 py-2.5">
+        <div className="absolute bottom-4 left-4 right-4 z-40 max-w-md mx-auto bg-amber/15 border border-amber/20 px-4 py-2.5">
           <p className="text-xs text-amber/80 text-center">{error}</p>
         </div>
       )}

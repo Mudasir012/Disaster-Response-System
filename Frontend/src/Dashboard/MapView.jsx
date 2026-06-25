@@ -116,7 +116,7 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
           {Object.entries(DISASTER_TYPES).map(([type, spec]) => (
             <div
               key={type}
-              className="flex items-center gap-1.5 rounded-md border border-[oklch(0.26_0.022_255/0.08)] bg-surface/90 px-2.5 py-1.5 backdrop-blur"
+              className="flex items-center gap-1.5 rounded-md border border-ink/10 bg-surface/90 px-2.5 py-1 backdrop-blur"
             >
               <span
                 className="shrink-0 flex items-center justify-center"
@@ -126,7 +126,7 @@ export default function MapView({ incidents, selectedId, onSelect, loading }) {
                     .replace('viewBox="0 0 24 24"', 'viewBox="0 0 24 24" width="12" height="12"'),
                 }}
               />
-              <span className="text-[10px] font-medium whitespace-nowrap text-cool-gray/80">{type}</span>
+              <span className="text-[9px] font-mono uppercase tracking-[0.04em] whitespace-nowrap text-ink/60">{type}</span>
             </div>
           ))}
         </div>

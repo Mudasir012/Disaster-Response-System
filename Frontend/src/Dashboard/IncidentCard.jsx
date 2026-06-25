@@ -16,8 +16,8 @@ const IncidentCard = memo(function IncidentCard({ incident, selected, onSelect }
   return (
     <button
       onClick={() => onSelect?.(incident.id)}
-      className={`w-full text-left rounded-xl transition-all duration-200 ${
-        selected ? 'bg-white/[0.06] ring-1 ring-white/[0.1]' : 'bg-surface hover:bg-white/[0.04]'
+      className={`w-full text-left rounded-[2px] transition-all duration-200 ${
+        selected ? 'bg-ink/[0.06] ring-1 ring-ink/[0.1]' : 'bg-surface hover:bg-ink/[0.04]'
       }`}
       style={{ boxShadow: selected ? `inset 0 0 0 1px ${sev.color}30` : 'none' }}
     >

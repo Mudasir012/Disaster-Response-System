@@ -1,4 +1,5 @@
-import { Fragment } from 'react'
+import { Fragment, useState, useEffect } from 'react'
+import { haversineDistance } from '../lib/utils'
 
 const TYPE_LABELS = {
   vehicle: 'Vehicles',
@@ -17,12 +18,12 @@ const STATUS_LABELS = {
 
 function StatCard({ label, total, color, statuses, STATUS_COLORS }) {
   return (
-    <div className="rounded-lg border border-white/5 bg-white/[0.03] p-3">
+    <div className="rounded-[2px] border border-ink/5 bg-ink/[0.03] p-3">
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-xs font-mono text-cool-gray/75 uppercase tracking-wider">{label}</span>
-        <span className="text-sm font-bold text-white font-mono">{total}</span>
+        <span className="text-xs font-mono text-ink/75 uppercase tracking-wider">{label}</span>
+        <span className="text-sm font-bold text-ink font-mono">{total}</span>
       </div>
-      <div className="flex gap-2 text-[11px] font-mono text-cool-gray/70">
+      <div className="flex gap-2 text-[11px] font-mono text-ink/70">
         {Object.entries(STATUS_LABELS).map(([key, slabel]) => {
           const count = statuses?.[key] || 0
           if (!count) return null
@@ -48,6 +49,52 @@ export default function ResourceSidebar({
   const typeKeys = Object.keys(TYPE_LABELS)
   const totalResources = resources.length
   const selectedResource = selected ? resources.find((r) => r._id === selected) : null
+  const [nearestInfo, setNearestInfo] = useState(null)
+
+  useEffect(() => {
+    setNearestInfo(null)
+  }, [selected])
+
+  const handleRouteToNearest = () => {
+    if (!selectedResource) return
+
+    const findAndRoute = (origin) => {
+      const others = resources.filter(r => r._id !== selectedResource._id)
+      if (!others.length) return
+
+      const withDist = others.map(r => ({
+        ...r,
+        distance: haversineDistance(origin.lng, origin.lat, ...r.location.coordinates),
+      }))
+      withDist.sort((a, b) => a.distance - b.distance)
+      const nearest = withDist[0]
+
+      const distKm = nearest.distance / 1000
+      setNearestInfo({
+        name: nearest.name,
+        dist: distKm < 1 ? `${Math.round(nearest.distance)} m` : `${distKm.toFixed(1)} km`,
+      })
+
+      onRoute(
+        { lng: origin.lng, lat: origin.lat },
+        { lng: nearest.location.coordinates[0], lat: nearest.location.coordinates[1] },
+      )
+    }
+
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => findAndRoute({ lng: pos.coords.longitude, lat: pos.coords.latitude }),
+        () => {
+          const [lng, lat] = selectedResource.location.coordinates
+          findAndRoute({ lng, lat })
+        },
+        { enableHighAccuracy: true, timeout: 10000 },
+      )
+    } else {
+      const [lng, lat] = selectedResource.location.coordinates
+      findAndRoute({ lng, lat })
+    }
+  }
 
   const counts = typeKeys.reduce((acc, key) => {
     const typeResources = resources.filter((r) => r.type === key)
@@ -56,12 +103,12 @@ export default function ResourceSidebar({
   }, {})
 
   return (
-    <div className="h-full flex flex-col bg-landing-bg/90 backdrop-blur-sm border-l border-white/5">
-      <div className="flex-shrink-0 px-4 py-4 border-b border-white/5">
+    <div className="h-full flex flex-col bg-landing-bg/90 backdrop-blur-sm border-l border-ink/5">
+      <div className="flex-shrink-0 px-4 py-4 border-b border-ink/5">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h2 className="text-sm font-bold text-white font-mono tracking-wide">Resources</h2>
-            <p className="text-[11px] text-cool-gray/70 font-mono mt-0.5">
+            <h2 className="text-sm font-bold text-ink font-mono tracking-wide">Resources</h2>
+            <p className="text-[11px] text-ink/70 font-mono mt-0.5">
               {loading ? 'Loading...' : `${totalResources} total`}
             </p>
           </div>
@@ -80,8 +127,8 @@ export default function ResourceSidebar({
               onClick={clearOverlays}
               disabled={!route && !isochrones.length}
               className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider rounded
-                bg-white/5 text-cool-gray/70 border border-white/5
-                hover:bg-white/10 hover:text-white transition-all
+                bg-ink/5 text-ink/70 border border-ink/5
+                hover:bg-ink/10 hover:text-ink transition-all
                 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer"
             >
               Clear
@@ -89,8 +136,8 @@ export default function ResourceSidebar({
             <button
               onClick={onRefresh}
               className="px-2 py-1 text-[10px] font-mono uppercase tracking-wider rounded
-                bg-white/5 text-cool-gray/70 border border-white/5
-                hover:bg-white/10 hover:text-white transition-all cursor-pointer"
+                bg-ink/5 text-ink/70 border border-ink/5
+                hover:bg-ink/10 hover:text-ink transition-all cursor-pointer"
             >
               Refresh
             </button>
@@ -103,8 +150,8 @@ export default function ResourceSidebar({
             onClick={() => onFilter('all')}
             className={`px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider rounded-full border transition-all cursor-pointer ${
               filter === 'all'
-                ? 'bg-white/10 text-white border-white/20'
-                : 'bg-white/[0.03] text-cool-gray/70 border-white/5 hover:bg-white/10 hover:text-white'
+                ? 'bg-ink/10 text-ink border-ink/20'
+                : 'bg-ink/[0.03] text-ink/70 border-ink/5 hover:bg-ink/10 hover:text-ink'
             }`}
           >
             All
@@ -119,8 +166,8 @@ export default function ResourceSidebar({
                 onClick={() => onFilter(key)}
                 className={`px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider rounded-full border transition-all cursor-pointer ${
                   filter === key
-                    ? 'text-white border-white/20'
-                    : 'text-cool-gray/70 border-white/5 hover:bg-white/10 hover:text-white'
+                    ? 'text-ink border-ink/20'
+                    : 'text-ink/70 border-ink/5 hover:bg-ink/10 hover:text-ink'
                 }`}
                 style={{
                   background: filter === key ? `${TYPE_COLORS[key]}30` : 'rgba(255,255,255,0.03)',
@@ -135,7 +182,7 @@ export default function ResourceSidebar({
       </div>
 
       {/* Stats grid */}
-      <div className="flex-shrink-0 grid grid-cols-2 gap-2 px-4 py-3 border-b border-white/5">
+      <div className="flex-shrink-0 grid grid-cols-2 gap-2 px-4 py-3 border-b border-ink/5">
         {typeKeys.map((key) => {
           const typeResources = resources.filter((r) => r.type === key)
           if (!typeResources.length) return null
@@ -161,7 +208,7 @@ export default function ResourceSidebar({
         {loading ? (
           <div className="p-4 space-y-2">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-14 rounded-lg bg-white/[0.03] animate-pulse" />
+              <div key={i} className="h-14 rounded-[2px] bg-ink/[0.03] animate-pulse" />
             ))}
           </div>
         ) : resources.length === 0 ? (
@@ -171,8 +218,8 @@ export default function ResourceSidebar({
                 <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
               </svg>
             </div>
-            <p className="text-[11px] text-cool-gray/65 font-mono mb-1">No resources yet</p>
-            <p className="text-[10px] text-cool-gray/70 font-mono leading-relaxed">
+            <p className="text-[11px] text-ink/65 font-mono mb-1">No resources yet</p>
+            <p className="text-[10px] text-ink/70 font-mono leading-relaxed">
               Click <span className="text-purple-600/60">+ Add</span> above or the floating<br />
               <span className="text-purple-600/60">+</span> button, then click the map to place one.
             </p>
@@ -188,10 +235,10 @@ export default function ResourceSidebar({
                 <button
                   key={r._id}
                   onClick={() => onSelect?.(isSelected ? null : r._id)}
-                  className={`w-full text-left px-3 py-2.5 rounded-lg border transition-all cursor-pointer ${
+                  className={`w-full text-left px-3 py-2.5 rounded-[2px] border transition-all cursor-pointer ${
                     isSelected
-                      ? 'bg-white/10 border-white/20'
-                      : 'bg-white/[0.02] border-transparent hover:bg-white/[0.05] hover:border-white/10'
+                      ? 'bg-ink/10 border-ink/20'
+                      : 'bg-ink/[0.02] border-transparent hover:bg-ink/[0.05] hover:border-ink/10'
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-1">
@@ -199,7 +246,7 @@ export default function ResourceSidebar({
                       className="w-2 h-2 rounded-full flex-shrink-0"
                       style={{ background: TYPE_COLORS[r.type] || '#6b7280' }}
                     />
-                    <span className="text-xs font-semibold text-white font-mono truncate">
+                    <span className="text-xs font-semibold text-ink font-mono truncate">
                       {r.name}
                     </span>
                     <span
@@ -212,7 +259,7 @@ export default function ResourceSidebar({
                       {r.status}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] font-mono text-cool-gray/70 ml-4">
+                  <div className="flex items-center gap-3 text-[10px] font-mono text-ink/70 ml-4">
                     <span>{TYPE_LABELS[r.type] || r.type}</span>
                     <span>{lat?.toFixed(3)}, {lng?.toFixed(3)}</span>
                     {detail.capacity && <span>Cap: {detail.capacity}</span>}
@@ -226,29 +273,20 @@ export default function ResourceSidebar({
 
       {/* Selected resource actions */}
       {selectedResource && (
-        <div className="flex-shrink-0 p-3 border-t border-white/5 bg-white/[0.02]">
-          <p className="text-[10px] font-mono text-cool-gray/70 uppercase tracking-wider mb-2">
+        <div className="flex-shrink-0 p-3 border-t border-ink/5 bg-ink/[0.02]">
+          <p className="text-[10px] font-mono text-ink/70 uppercase tracking-wider mb-2">
             {selectedResource.name} — Actions
           </p>
           <div className="flex flex-wrap gap-1.5">
             <button
-              onClick={() => {
-                const allOthers = resources.filter(r => r._id !== selectedResource._id)
-                const firstOther = allOthers[0]
-                if (firstOther) {
-                  const [slng, slat] = selectedResource.location.coordinates
-                  const [dlng, dlat] = firstOther.location.coordinates
-                  onRoute(
-                    { lng: slng, lat: slat },
-                    { lng: dlng, lat: dlat },
-                  )
-                }
-              }}
+              onClick={handleRouteToNearest}
               className="px-2.5 py-1 text-[10px] font-mono uppercase tracking-wider rounded
                 bg-purple-500/20 text-purple-700 border border-purple-500/30
                 hover:bg-purple-500/30 transition-all cursor-pointer"
             >
-              Route to nearest
+              {nearestInfo
+                ? `Route to ${nearestInfo.name} (${nearestInfo.dist})`
+                : 'Route to nearest'}
             </button>
             <button
               onClick={() => {
