@@ -85,7 +85,7 @@ function drawSeismic(ctx, w, h, t) {
   _seismic.data.push(_seismic._genWave(_seismic.data.length, time))
   if (_seismic.data.length > _seismic.maxCols) _seismic.data.shift()
 
-  ctx.fillStyle = '#020408'
+  ctx.fillStyle = '#ebe5d4'
   ctx.fillRect(0, 0, w, h)
 
   const fov = 350
@@ -111,12 +111,12 @@ function drawSeismic(ctx, w, h, t) {
 
       if (dist < 20) {
         const brightness = 1 - dist / 20
-        ctx.fillStyle = `rgba(0, ${Math.floor(140 + brightness * 115)}, ${Math.floor(180 + brightness * 75)}, ${brightness * scale})`
+        ctx.fillStyle = `rgba(${Math.floor(22 + brightness * 198)}, ${Math.floor(21 + brightness * 234)}, ${Math.floor(15 + brightness * 37)}, ${brightness * scale})`
         ctx.beginPath()
         ctx.arc(px, py, (1.2 + brightness * 2) * scale, 0, Math.PI * 2)
         ctx.fill()
       } else {
-        ctx.fillStyle = `rgba(20, 50, 80, ${0.12 * scale})`
+        ctx.fillStyle = `rgba(22, 21, 15, ${0.02 * scale})`
         ctx.beginPath()
         ctx.arc(px, py, 1 * scale, 0, Math.PI * 2)
         ctx.fill()
@@ -124,7 +124,7 @@ function drawSeismic(ctx, w, h, t) {
     }
   }
 
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.06)'
+  ctx.fillStyle = 'rgba(22, 21, 15, 0.03)'
   for (let y = 0; y < h; y += 4) ctx.fillRect(0, y, w, 2)
 }
 
@@ -169,20 +169,20 @@ function drawRadar(ctx, w, h, t) {
   const cy = h / 2
   const maxR = Math.min(w, h) / 2 - 18
 
-  ctx.fillStyle = '#001000'
+  ctx.fillStyle = '#ebe5d4'
   ctx.fillRect(0, 0, w, h)
 
   const vig = ctx.createRadialGradient(cx, cy, maxR * 0.3, cx, cy, maxR)
-  vig.addColorStop(0, 'rgba(0,20,0,0)')
-  vig.addColorStop(1, 'rgba(0,10,0,0.7)')
+  vig.addColorStop(0, 'rgba(22,21,15,0)')
+  vig.addColorStop(1, 'rgba(22,21,15,0.15)')
   ctx.fillStyle = vig
   ctx.fillRect(0, 0, w, h)
 
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.12)'
+  ctx.fillStyle = 'rgba(22, 21, 15, 0.04)'
   for (let y = 0; y < h; y += 3) ctx.fillRect(0, y, w, 1)
 
-  ctx.strokeStyle = 'rgba(0, 255, 0, 0.15)'
-  ctx.lineWidth = 1
+  ctx.strokeStyle = 'rgba(22, 21, 15, 0.12)'
+  ctx.lineWidth = 0.5
   for (let i = 1; i <= 4; i++) {
     ctx.beginPath()
     ctx.arc(cx, cy, maxR * i / 4, 0, Math.PI * 2)
@@ -196,7 +196,7 @@ function drawRadar(ctx, w, h, t) {
   ctx.lineTo(cx, cy + maxR)
   ctx.stroke()
 
-  ctx.fillStyle = 'rgba(0, 255, 0, 0.5)'
+  ctx.fillStyle = 'rgba(22, 21, 15, 0.45)'
   ctx.font = '11px monospace'
   ctx.fillText('N', cx - 4, cy - maxR + 14)
   ctx.fillText('E', cx + maxR - 12, cy + 4)
@@ -207,7 +207,7 @@ function drawRadar(ctx, w, h, t) {
   for (let i = 0; i < trailSteps; i++) {
     const a = _radar.angle - (i / trailSteps) * 1.3
     const alpha = 0.35 * (1 - i / trailSteps)
-    ctx.strokeStyle = `rgba(0, 255, 0, ${alpha})`
+    ctx.strokeStyle = `rgba(22, 21, 15, ${alpha * 0.2})`
     ctx.lineWidth = 2
     ctx.beginPath()
     ctx.moveTo(cx, cy)
@@ -215,7 +215,7 @@ function drawRadar(ctx, w, h, t) {
     ctx.stroke()
   }
 
-  ctx.strokeStyle = 'rgba(220, 255, 220, 0.95)'
+  ctx.strokeStyle = 'rgba(220, 255, 52, 0.85)'
   ctx.lineWidth = 2
   ctx.beginPath()
   ctx.moveTo(cx, cy)
@@ -242,22 +242,22 @@ function drawRadar(ctx, w, h, t) {
     const by = cy + Math.sin(b.theta) * b.r * maxR
 
     const glow = ctx.createRadialGradient(bx, by, 0, bx, by, b.size * 5)
-    glow.addColorStop(0, `rgba(0, 255, 120, ${b.intensity * 0.8})`)
-    glow.addColorStop(1, 'rgba(0, 255, 0, 0)')
+    glow.addColorStop(0, `rgba(220, 255, 52, ${b.intensity * 0.7})`)
+    glow.addColorStop(1, 'rgba(220, 255, 52, 0)')
     ctx.fillStyle = glow
     ctx.beginPath()
     ctx.arc(bx, by, b.size * 5, 0, Math.PI * 2)
     ctx.fill()
 
     if (b.intensity > 0.1) {
-      ctx.fillStyle = `rgba(220, 255, 220, ${b.intensity})`
+      ctx.fillStyle = `rgba(22, 21, 15, ${b.intensity * 0.85})`
       ctx.beginPath()
       ctx.arc(bx, by, b.size, 0, Math.PI * 2)
       ctx.fill()
     }
   }
 
-  ctx.fillStyle = 'rgba(0, 255, 0, 0.1)'
+  ctx.fillStyle = 'rgba(22, 21, 15, 0.04)'
   for (let i = 0; i < 30; i++) {
     ctx.fillRect(Math.random() * w, Math.random() * h, 1, 1)
   }
@@ -326,7 +326,7 @@ function drawNetwork(ctx, w, h, t) {
     _neural.spawnPulse(l, n)
   }
 
-  ctx.fillStyle = '#02080a'
+  ctx.fillStyle = '#ebe5d4'
   ctx.fillRect(0, 0, w, h)
 
   const fov = 450
@@ -360,7 +360,7 @@ function drawNetwork(ctx, w, h, t) {
       for (let j = 0; j < _neural.layers[l + 1].length; j++) {
         const b = _neural.layers[l + 1][j]
         const pb = proj(b.x, b.y, b.z)
-        ctx.strokeStyle = `rgba(0, 200, 200, ${0.04 + (a.flash + b.flash) * 0.08})`
+        ctx.strokeStyle = `rgba(22, 21, 15, ${0.04 + (a.flash + b.flash) * 0.1})`
         ctx.beginPath()
         ctx.moveTo(pa.x, pa.y)
         ctx.lineTo(pb.x, pb.y)
@@ -391,8 +391,8 @@ function drawNetwork(ctx, w, h, t) {
     const pscale = pa.scale + (pb.scale - pa.scale) * p.progress
 
     ctx.shadowBlur = 14
-    ctx.shadowColor = 'rgba(0, 255, 255, 0.9)'
-    ctx.fillStyle = '#00ffff'
+    ctx.shadowColor = 'rgba(220, 255, 52, 0.8)'
+    ctx.fillStyle = '#dcff34'
     ctx.beginPath()
     ctx.arc(px, py, 3 * pscale, 0, Math.PI * 2)
     ctx.fill()
@@ -405,17 +405,17 @@ function drawNetwork(ctx, w, h, t) {
     if (node.flash > 0) node.flash *= 0.9
 
     const size = (5 + node.flash * 6) * p.scale
-    const alpha = 0.35 + node.flash * 0.65
+    const alpha = 0.3 + node.flash * 0.7
 
     ctx.shadowBlur = 20
-    ctx.shadowColor = `rgba(0, 255, 255, ${0.3 + node.flash * 0.5})`
-    ctx.fillStyle = `rgba(0, 255, 255, ${alpha})`
+    ctx.shadowColor = `rgba(220, 255, 52, ${0.15 + node.flash * 0.35})`
+    ctx.fillStyle = `rgba(22, 21, 15, ${alpha * 0.7})`
     ctx.beginPath()
     ctx.arc(p.x, p.y, size, 0, Math.PI * 2)
     ctx.fill()
     ctx.shadowBlur = 0
 
-    ctx.fillStyle = `rgba(220, 255, 255, ${0.8 + node.flash * 0.2})`
+    ctx.fillStyle = `rgba(220, 255, 52, ${0.4 + node.flash * 0.4})`
     ctx.beginPath()
     ctx.arc(p.x, p.y, size * 0.35, 0, Math.PI * 2)
     ctx.fill()
@@ -427,22 +427,22 @@ function drawNetwork(ctx, w, h, t) {
   const meterX = w - 32
   const meterY = h / 2 - meterH / 2
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)'
+  ctx.fillStyle = 'rgba(22, 21, 15, 0.06)'
   ctx.fillRect(meterX, meterY, meterW, meterH)
 
   const fillH = meterH * _neural.severity
   const grad = ctx.createLinearGradient(meterX, meterY + meterH, meterX, meterY)
-  grad.addColorStop(0, '#004444')
-  grad.addColorStop(0.5, '#008888')
-  grad.addColorStop(1, '#00ffff')
+  grad.addColorStop(0, '#16150F')
+  grad.addColorStop(0.5, '#F0571F')
+  grad.addColorStop(1, '#DCFF34')
   ctx.fillStyle = grad
   ctx.fillRect(meterX, meterY + meterH - fillH, meterW, fillH)
 
-  ctx.strokeStyle = 'rgba(0, 255, 255, 0.25)'
+  ctx.strokeStyle = 'rgba(22, 21, 15, 0.15)'
   ctx.lineWidth = 1
   ctx.strokeRect(meterX, meterY, meterW, meterH)
 
-  ctx.fillStyle = 'rgba(0, 255, 255, 0.5)'
+  ctx.fillStyle = 'rgba(22, 21, 15, 0.45)'
   ctx.font = '10px sans-serif'
   ctx.fillText('SEV', meterX - 4, meterY + meterH + 14)
 }
@@ -485,7 +485,7 @@ function drawBeacon(ctx, w, h, t) {
   }
   if (_beacon.flash > 0) _beacon.flash *= 0.9
 
-  ctx.fillStyle = '#080400'
+  ctx.fillStyle = '#ebe5d4'
   ctx.fillRect(0, 0, w, h)
 
   const cx = w / 2
@@ -497,7 +497,7 @@ function drawBeacon(ctx, w, h, t) {
     return { x: cx + px * scale, y: cy + py * scale, scale }
   }
 
-  ctx.strokeStyle = 'rgba(255, 60, 0, 0.07)'
+  ctx.strokeStyle = 'rgba(240, 87, 31, 0.06)'
   ctx.lineWidth = 1
   for (let i = 0; i < 12; i++) {
     const z = i * 40
@@ -520,7 +520,7 @@ function drawBeacon(ctx, w, h, t) {
   const topW = 10
   const segments = 7
 
-  ctx.strokeStyle = `rgba(255, 100, 40, ${0.5 + _beacon.flash * 0.3})`
+  ctx.strokeStyle = `rgba(22, 21, 15, ${0.3 + _beacon.flash * 0.15})`
   ctx.lineWidth = 1.5
   for (let s = 0; s < segments; s++) {
     const y1 = 50 - (s / segments) * towerH
@@ -559,8 +559,8 @@ function drawBeacon(ctx, w, h, t) {
     }
 
     const scale = fov / (fov + 160)
-    ctx.strokeStyle = `rgba(255, 80, 20, ${r.alpha})`
-    ctx.lineWidth = 2 * scale
+    ctx.strokeStyle = `rgba(22, 21, 15, ${r.alpha * 0.25})`
+    ctx.lineWidth = 1.5 * scale
     ctx.beginPath()
     ctx.ellipse(cx, cy + 50, r.r * scale, r.r * scale * 0.32, 0, 0, Math.PI * 2)
     ctx.stroke()
@@ -581,7 +581,7 @@ function drawBeacon(ctx, w, h, t) {
       continue
     }
     const pp = proj(p.x, p.y, p.z)
-    ctx.fillStyle = `rgba(255, 140, 40, ${p.life * 0.35})`
+    ctx.fillStyle = `rgba(240, 87, 31, ${p.life * 0.35})`
     ctx.beginPath()
     ctx.arc(pp.x, pp.y, 1.5 * pp.scale, 0, Math.PI * 2)
     ctx.fill()
@@ -592,15 +592,15 @@ function drawBeacon(ctx, w, h, t) {
 
   if (_beacon.flash > 0.05) {
     const glow = ctx.createRadialGradient(topP.x, topP.y, 0, topP.x, topP.y, 55 * topP.scale)
-    glow.addColorStop(0, `rgba(255, 255, 220, ${_beacon.flash})`)
-    glow.addColorStop(0.5, `rgba(255, 120, 0, ${_beacon.flash * 0.5})`)
-    glow.addColorStop(1, 'rgba(255, 60, 0, 0)')
+    glow.addColorStop(0, `rgba(220, 255, 52, ${_beacon.flash})`)
+    glow.addColorStop(0.5, `rgba(240, 87, 31, ${_beacon.flash * 0.4})`)
+    glow.addColorStop(1, 'rgba(240, 87, 31, 0)')
     ctx.fillStyle = glow
     ctx.beginPath()
     ctx.arc(topP.x, topP.y, 55 * topP.scale, 0, Math.PI * 2)
     ctx.fill()
 
-    ctx.fillStyle = `rgba(255, 200, 100, ${_beacon.flash * 0.18})`
+    ctx.fillStyle = `rgba(220, 255, 52, ${_beacon.flash * 0.12})`
     ctx.beginPath()
     ctx.moveTo(topP.x, topP.y)
     ctx.lineTo(topP.x - 90 * topP.scale, topP.y - 200 * topP.scale)
@@ -608,7 +608,7 @@ function drawBeacon(ctx, w, h, t) {
     ctx.closePath()
     ctx.fill()
 
-    ctx.strokeStyle = `rgba(255, 255, 200, ${_beacon.flash * 0.6})`
+    ctx.strokeStyle = `rgba(220, 255, 52, ${_beacon.flash * 0.5})`
     ctx.lineWidth = 2
     for (let a = 0; a < 8; a++) {
       const ang = (a / 8) * Math.PI * 2 + time
@@ -619,7 +619,7 @@ function drawBeacon(ctx, w, h, t) {
     }
   }
 
-  ctx.fillStyle = '#ffcc88'
+  ctx.fillStyle = '#ebe5d4'
   ctx.beginPath()
   ctx.arc(topP.x, topP.y, 4.5 * topP.scale, 0, Math.PI * 2)
   ctx.fill()
